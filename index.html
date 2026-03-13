@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
 <meta charset="UTF-8">
 <title>Central de Radios Guatemala</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 
@@ -24,23 +21,23 @@ color:white;
 
 .header{
 text-align:center;
-padding:60px 20px 40px;
+padding:50px 20px 30px;
 }
 
 .header h1{
 margin:0;
-font-size:48px;
-letter-spacing:4px;
+font-size:38px;
+letter-spacing:2px;
 font-weight:700;
-background:linear-gradient(90deg,#00e5ff,#00bfff,#3affff);
+background:linear-gradient(90deg,#00e5ff,#00bfff);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-text-shadow:0 0 20px rgba(0,229,255,.4);
 }
 
 .header p{
-opacity:.7;
 margin-top:10px;
+opacity:.7;
+font-size:14px;
 }
 
 /* GRID */
@@ -59,10 +56,11 @@ gap:22px;
 .radio{
 background:rgba(255,255,255,0.05);
 border-radius:16px;
-padding:18px;
+padding:18px 14px;
 cursor:pointer;
-border:1px solid rgba(255,255,255,0.08);
 transition:.3s;
+border:1px solid rgba(255,255,255,0.08);
+box-shadow:0 8px 22px rgba(0,0,0,.35);
 
 display:flex;
 flex-direction:column;
@@ -80,7 +78,7 @@ background:rgba(255,255,255,0.1);
 
 .radio.activa{
 border:1px solid #00e5ff;
-box-shadow:0 0 15px rgba(0,229,255,.6);
+box-shadow:0 0 18px rgba(0,229,255,.5);
 }
 
 .radio img{
@@ -88,13 +86,16 @@ width:90px;
 height:55px;
 object-fit:contain;
 margin-bottom:8px;
-padding:5px;
+padding:6px;
 border-radius:10px;
 border:2px solid rgba(0,191,255,.6);
+box-shadow:0 0 8px rgba(0,191,255,.4);
 }
 
 .radio span{
 font-size:13px;
+font-weight:500;
+line-height:1.2;
 }
 
 /* PLAYER */
@@ -109,8 +110,8 @@ border-top:1px solid rgba(255,255,255,.1);
 padding:14px 20px;
 
 display:flex;
-justify-content:space-between;
 align-items:center;
+justify-content:space-between;
 }
 
 .player-info{
@@ -141,6 +142,7 @@ color:white;
 padding:7px 16px;
 border-radius:6px;
 cursor:pointer;
+font-weight:500;
 }
 
 button:hover{
@@ -148,18 +150,7 @@ background:#00e5ff;
 }
 
 .volume{
-width:120px;
-}
-
-/* FOOTER */
-
-.footer{
-text-align:center;
-padding:25px;
-font-size:12px;
-opacity:.6;
-background:#0b1118;
-border-top:1px solid rgba(255,255,255,.08);
+width:110px;
 }
 
 /* RESPONSIVE */
@@ -174,7 +165,6 @@ border-top:1px solid rgba(255,255,255,.08);
 
 @media(max-width:450px){
 .contenedor{grid-template-columns:1fr;}
-.header h1{font-size:32px;}
 }
 
 </style>
@@ -184,7 +174,7 @@ border-top:1px solid rgba(255,255,255,.08);
 
 <div class="header">
 <h1>CENTRAL DE RADIOS GUATEMALA</h1>
-<p>Escucha emisoras en vivo</p>
+<p>Escucha tus emisoras favoritas en vivo</p>
 </div>
 
 <div class="contenedor">
@@ -199,54 +189,54 @@ border-top:1px solid rgba(255,255,255,.08);
 <span>Éxitos 90.9</span>
 </div>
 
-<div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/ef0c82f1-e446-4093-8455-3a144ca2e171/ts:abr.m3u8','Éxitos Xela','exitosx.png')">
+<div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/ef0c82f1-e446-4093-8455-3a144ca2e171/ts:abr.m3u8','Éxitos Xela 107.1 FM','exitosx.png')">
 <img src="exitosx.png">
-<span>Éxitos Xela</span>
+<span>Éxitos Xela 107.1 FM</span>
 </div>
 
-<div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/c2af032e-3e29-4551-a757-e4f3d349386c/ts:abr.m3u8','Flix 93.9','fixx.png')">
+<div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/c2af032e-3e29-4551-a757-e4f3d349386c/ts:abr.m3u8','Flix Xela 93.9','fixx.png')">
 <img src="fixx.png">
-<span>Flix 93.9</span>
+<span>Flix Xela 93.9</span>
 </div>
 
-<div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/9c2d6264-2009-49a8-a501-848a7bae1051/ts:abr.m3u8','Fiesta 103.7','fiesta.png')">
+<div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/9c2d6264-2009-49a8-a501-848a7bae1051/ts:abr.m3u8','Fiesta 103.7 FM','fiesta.png')">
 <img src="fiesta.png">
-<span>Fiesta 103.7</span>
+<span>Fiesta 103.7 FM</span>
 </div>
 
-<div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/a4e3175d-fa7e-4d4b-979f-e7f875468260/ts:abr.m3u8','Ranchera 95.7','ranchera.png')">
+<div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/a4e3175d-fa7e-4d4b-979f-e7f875468260/ts:abr.m3u8','Ranchera 95.7 FM','ranchera.png')">
 <img src="ranchera.png">
-<span>Ranchera 95.7</span>
+<span>Ranchera 95.7 FM</span>
 </div>
 
-<div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/406d6243-a8fc-4215-aca0-ffd43aac2bf3/ts:abr.m3u8','Galaxia 88.5','galaxia.png')">
+<div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/406d6243-a8fc-4215-aca0-ffd43aac2bf3/ts:abr.m3u8','Galaxia 88.5 FM','galaxia.png')">
 <img src="galaxia.png">
-<span>Galaxia 88.5</span>
+<span>Galaxia 88.5 FM</span>
 </div>
 
-<div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/53ee315d-206f-4271-994b-4c1927ae338b/ts:abr.m3u8','La Marca 94.1','lamarca.png')">
+<div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/53ee315d-206f-4271-994b-4c1927ae338b/ts:abr.m3u8','La Marca 94.1 FM','lamarca.png')">
 <img src="lamarca.png">
-<span>La Marca 94.1</span>
+<span>La Marca 94.1 FM</span>
 </div>
 
-<div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/67aeb080-68fa-4197-89f6-c8bb70f9a395/ts:abr.m3u8','Tropicálida','tropicalida.png')">
+<div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/67aeb080-68fa-4197-89f6-c8bb70f9a395/ts:abr.m3u8','Tropicálida 104.9 FM','tropicalida.png')">
 <img src="tropicalida.png">
-<span>Tropicálida</span>
+<span>Tropicálida 104.9 FM</span>
 </div>
 
-<div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/e33ed625-2624-4334-a625-a53a70d95791/ts:abr.m3u8','Joya 92.9','joya.png')">
+<div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/e33ed625-2624-4334-a625-a53a70d95791/ts:abr.m3u8','Joya 92.9 FM','joya.png')">
 <img src="joya.png">
-<span>Joya 92.9</span>
+<span>Joya 92.9 FM</span>
 </div>
 
-<div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/3943e598-9843-4784-9388-80e97aa3674b/ts:abr.m3u8','Alfa 97.3','alfa.png')">
+<div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/3943e598-9843-4784-9388-80e97aa3674b/ts:abr.m3u8','Alfa 97.3 FM','alfa.png')">
 <img src="alfa.png">
-<span>Alfa 97.3</span>
+<span>Alfa 97.3 FM</span>
 </div>
 
-<div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/8e7a8a5b-a2db-4323-8397-46c17f4573ac/ts:abr.m3u8','Sonora 96.9','sonora.png')">
+<div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/8e7a8a5b-a2db-4323-8397-46c17f4573ac/ts:abr.m3u8','Sonora 96.9 FM','sonora.png')">
 <img src="sonora.png">
-<span>Sonora 96.9</span>
+<span>Sonora 96.9 FM</span>
 </div>
 
 </div>
@@ -260,13 +250,9 @@ border-top:1px solid rgba(255,255,255,.08);
 
 <div class="controls">
 <button onclick="togglePlay()">Play / Pause</button>
-<input class="volume" type="range" min="0" max="1" step="0.01" value="0.8" oninput="setVolume(this.value)">
+<input class="volume" type="range" min="0" max="1" step="0.01" value="0.8" onchange="setVolume(this.value)">
 </div>
 
-</div>
-
-<div class="footer">
-© 2026 LMB. All Rights Reserved.
 </div>
 
 <audio id="audio"></audio>
@@ -277,34 +263,16 @@ let audio=document.getElementById("audio")
 let title=document.getElementById("playerTitle")
 let logo=document.getElementById("playerLogo")
 
-let hls
-
 function playRadio(el,url,name,img){
 
 document.querySelectorAll(".radio").forEach(r=>r.classList.remove("activa"))
 el.classList.add("activa")
 
-title.innerText=name
-logo.src=img
-
-if(Hls.isSupported()){
-
-if(hls){hls.destroy()}
-
-hls=new Hls()
-hls.loadSource(url)
-hls.attachMedia(audio)
-
-hls.on(Hls.Events.MANIFEST_PARSED,function(){
-audio.play()
-})
-
-}else{
-
 audio.src=url
 audio.play()
 
-}
+title.innerText=name
+logo.src=img
 
 }
 
