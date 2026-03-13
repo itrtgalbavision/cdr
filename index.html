@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>-Central de Radios Guatemala-</title>
+<title>Central de Radios Guatemala</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
@@ -21,13 +21,13 @@ color:white;
 
 .header{
 text-align:center;
-padding:60px 20px 30px;
+padding:50px 20px 30px;
 }
 
 .header h1{
 margin:0;
-font-size:42px;
-letter-spacing:3px;
+font-size:38px;
+letter-spacing:2px;
 font-weight:700;
 background:linear-gradient(90deg,#00e5ff,#00bfff);
 -webkit-background-clip:text;
@@ -44,48 +44,58 @@ font-size:14px;
 
 .contenedor{
 width:90%;
-max-width:1300px;
+max-width:1200px;
 margin:40px auto 120px;
 display:grid;
 grid-template-columns:repeat(4,1fr);
-gap:28px;
+gap:22px;
 }
 
 /* TARJETAS */
 
 .radio{
 background:rgba(255,255,255,0.05);
-border-radius:18px;
-padding:28px 20px;
-text-align:center;
+border-radius:16px;
+padding:18px 14px;
 cursor:pointer;
-transition:.35s;
+transition:.3s;
 border:1px solid rgba(255,255,255,0.08);
-box-shadow:0 10px 30px rgba(0,0,0,.35);
+box-shadow:0 8px 22px rgba(0,0,0,.35);
+
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+
+height:140px;
+text-align:center;
 }
 
 .radio:hover{
-transform:translateY(-8px);
+transform:translateY(-6px);
 background:rgba(255,255,255,0.1);
 }
 
 .radio.activa{
 border:1px solid #00e5ff;
-box-shadow:0 0 20px rgba(0,229,255,.4);
+box-shadow:0 0 18px rgba(0,229,255,.5);
 }
 
 .radio img{
-width:120px;
-margin-bottom:12px;
-padding:10px;
-border-radius:14px;
+width:90px;
+height:55px;
+object-fit:contain;
+margin-bottom:8px;
+padding:6px;
+border-radius:10px;
 border:2px solid rgba(0,191,255,.6);
-box-shadow:0 0 10px rgba(0,191,255,.4);
+box-shadow:0 0 8px rgba(0,191,255,.4);
 }
 
 .radio span{
-font-size:15px;
+font-size:13px;
 font-weight:500;
+line-height:1.2;
 }
 
 /* PLAYER */
@@ -97,27 +107,26 @@ left:0;
 width:100%;
 background:#0f1822;
 border-top:1px solid rgba(255,255,255,.1);
-padding:15px 20px;
+padding:14px 20px;
+
 display:flex;
 align-items:center;
 justify-content:space-between;
-z-index:999;
 }
 
 .player-info{
 display:flex;
 align-items:center;
-gap:15px;
+gap:12px;
 }
 
-.player img{
-width:50px;
-border-radius:8px;
+.player-info img{
+width:45px;
+border-radius:6px;
 }
 
 .player-title{
 font-size:14px;
-font-weight:500;
 }
 
 .controls{
@@ -130,8 +139,8 @@ button{
 background:#00bfff;
 border:none;
 color:white;
-padding:8px 16px;
-border-radius:8px;
+padding:7px 16px;
+border-radius:6px;
 cursor:pointer;
 font-weight:500;
 }
@@ -140,31 +149,22 @@ button:hover{
 background:#00e5ff;
 }
 
-input[type=range]{
-width:120px;
+.volume{
+width:110px;
 }
 
 /* RESPONSIVE */
 
-@media(max-width:1100px){
+@media(max-width:1000px){
 .contenedor{grid-template-columns:repeat(3,1fr);}
 }
 
-@media(max-width:800px){
+@media(max-width:700px){
 .contenedor{grid-template-columns:repeat(2,1fr);}
 }
 
-@media(max-width:500px){
-
+@media(max-width:450px){
 .contenedor{grid-template-columns:1fr;}
-
-.header h1{font-size:26px;}
-
-.player{
-flex-direction:column;
-gap:10px;
-}
-
 }
 
 </style>
@@ -244,13 +244,13 @@ gap:10px;
 <div class="player">
 
 <div class="player-info">
-<img id="playerLogo" src="">
+<img id="playerLogo">
 <div class="player-title" id="playerTitle">Selecciona una radio</div>
 </div>
 
 <div class="controls">
 <button onclick="togglePlay()">Play / Pause</button>
-<input type="range" min="0" max="1" step="0.01" value="0.8" onchange="setVolume(this.value)">
+<input class="volume" type="range" min="0" max="1" step="0.01" value="0.8" onchange="setVolume(this.value)">
 </div>
 
 </div>
@@ -260,22 +260,19 @@ gap:10px;
 <script>
 
 let audio=document.getElementById("audio")
-let playerTitle=document.getElementById("playerTitle")
-let playerLogo=document.getElementById("playerLogo")
+let title=document.getElementById("playerTitle")
+let logo=document.getElementById("playerLogo")
 
-function playRadio(el,url,name,logo){
+function playRadio(el,url,name,img){
 
-document.querySelectorAll(".radio").forEach(r=>{
-r.classList.remove("activa")
-})
-
+document.querySelectorAll(".radio").forEach(r=>r.classList.remove("activa"))
 el.classList.add("activa")
 
 audio.src=url
 audio.play()
 
-playerTitle.innerText=name
-playerLogo.src=logo
+title.innerText=name
+logo.src=img
 
 }
 
@@ -297,4 +294,3 @@ audio.volume=v
 
 </body>
 </html>
-
