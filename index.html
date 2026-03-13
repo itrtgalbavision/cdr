@@ -4,176 +4,252 @@
 <meta charset="UTF-8">
 <title>Central de Radios Guatemala</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-    body {
-        margin: 0;
-        font-family: 'Segoe UI', sans-serif;
-        background: radial-gradient(circle at top, #1f2c3a, #0d141c 70%);
-        color: white;
-    }
 
-    .header {
-        text-align: center;
-        padding: 50px 20px 20px 20px;
-    }
+*{
+box-sizing:border-box;
+}
 
-    .header h1 {
-        margin: 0;
-        font-size: 40px;
-        letter-spacing: 2px;
-        font-weight: 700;
-    }
+body{
+margin:0;
+font-family:'Poppins',sans-serif;
+background:linear-gradient(180deg,#0b1118,#121c27 40%,#0b1118);
+color:white;
+}
 
-    .header p {
-        margin-top: 10px;
-        opacity: 0.7;
-        font-size: 14px;
-    }
+/* HEADER */
 
-    .contenedor {
-        width: 90%;
-        max-width: 1200px;
-        margin: 40px auto 80px auto;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 30px;
-    }
+.header{
+text-align:center;
+padding:60px 20px 40px;
+}
 
-    .radio {
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 18px;
-        padding: 30px 20px;
-        text-align: center;
-        text-decoration: none;
-        color: white;
-        transition: 0.3s ease;
-        backdrop-filter: blur(8px);
-        border: 1px solid rgba(255,255,255,0.15);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-    }
+.header h1{
+margin:0;
+font-size:42px;
+letter-spacing:3px;
+font-weight:700;
+background:linear-gradient(90deg,#00e5ff,#00bfff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
 
-    .radio img {
-        width: 130px;
-        height: auto;
-        margin-bottom: 15px;
-        padding: 10px;
-        border-radius: 14px;
-        background: transparent;
-        border: 2px solid #00bfff;
-        box-shadow:
-            0 0 8px #00bfff,
-            0 0 16px #00bfff,
-            0 0 24px rgba(0,191,255,0.7);
-        transition: 0.3s ease;
-    }
+.header p{
+margin-top:12px;
+opacity:.7;
+font-size:14px;
+}
 
-    .radio span {
-        display: block;
-        font-size: 15px;
-        font-weight: 600;
-    }
+.header::after{
+content:"";
+display:block;
+width:120px;
+height:3px;
+margin:25px auto 0;
+background:linear-gradient(90deg,transparent,#00bfff,transparent);
+}
 
-    .radio:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-        background: rgba(255,255,255,0.12);
-    }
+/* GRID */
 
-    .radio:hover img {
-        box-shadow:
-            0 0 12px #00e5ff,
-            0 0 25px #00e5ff,
-            0 0 40px rgba(0,229,255,0.9);
-        transform: scale(1.05);
-    }
+.contenedor{
+width:90%;
+max-width:1250px;
+margin:40px auto 70px;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:28px;
+}
 
-    @media (max-width: 900px) {
-        .contenedor {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
+/* TARJETAS */
 
-    @media (max-width: 600px) {
-        .contenedor {
-            grid-template-columns: 1fr;
-        }
+.radio{
+background:rgba(255,255,255,0.06);
+border-radius:18px;
+padding:30px 20px;
+text-align:center;
+text-decoration:none;
+color:white;
+transition:.35s;
+border:1px solid rgba(255,255,255,0.08);
+box-shadow:0 10px 30px rgba(0,0,0,0.35);
+backdrop-filter:blur(10px);
+position:relative;
+overflow:hidden;
+}
 
-        .header h1 {
-            font-size: 26px;
-        }
-    }
+/* glow suave */
+
+.radio::before{
+content:"";
+position:absolute;
+top:-50%;
+left:-50%;
+width:200%;
+height:200%;
+background:radial-gradient(circle,#00bfff33,transparent 60%);
+opacity:0;
+transition:.4s;
+}
+
+.radio:hover::before{
+opacity:1;
+}
+
+/* logo */
+
+.radio img{
+width:120px;
+height:auto;
+margin-bottom:15px;
+padding:12px;
+border-radius:14px;
+border:2px solid rgba(0,191,255,.6);
+box-shadow:0 0 10px rgba(0,191,255,.4);
+transition:.35s;
+}
+
+/* nombre radio */
+
+.radio span{
+display:block;
+font-size:15px;
+font-weight:500;
+letter-spacing:.4px;
+}
+
+/* hover */
+
+.radio:hover{
+transform:translateY(-8px) scale(1.02);
+box-shadow:0 20px 40px rgba(0,0,0,.6);
+background:rgba(255,255,255,0.1);
+}
+
+.radio:hover img{
+transform:scale(1.08);
+box-shadow:
+0 0 12px #00e5ff,
+0 0 25px #00e5ff;
+}
+
+/* FOOTER */
+
+.footer{
+text-align:center;
+padding:25px;
+font-size:12px;
+opacity:.5;
+border-top:1px solid rgba(255,255,255,.08);
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1100px){
+
+.contenedor{
+grid-template-columns:repeat(3,1fr);
+}
+
+}
+
+@media(max-width:800px){
+
+.contenedor{
+grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+@media(max-width:500px){
+
+.contenedor{
+grid-template-columns:1fr;
+}
+
+.header h1{
+font-size:26px;
+}
+
+}
+
 </style>
 </head>
 
 <body>
 
 <div class="header">
-    <h1>CENTRAL DE RADIOS GUATEMALA</h1>
-    <p>Escucha tus emisoras favoritas en vivo</p>
+<h1>CENTRAL DE RADIOS GUATEMALA</h1>
+<p>Escucha tus emisoras favoritas en vivo</p>
 </div>
 
 <div class="contenedor">
 
 <a class="radio" href="https://d2qsan2ut81n2k.cloudfront.net/live/c2cce928-c69c-45d5-bd0a-5a5eba167a0d/ts:abr.m3u8" target="_blank">
-<img src="xtrema.png" alt="Xtrema 101.3 FM">
+<img src="xtrema.png">
 <span>Xtrema 101.3 FM</span>
 </a>
 
 <a class="radio" href="https://d2qsan2ut81n2k.cloudfront.net/live/ca11fca0-0da4-4198-83bd-b50e5607d6f8/ts:abr.m3u8" target="_blank">
-<img src="exitos.png" alt="Éxitos 90.9">
+<img src="exitos.png">
 <span>Éxitos 90.9</span>
 </a>
 
 <a class="radio" href="https://d2qsan2ut81n2k.cloudfront.net/live/ef0c82f1-e446-4093-8455-3a144ca2e171/ts:abr.m3u8" target="_blank">
-<img src="exitosx.png" alt="Exitos Xela 107.1 FM">
-<span>Exitos Xela 107.1 FM</span>
+<img src="exitosx.png">
+<span>Éxitos Xela 107.1 FM</span>
 </a>
 
 <a class="radio" href="https://d2qsan2ut81n2k.cloudfront.net/live/c2af032e-3e29-4551-a757-e4f3d349386c/ts:abr.m3u8" target="_blank">
-<img src="fixx.png" alt="Flix Xela 93.9">
+<img src="fixx.png">
 <span>Flix Xela 93.9</span>
 </a>
 
 <a class="radio" href="https://d2qsan2ut81n2k.cloudfront.net/live/9c2d6264-2009-49a8-a501-848a7bae1051/ts:abr.m3u8" target="_blank">
-<img src="fiesta.png" alt="Fiesta 103.7 FM">
+<img src="fiesta.png">
 <span>Fiesta 103.7 FM</span>
 </a>
 
 <a class="radio" href="https://d2qsan2ut81n2k.cloudfront.net/live/a4e3175d-fa7e-4d4b-979f-e7f875468260/ts:abr.m3u8" target="_blank">
-<img src="ranchera.png" alt="Ranchera 95.7 FM">
+<img src="ranchera.png">
 <span>Ranchera 95.7 FM</span>
 </a>
 
 <a class="radio" href="https://d2qsan2ut81n2k.cloudfront.net/live/406d6243-a8fc-4215-aca0-ffd43aac2bf3/ts:abr.m3u8" target="_blank">
-<img src="galaxia.png" alt="Galaxia 88.5 FM">
+<img src="galaxia.png">
 <span>Galaxia 88.5 FM</span>
 </a>
 
 <a class="radio" href="https://d2qsan2ut81n2k.cloudfront.net/live/53ee315d-206f-4271-994b-4c1927ae338b/ts:abr.m3u8" target="_blank">
-<img src="lamarca.png" alt="La Marca 94.1 FM">
+<img src="lamarca.png">
 <span>La Marca 94.1 FM</span>
 </a>
 
 <a class="radio" href="https://d2qsan2ut81n2k.cloudfront.net/live/67aeb080-68fa-4197-89f6-c8bb70f9a395/ts:abr.m3u8" target="_blank">
-<img src="tropicalida.png" alt="Tropicálida 104.9 FM">
+<img src="tropicalida.png">
 <span>Tropicálida 104.9 FM</span>
 </a>
 
 <a class="radio" href="https://d2qsan2ut81n2k.cloudfront.net/live/e33ed625-2624-4334-a625-a53a70d95791/ts:abr.m3u8" target="_blank">
-<img src="joya.png" alt="Joya 92.9 FM">
+<img src="joya.png">
 <span>Joya 92.9 FM</span>
 </a>
 
 <a class="radio" href="https://d2qsan2ut81n2k.cloudfront.net/live/3943e598-9843-4784-9388-80e97aa3674b/ts:abr.m3u8" target="_blank">
-<img src="alfa.png" alt="Alfa 97.3 FM">
+<img src="alfa.png">
 <span>Alfa 97.3 FM</span>
 </a>
 
 <a class="radio" href="https://d2qsan2ut81n2k.cloudfront.net/live/8e7a8a5b-a2db-4323-8397-46c17f4573ac/ts:abr.m3u8" target="_blank">
-<img src="sonora.png" alt="Sonora 96.9 FM">
+<img src="sonora.png">
 <span>Sonora 96.9 FM</span>
 </a>
 
+</div>
+
+<div class="footer">
+© 2026 Central de Radios Guatemala
 </div>
 
 </body>
