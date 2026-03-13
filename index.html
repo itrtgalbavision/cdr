@@ -12,14 +12,83 @@
             background:linear-gradient(180deg,#0b1118,#121c27 40%,#0b1118);
             color:white;
         }
-        /* HEADER */
-        .header{ text-align:center; padding:50px 20px 30px; }
-        .header h1{
-            margin:0; font-size:38px; letter-spacing:2px; font-weight:700;
-            background:linear-gradient(90deg,#00e5ff,#00bfff);
-            -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+
+        /* HEADER MEJORADO */
+        .header {
+            text-align: center;
+            padding: 60px 20px 40px;
+            position: relative;
         }
-        .header p{ margin-top:10px; opacity:.7; font-size:14px; }
+        /* Brillo sutil de fondo */
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 250px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(0,229,255,0.15) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+        }
+        /* Etiqueta de En Vivo */
+        .badge-en-vivo {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #fff;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .punto-rojo {
+            width: 8px;
+            height: 8px;
+            background-color: #ff3366;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #ff3366;
+            animation: latido 1.5s infinite;
+        }
+        @keyframes latido {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 51, 102, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(255, 51, 102, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 51, 102, 0); }
+        }
+        /* Título Principal */
+        .header h1 {
+            margin: 0;
+            font-size: 36px;
+            line-height: 1.2;
+            letter-spacing: 1px;
+            font-weight: 800;
+        }
+        .header h1 span {
+            display: block;
+            font-size: 44px;
+            background: linear-gradient(90deg, #00e5ff, #00bfff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0px 4px 15px rgba(0, 229, 255, 0.2);
+        }
+        .header p {
+            margin-top: 15px;
+            color: #a0aec0;
+            font-size: 15px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+        /* Ajuste para pantallas pequeñas */
+        @media(max-width: 600px) {
+            .header h1 { font-size: 28px; }
+            .header h1 span { font-size: 34px; }
+        }
+
         /* GRID */
         .contenedor{
             width:90%; max-width:1200px; margin:40px auto 120px;
@@ -62,9 +131,16 @@
     </style>
 </head>
 <body>
+    
     <div class="header">
-        <h1>CENTRAL DE RADIOS GUATEMALA</h1>
-        <p>Escucha tus emisoras favoritas en vivo</p>
+        <div class="badge-en-vivo">
+            <span class="punto-rojo"></span> EN VIVO
+        </div>
+        <h1>
+            CENTRAL DE RADIOS
+            <span>GUATEMALA</span>
+        </h1>
+        <p>Escucha tus emisoras favoritas sin interrupciones</p>
     </div>
 
     <div class="contenedor">
