@@ -147,8 +147,8 @@
                 
                 // Configuramos para que pre-cargue más segundos de audio
                 hlsInstancia = new Hls({
-                    maxBufferLength: 30, 
-                    maxMaxBufferLength: 60
+                    maxBufferLength: 10, 
+                    maxMaxBufferLength: 15
                 });
                 
                 hlsInstancia.loadSource(url);
