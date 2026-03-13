@@ -184,7 +184,7 @@ width:110px;
 <span>Xtrema 101.3 FM</span>
 </div>
 
-  <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/406d6243-a8fc-4215-aca0-ffd43aac2bf3/ts:abr.m3u8','Galaxia 88.5 FM','galaxia.png')">
+<div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/406d6243-a8fc-4215-aca0-ffd43aac2bf3/ts:abr.m3u8','Galaxia 88.5 FM','galaxia.png')">
 <img src="galaxia.png">
 <span>Galaxia 88.5 FM</span>
 </div>
@@ -209,33 +209,27 @@ width:110px;
 <span>Alfa 97.3 FM</span>
 </div>
 
-
-
 <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/a4e3175d-fa7e-4d4b-979f-e7f875468260/ts:abr.m3u8','Ranchera 95.7 FM','ranchera.png')">
 <img src="ranchera.png">
 <span>Ranchera 95.7 FM</span>
 </div>
-
-
 
 <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/53ee315d-206f-4271-994b-4c1927ae338b/ts:abr.m3u8','La Marca 94.1 FM','lamarca.png')">
 <img src="lamarca.png">
 <span>La Marca 94.1 FM</span>
 </div>
 
-
 <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/9c2d6264-2009-49a8-a501-848a7bae1051/ts:abr.m3u8','Fiesta 103.7 FM','fiesta.png')">
 <img src="fiesta.png">
 <span>Fiesta 103.7 FM</span>
 </div>
-
 
 <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/8e7a8a5b-a2db-4323-8397-46c17f4573ac/ts:abr.m3u8','Sonora 96.9 FM','sonora.png')">
 <img src="sonora.png">
 <span>Sonora 96.9 FM</span>
 </div>
 
-  <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/ef0c82f1-e446-4093-8455-3a144ca2e171/ts:abr.m3u8','Éxitos Xela 107.1 FM','exitosx.png')">
+<div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/ef0c82f1-e446-4093-8455-3a144ca2e171/ts:abr.m3u8','Éxitos Xela 107.1 FM','exitosx.png')">
 <img src="exitosx.png">
 <span>Éxitos Xela 107.1 FM</span>
 </div>
@@ -261,7 +255,7 @@ width:110px;
 
 </div>
 
-<audio id="audio"></audio>
+<audio id="audio" preload="auto" playsinline></audio>
 
 <script>
 
@@ -274,8 +268,17 @@ function playRadio(el,url,name,img){
 document.querySelectorAll(".radio").forEach(r=>r.classList.remove("activa"))
 el.classList.add("activa")
 
+audio.pause()
 audio.src=url
-audio.play()
+audio.load()
+
+let playPromise = audio.play()
+
+if(playPromise !== undefined){
+playPromise.catch(()=>{
+console.log("Autoplay bloqueado en móvil")
+})
+}
 
 title.innerText=name
 logo.src=img
@@ -300,5 +303,3 @@ audio.volume=v
 
 </body>
 </html>
-
-
