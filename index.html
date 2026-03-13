@@ -62,7 +62,6 @@
     </style>
 </head>
 <body>
-
     <div class="header">
         <h1>CENTRAL DE RADIOS GUATEMALA</h1>
         <p>Escucha tus emisoras favoritas en vivo</p>
@@ -127,28 +126,33 @@
         let title = document.getElementById("playerTitle");
         let logo = document.getElementById("playerLogo");
         
-        let hlsInstancia = null; // Variable para controlar la librería
+        let hlsInstancia = null;
 
-        // Detectar si el usuario está en un celular o tablet
+        // Detectar si el usuario está en celular
         const esMovil = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
         function playRadio(el, url, name, img) {
-            // Cambios de UI (Botones e imágenes)
+            // Cambios visuales
             document.querySelectorAll(".radio").forEach(r => r.classList.remove("activa"));
             el.classList.add("activa");
             title.innerText = name;
             logo.src = img;
 
-            // LÓGICA EXCLUSIVA PARA MÓVILES (Mejora el buffering para que no se corte)
+            // Truco móvil: Pedimos reproducir de inmediato para evitar bloqueos del navegador
+            let playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(() => { /* Ignoramos error temporal */ });
+            }
+
             if (esMovil && Hls.isSupported()) {
                 if (hlsInstancia) {
-                    hlsInstancia.destroy(); // Limpia la radio anterior si cambias de estación
+                    hlsInstancia.destroy(); 
                 }
                 
-                // Configuramos para que pre-cargue más segundos de audio
+                // Buffer ajustado para que cargue rápido
                 hlsInstancia = new Hls({
                     maxBufferLength: 10, 
-                    maxMaxBufferLength: 15
+                    maxMaxBufferLength: 20
                 });
                 
                 hlsInstancia.loadSource(url);
@@ -156,8 +160,19 @@
                 hlsInstancia.on(Hls.Events.MANIFEST_PARSED, function() {
                     audio.play();
                 });
+
+                // PLAN B: Si el servidor bloquea la librería, usamos tu código original
+                hlsInstancia.on(Hls.Events.ERROR, function (event, data) {
+                    if (data.fatal) {
+                        console.warn("La librería falló, usando reproductor original...", data);
+                        hlsInstancia.destroy();
+                        audio.src = url;
+                        audio.play();
+                    }
+                });
+
             } 
-            // LÓGICA INTACTA PARA PC (Tu código original, no se toca nada)
+            // CÓDIGO INTACTO PARA PC O DISPOSITIVOS SIN SOPORTE
             else {
                 audio.src = url;
                 audio.play();
