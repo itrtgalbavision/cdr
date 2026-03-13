@@ -21,23 +21,34 @@ color:white;
 
 .header{
 text-align:center;
-padding:50px 20px 30px;
+padding:60px 20px 35px;
 }
 
 .header h1{
 margin:0;
-font-size:38px;
-letter-spacing:2px;
+font-size:48px;
+letter-spacing:4px;
 font-weight:700;
-background:linear-gradient(90deg,#00e5ff,#00bfff);
+background:linear-gradient(90deg,#00e5ff,#00bfff,#3affff);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
+text-shadow:0 0 18px rgba(0,229,255,.35);
 }
 
 .header p{
-margin-top:10px;
-opacity:.7;
-font-size:14px;
+margin-top:12px;
+opacity:.75;
+font-size:15px;
+}
+
+.header::after{
+content:"";
+display:block;
+width:140px;
+height:3px;
+margin:20px auto 0;
+background:linear-gradient(90deg,transparent,#00bfff,transparent);
+border-radius:3px;
 }
 
 /* GRID */
@@ -108,7 +119,6 @@ width:100%;
 background:#0f1822;
 border-top:1px solid rgba(255,255,255,.1);
 padding:14px 20px;
-
 display:flex;
 align-items:center;
 justify-content:space-between;
@@ -153,6 +163,17 @@ background:#00e5ff;
 width:110px;
 }
 
+/* FOOTER */
+
+.footer{
+text-align:center;
+padding:20px;
+font-size:12px;
+opacity:.6;
+border-top:1px solid rgba(255,255,255,0.08);
+background:#0b1118;
+}
+
 /* RESPONSIVE */
 
 @media(max-width:1000px){
@@ -165,6 +186,7 @@ width:110px;
 
 @media(max-width:450px){
 .contenedor{grid-template-columns:1fr;}
+.header h1{font-size:32px;}
 }
 
 </style>
@@ -174,6 +196,9 @@ width:110px;
 
 <div class="header">
 <h1>CENTRAL DE RADIOS GUATEMALA</h1>
+<p>Escucha tus emisoras favoritas en vivo</p>
+</div>
+
 <div class="contenedor">
 
 <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/c2cce928-c69c-45d5-bd0a-5a5eba167a0d/ts:abr.m3u8','Xtrema 101.3 FM','xtrema.png')">
@@ -252,6 +277,10 @@ width:110px;
 
 </div>
 
+<div class="footer">
+© 2026 LMB. All Rights Reserved.
+</div>
+
 <audio id="audio"></audio>
 
 <script>
@@ -291,4 +320,3 @@ audio.volume=v
 
 </body>
 </html>
-
