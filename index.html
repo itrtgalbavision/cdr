@@ -117,7 +117,7 @@
         </div>
     </div>
 
-    <audio id="audio"></audio>
+    <audio id="audio" playsinline preload="auto"></audio>
 
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -128,17 +128,14 @@
         
         let hlsInstancia = null;
 
-        // Detectar si el usuario está en celular
         const esMovil = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
         function playRadio(el, url, name, img) {
-            // Cambios visuales
             document.querySelectorAll(".radio").forEach(r => r.classList.remove("activa"));
             el.classList.add("activa");
             title.innerText = name;
             logo.src = img;
 
-            // Truco móvil: Pedimos reproducir de inmediato para evitar bloqueos del navegador
             let playPromise = audio.play();
             if (playPromise !== undefined) {
                 playPromise.catch(() => { /* Ignoramos error temporal */ });
@@ -149,10 +146,12 @@
                     hlsInstancia.destroy(); 
                 }
                 
-                // Buffer ajustado para que cargue rápido
+                // AQUÍ ESTÁ EL SEGUNDO CAMBIO: Configuración optimizada para streams en vivo
                 hlsInstancia = new Hls({
-                    maxBufferLength: 60, 
-                    maxMaxBufferLength: 30
+                    maxBufferLength: 15, // Un poco más de colchón
+                    maxMaxBufferLength: 30,
+                    liveSyncDurationCount: 3, // Se aleja unos segundos del "en vivo" para evitar cortes
+                    liveMaxLatencyDurationCount: 10 // Si se atrasa mucho, lo corrige suavemente
                 });
                 
                 hlsInstancia.loadSource(url);
@@ -161,7 +160,6 @@
                     audio.play();
                 });
 
-                // PLAN B: Si el servidor bloquea la librería, usamos tu código original
                 hlsInstancia.on(Hls.Events.ERROR, function (event, data) {
                     if (data.fatal) {
                         console.warn("La librería falló, usando reproductor original...", data);
@@ -171,9 +169,7 @@
                     }
                 });
 
-            } 
-            // CÓDIGO INTACTO PARA PC O DISPOSITIVOS SIN SOPORTE
-            else {
+            } else {
                 audio.src = url;
                 audio.play();
             }
@@ -193,5 +189,3 @@
     </script>
 </body>
 </html>
-
-
