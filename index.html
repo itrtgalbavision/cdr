@@ -1,8 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Test Radio Estable</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    body {
+        margin: 0;
+        background: #0b1118;
+        color: white;
+        font-family: Arial;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+    }
+
+    button {
+        background: #00e5ff;
+        border: none;
+        padding: 20px 40px;
+        font-size: 18px;
+        border-radius: 50px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>Radio Test (Modo Estable)</h1>
+
+<button onclick="playRadio()">PLAY</button>
+
+<audio id="audio" playsinline preload="none"></audio>
+
+<script>
+let audio = document.getElementById("audio");
+
+const url = "https://d2qsan2ut81n2k.cloudfront.net/live/c2cce928-c69c-45d5-bd0a-5a5eba167a0d/ts:abr.m3u8";
+
 function playRadio() {
-
-    audio.src = "https://d2qsan2ut81n2k.cloudfront.net/live/c2cce928-c69c-45d5-bd0a-5a5eba167a0d/ts:abr.m3u8";
-
-    audio.play().catch(e => {
-        console.log("Error autoplay:", e);
-    });
+    audio.src = url;
+    audio.play().catch(err => console.log(err));
 }
+</script>
+
+</body>
+</html>
