@@ -9,13 +9,10 @@
             --primary: #00e5ff;
             --primary-dark: #00bfff;
             --accent: #ff3366;
-            --bg-body: #0b1118;
             --glass: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.1);
         }
-
         *{box-sizing:border-box;}
-        
         body{
             margin:0;
             font-family:'Poppins',sans-serif;
@@ -23,214 +20,63 @@
             color:white;
             min-height: 100vh;
         }
-
-        /* HEADER */
-        .header {
-            text-align: center;
-            padding: 60px 20px 40px;
-            position: relative;
-        }
-
+        .header { text-align: center; padding: 40px 20px; }
         .badge-en-vivo {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 51, 102, 0.1);
-            border: 1px solid rgba(255, 51, 102, 0.2);
-            padding: 6px 16px;
-            border-radius: 30px;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            color: var(--accent);
-            margin-bottom: 20px;
-            text-transform: uppercase;
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(255, 51, 102, 0.1); border: 1px solid rgba(255, 51, 102, 0.2);
+            padding: 6px 16px; border-radius: 30px; font-size: 11px; font-weight: 700; color: var(--accent); margin-bottom: 20px;
         }
-
         .punto-rojo {
-            width: 8px; height: 8px;
-            background-color: var(--accent);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--accent);
-            animation: latido 1.5s infinite;
+            width: 8px; height: 8px; background-color: var(--accent); border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent); animation: latido 1.5s infinite;
         }
-
-        @keyframes latido {
-            0% { transform: scale(0.9); opacity: 1; }
-            70% { transform: scale(1.5); opacity: 0; }
-            100% { transform: scale(0.9); opacity: 0; }
-        }
-
-        .header h1 {
-            margin: 0;
-            font-size: 38px;
-            line-height: 1.1;
-            font-weight: 800;
-            color: #f0f0f0;
-        }
-
+        @keyframes latido { 0% { transform: scale(0.9); opacity: 1; } 70% { transform: scale(1.5); opacity: 0; } 100% { transform: scale(0.9); opacity: 0; } }
+        .header h1 { margin: 0; font-size: 32px; font-weight: 800; }
         .header h1 span {
-            display: block;
-            font-size: 48px;
+            display: block; font-size: 40px;
             background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0px 4px 10px rgba(0, 229, 255, 0.3));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-
-        /* GRID */
         .contenedor {
-            width: 90%; 
-            max-width: 1200px; 
-            margin: 20px auto 140px;
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
-            gap: 25px;
+            width: 90%; max-width: 1200px; margin: 0 auto 140px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;
         }
-
-        /* TARJETAS */
         .radio {
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px 15px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            border: 1px solid var(--glass-border);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 160px;
-            text-align: center;
-            position: relative;
+            background: var(--glass); border-radius: 20px; padding: 25px 15px; cursor: pointer;
+            transition: 0.3s; border: 1px solid var(--glass-border);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
         }
-
-        .radio:hover {
-            transform: translateY(-8px);
-            background: rgba(255, 255, 255, 0.08);
-            border-color: var(--primary);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-        }
-
-        .radio.activa {
-            background: rgba(0, 229, 255, 0.05);
-            border: 2px solid var(--primary);
-            box-shadow: 0 0 25px rgba(0, 229, 255, 0.2);
-        }
-
-        .radio img {
-            width: auto;
-            max-width: 110px;
-            height: 65px;
-            object-fit: contain;
-            margin-bottom: 15px;
-            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
-            transition: transform 0.3s;
-        }
-
-        .radio:hover img {
-            transform: scale(1.05);
-        }
-
-        .radio span {
-            font-size: 14px;
-            font-weight: 500;
-            color: #efefef;
-            letter-spacing: 0.3px;
-        }
-
-        /* PLAYER BAR */
+        .radio:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.08); border-color: var(--primary); }
+        .radio.activa { border: 2px solid var(--primary); background: rgba(0, 229, 255, 0.05); }
+        .radio img { width: auto; max-width: 100px; height: 60px; object-fit: contain; margin-bottom: 12px; }
+        .radio span { font-size: 14px; font-weight: 500; color: #efefef; }
         .player {
-            position: fixed;
-            bottom: 0; left: 0;
-            width: 100%;
-            background: rgba(15, 24, 34, 0.9);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid var(--glass-border);
-            padding: 18px 40px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            z-index: 1000;
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.3);
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(15, 24, 34, 0.95); backdrop-filter: blur(15px);
+            border-top: 1px solid var(--glass-border); padding: 15px 30px;
+            display: flex; align-items: center; justify-content: space-between; z-index: 1000;
         }
-
-        .player-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex: 1;
-        }
-
-        #playerLogo {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
-            background: white;
-            padding: 5px;
-            object-fit: contain;
-            border: 1px solid var(--glass-border);
-        }
-        
+        .player-info { display: flex; align-items: center; gap: 15px; flex: 1; }
+        #playerLogo { width: 45px; height: 45px; border-radius: 8px; background: white; padding: 4px; object-fit: contain; }
         #playerLogo[src=""], #playerLogo:not([src]) { display: none; }
-
-        .player-title {
-            font-size: 15px;
-            font-weight: 600;
-            color: #fff;
-        }
-
-        .controls {
-            display: flex;
-            align-items: center;
-            gap: 25px;
-        }
-
+        .player-title { font-size: 14px; font-weight: 600; }
+        .controls { display: flex; align-items: center; gap: 20px; }
         button {
-            background: var(--primary);
-            border: none;
-            color: #0b1118;
-            padding: 10px 24px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
+            background: var(--primary); border: none; padding: 10px 20px; border-radius: 50px;
+            cursor: pointer; font-weight: 700; font-size: 12px; transition: 0.2s;
         }
-
-        button:hover {
-            background: white;
-            transform: scale(1.05);
-        }
-
-        .volume {
-            width: 120px;
-            height: 5px;
-            cursor: pointer;
-            accent-color: var(--primary);
-        }
-
-        /* RESPONSIVE */
-        @media(max-width: 768px) {
-            .header h1 { font-size: 28px; }
-            .header h1 span { font-size: 36px; }
-            .contenedor { width: 95%; gap: 15px; }
-            .player { padding: 15px 20px; }
-            .volume { display: none; }
-            .player-title { font-size: 13px; max-width: 150px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        button:hover { background: white; transform: scale(1.05); }
+        .volume { width: 100px; accent-color: var(--primary); }
+        @media(max-width: 600px) {
+            .player { padding: 15px; } .volume { display: none; }
+            .player-title { font-size: 12px; max-width: 140px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
         }
     </style>
 </head>
 <body>
     
     <div class="header">
-        <div class="badge-en-vivo">
-            <span class="punto-rojo"></span> EN VIVO
-        </div>
+        <div class="badge-en-vivo"><span class="punto-rojo"></span> EN VIVO</div>
         <h1>CENTRAL DE RADIOS <span>GUATEMALA</span></h1>
     </div>
 
@@ -284,7 +130,7 @@
         </div>
     </div>
 
-    <audio id="audio" playsinline preload="auto"></audio>
+    <audio id="audio" playsinline></audio>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
     <script>
@@ -294,75 +140,38 @@
         let hlsInstancia = null;
 
         function playRadio(el, url, name, img) {
+            // UI
             document.querySelectorAll(".radio").forEach(r => r.classList.remove("activa"));
             el.classList.add("activa");
             title.innerText = name;
             logo.src = img;
+            logo.style.display = "block";
 
-            // Intentar reproducir el elemento audio vacío primero (necesario para safari móvil)
-            audio.play().catch(() => {});
+            // Detener instancia previa si existe
+            if (hlsInstancia) {
+                hlsInstancia.destroy();
+            }
 
+            // REPRODUCCIÓN (Lógica Original Simplificada)
             if (Hls.isSupported()) {
-                if (hlsInstancia) {
-                    hlsInstancia.destroy();
-                }
-
-                // OPTIMIZACIÓN MÓVIL: Configuración de buffer agresiva para evitar cortes
-                hlsInstancia = new Hls({
-                    enableWorker: true,
-                    lowLatencyMode: false, // Desactivamos latencia baja para priorizar estabilidad
-                    backBufferLength: 60,
-                    maxBufferLength: 30, // 30 segundos de colchón
-                    maxMaxBufferLength: 60,
-                    liveSyncDurationCount: 5, // Se aleja un poco más del punto en vivo para mayor estabilidad
-                    liveMaxLatencyDurationCount: 10
-                });
-
+                hlsInstancia = new Hls();
                 hlsInstancia.loadSource(url);
                 hlsInstancia.attachMedia(audio);
                 hlsInstancia.on(Hls.Events.MANIFEST_PARSED, function() {
                     audio.play();
                 });
-
-                // REINTENTO AUTOMÁTICO: Si hay error de red, intenta recargar
-                hlsInstancia.on(Hls.Events.ERROR, function (event, data) {
-                    if (data.fatal) {
-                        switch (data.type) {
-                            case Hls.ErrorTypes.NETWORK_ERROR:
-                                hlsInstancia.startLoad();
-                                break;
-                            case Hls.ErrorTypes.MEDIA_ERROR:
-                                hlsInstancia.recoverMediaError();
-                                break;
-                            default:
-                                hlsInstancia.destroy();
-                                audio.src = url;
-                                audio.play();
-                                break;
-                        }
-                    }
-                });
-
             } else if (audio.canPlayType('application/vnd.apple.mpegurl')) {
-                // Soporte nativo para iOS Safari
+                // Soporte nativo (Safari)
                 audio.src = url;
-                audio.addEventListener('canplay', function() {
-                    audio.play();
-                });
+                audio.play();
             }
         }
 
         function togglePlay() {
-            if (audio.paused) {
-                audio.play();
-            } else {
-                audio.pause();
-            }
+            if (audio.paused) { audio.play(); } else { audio.pause(); }
         }
 
-        function setVolume(v) {
-            audio.volume = v;
-        }
+        function setVolume(v) { audio.volume = v; }
     </script>
 </body>
 </html>
