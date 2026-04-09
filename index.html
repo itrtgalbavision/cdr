@@ -171,7 +171,6 @@
             padding: 5px;
             object-fit: contain;
             border: 1px solid var(--glass-border);
-            /* Solo se muestra si tiene src */
         }
         
         #playerLogo[src=""], #playerLogo:not([src]) { display: none; }
@@ -232,10 +231,7 @@
         <div class="badge-en-vivo">
             <span class="punto-rojo"></span> EN VIVO
         </div>
-        <h1>
-            CENTRAL DE RADIOS
-            <span>GUATEMALA</span>
-        </h1>
+        <h1>CENTRAL DE RADIOS <span>GUATEMALA</span></h1>
     </div>
 
     <div class="contenedor">
@@ -289,17 +285,13 @@
     </div>
 
     <audio id="audio" playsinline preload="auto"></audio>
-
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
     <script>
         let audio = document.getElementById("audio");
         let title = document.getElementById("playerTitle");
         let logo = document.getElementById("playerLogo");
-        
         let hlsInstancia = null;
-
-        const esMovil = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
         function playRadio(el, url, name, img) {
             document.querySelectorAll(".radio").forEach(r => r.classList.remove("activa"));
@@ -307,41 +299,56 @@
             title.innerText = name;
             logo.src = img;
 
-            let playPromise = audio.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(() => { /* Ignoramos error temporal */ });
-            }
+            // Intentar reproducir el elemento audio vacío primero (necesario para safari móvil)
+            audio.play().catch(() => {});
 
-            if (esMovil && Hls.isSupported()) {
+            if (Hls.isSupported()) {
                 if (hlsInstancia) {
-                    hlsInstancia.destroy(); 
+                    hlsInstancia.destroy();
                 }
-                
+
+                // OPTIMIZACIÓN MÓVIL: Configuración de buffer agresiva para evitar cortes
                 hlsInstancia = new Hls({
-                    maxBufferLength: 15,
-                    maxMaxBufferLength: 30,
-                    liveSyncDurationCount: 3,
+                    enableWorker: true,
+                    lowLatencyMode: false, // Desactivamos latencia baja para priorizar estabilidad
+                    backBufferLength: 60,
+                    maxBufferLength: 30, // 30 segundos de colchón
+                    maxMaxBufferLength: 60,
+                    liveSyncDurationCount: 5, // Se aleja un poco más del punto en vivo para mayor estabilidad
                     liveMaxLatencyDurationCount: 10
                 });
-                
+
                 hlsInstancia.loadSource(url);
                 hlsInstancia.attachMedia(audio);
                 hlsInstancia.on(Hls.Events.MANIFEST_PARSED, function() {
                     audio.play();
                 });
 
+                // REINTENTO AUTOMÁTICO: Si hay error de red, intenta recargar
                 hlsInstancia.on(Hls.Events.ERROR, function (event, data) {
                     if (data.fatal) {
-                        console.warn("La librería falló, usando reproductor original...", data);
-                        hlsInstancia.destroy();
-                        audio.src = url;
-                        audio.play();
+                        switch (data.type) {
+                            case Hls.ErrorTypes.NETWORK_ERROR:
+                                hlsInstancia.startLoad();
+                                break;
+                            case Hls.ErrorTypes.MEDIA_ERROR:
+                                hlsInstancia.recoverMediaError();
+                                break;
+                            default:
+                                hlsInstancia.destroy();
+                                audio.src = url;
+                                audio.play();
+                                break;
+                        }
                     }
                 });
 
-            } else {
+            } else if (audio.canPlayType('application/vnd.apple.mpegurl')) {
+                // Soporte nativo para iOS Safari
                 audio.src = url;
-                audio.play();
+                audio.addEventListener('canplay', function() {
+                    audio.play();
+                });
             }
         }
 
