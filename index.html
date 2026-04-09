@@ -67,7 +67,7 @@
             color: #000; font-weight: 600;
         }
         button:hover { background: white; transform: scale(1.05); }
-        button.loading { opacity: 0.6; cursor: not-allowed; }
+        button.loading { opacity: 0.6; }
         .status-indicator {
             display: inline-block; width: 8px; height: 8px; border-radius: 50%;
             margin-right: 8px; background: #ff3366;
@@ -91,40 +91,52 @@
 
     <div class="contenedor">
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/c2cce928-c69c-45d5-bd0a-5a5eba167a0d/ts:abr.m3u8','Xtrema 101.3 FM','xtrema.png')">
-            <img src="xtrema.png"> <span>Xtrema 101.3 FM</span>
+            <img src="xtrema.png" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2260%22%3E%3Crect fill=%22%23333%22 width=%22100%22 height=%2260%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2214%22 fill=%22%23fff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22%3EXtrema%3C/text%3E%3C/svg%3E'"> 
+            <span>Xtrema 101.3 FM</span>
         </div>
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/406d6243-a8fc-4215-aca0-ffd43aac2bf3/ts:abr.m3u8','Galaxia 88.5 FM','galaxia.png')">
-            <img src="galaxia.png"> <span>Galaxia 88.5 FM</span>
+            <img src="galaxia.png" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2260%22%3E%3Crect fill=%22%23333%22 width=%22100%22 height=%2260%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2214%22 fill=%22%23fff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22%3EGalaxia%3C/text%3E%3C/svg%3E'"> 
+            <span>Galaxia 88.5 FM</span>
         </div>
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/67aeb080-68fa-4197-89f6-c8bb70f9a395/ts:abr.m3u8','Tropicálida 104.9 FM','tropicalida.png')">
-            <img src="tropicalida.png"> <span>Tropicálida 104.9 FM</span>
+            <img src="tropicalida.png" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2260%22%3E%3Crect fill=%22%23333%22 width=%22100%22 height=%2260%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2214%22 fill=%22%23fff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22%3ETropicálida%3C/text%3E%3C/svg%3E'"> 
+            <span>Tropicálida 104.9 FM</span>
         </div>
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/ca11fca0-0da4-4198-83bd-b50e5607d6f8/ts:abr.m3u8','Éxitos 90.9','exitos.png')">
-            <img src="exitos.png"> <span>Éxitos 90.9</span>
+            <img src="exitos.png" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2260%22%3E%3Crect fill=%22%23333%22 width=%22100%22 height=%2260%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2214%22 fill=%22%23fff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22%3EÉxitos%3C/text%3E%3C/svg%3E'"> 
+            <span>Éxitos 90.9</span>
         </div>
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/e33ed625-2624-4334-a625-a53a70d95791/ts:abr.m3u8','Joya 92.9 FM','joya.png')">
-            <img src="joya.png"> <span>Joya 92.9 FM</span>
+            <img src="joya.png" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2260%22%3E%3Crect fill=%22%23333%22 width=%22100%22 height=%2260%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2214%22 fill=%22%23fff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22%3EJoya%3C/text%3E%3C/svg%3E'"> 
+            <span>Joya 92.9 FM</span>
         </div>
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/3943e598-9843-4784-9388-80e97aa3674b/ts:abr.m3u8','Alfa 97.3 FM','alfa.png')">
-            <img src="alfa.png"> <span>Alfa 97.3 FM</span>
+            <img src="alfa.png" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2260%22%3E%3Crect fill=%22%23333%22 width=%22100%22 height=%2260%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2214%22 fill=%22%23fff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22%3EAlfa%3C/text%3E%3C/svg%3E'"> 
+            <span>Alfa 97.3 FM</span>
         </div>
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/a4e3175d-fa7e-4d4b-979f-e7f875468260/ts:abr.m3u8','Ranchera 95.7 FM','ranchera.png')">
-            <img src="ranchera.png"> <span>Ranchera 95.7 FM</span>
+            <img src="ranchera.png" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2260%22%3E%3Crect fill=%22%23333%22 width=%22100%22 height=%2260%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2214%22 fill=%22%23fff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22%3ERanchera%3C/text%3E%3C/svg%3E'"> 
+            <span>Ranchera 95.7 FM</span>
         </div>
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/53ee315d-206f-4271-994b-4c1927ae338b/ts:abr.m3u8','La Marca 94.1 FM','lamarca.png')">
-            <img src="lamarca.png"> <span>La Marca 94.1 FM</span>
+            <img src="lamarca.png" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2260%22%3E%3Crect fill=%22%23333%22 width=%22100%22 height=%2260%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2214%22 fill=%22%23fff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22%3ELa Marca%3C/text%3E%3C/svg%3E'"> 
+            <span>La Marca 94.1 FM</span>
         </div>
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/9c2d6264-2009-49a8-a501-848a7bae1051/ts:abr.m3u8','Fiesta 103.7 FM','fiesta.png')">
-            <img src="fiesta.png"> <span>Fiesta 103.7 FM</span>
+            <img src="fiesta.png" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2260%22%3E%3Crect fill=%22%23333%22 width=%22100%22 height=%2260%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2214%22 fill=%22%23fff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22%3EFiesta%3C/text%3E%3C/svg%3E'"> 
+            <span>Fiesta 103.7 FM</span>
         </div>
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/8e7a8a5b-a2db-4323-8397-46c17f4573ac/ts:abr.m3u8','Sonora 96.9 FM','sonora.png')">
-            <img src="sonora.png"> <span>Sonora 96.9 FM</span>
+            <img src="sonora.png" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2260%22%3E%3Crect fill=%22%23333%22 width=%22100%22 height=%2260%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2214%22 fill=%22%23fff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22%3ESonora%3C/text%3E%3C/svg%3E'"> 
+            <span>Sonora 96.9 FM</span>
         </div>
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/ef0c82f1-e446-4093-8455-3a144ca2e171/ts:abr.m3u8','Éxitos Xela 107.1 FM','exitosx.png')">
-            <img src="exitosx.png"> <span>Éxitos Xela 107.1 FM</span>
+            <img src="exitosx.png" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2260%22%3E%3Crect fill=%22%23333%22 width=%22100%22 height=%2260%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2214%22 fill=%22%23fff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22%3EÉxitos Xela%3C/text%3E%3C/svg%3E'"> 
+            <span>Éxitos Xela 107.1 FM</span>
         </div>
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/c2af032e-3e29-4551-a757-e4f3d349386c/ts:abr.m3u8','Flix Xela 93.9','fixx.png')">
-            <img src="fixx.png"> <span>Flix Xela 93.9</span>
+            <img src="fixx.png" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2260%22%3E%3Crect fill=%22%23333%22 width=%22100%22 height=%2260%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2214%22 fill=%22%23fff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22%3EFlix Xela%3C/text%3E%3C/svg%3E'"> 
+            <span>Flix Xela 93.9</span>
         </div>
     </div>
 
@@ -149,199 +161,169 @@
         let logo = document.getElementById("playerLogo");
         let playBtn = document.getElementById("playBtn");
         let statusIndicator = document.getElementById("statusIndicator");
+        
         let hlsInstancia = null;
         let currentRadio = null;
-        let isLoadingManifest = false;
+        let currentRadioName = null;
+        let isLoading = false;
 
-        // Configuración optimizada para HLS.js
+        // Configuración optimizada pero SIMPLE
         const hlsConfig = {
             debug: false,
             enableWorker: true,
-            lowLatencyMode: true,
-            backBufferLength: 90, // Aumentado para mejor estabilidad en móvil
+            autoStartLoad: true,
+            startLevel: -1,
+            defaultAudioCodec: undefined,
+            initialLiveManifestSize: 3,
             maxBufferLength: 30,
-            maxMaxBufferLength: 600, // Máximo buffer en caso de conexión lenta
-            maxBackBufferLength: 90,
-            fragLoadingTimeOut: 20000, // 20 segundos timeout
-            fragLoadingMaxRetry: 6, // Reintentos agresivos
+            maxMaxBufferLength: 300,
+            backBufferLength: 60,
+            fragLoadingTimeOut: 20000,
+            fragLoadingMaxRetry: 4,
             levelLoadingTimeOut: 10000,
             levelLoadingMaxRetry: 4,
             manifestLoadingTimeOut: 10000,
-            manifestLoadingMaxRetry: 3,
-            startFragPrefetching: true,
-            initialLiveManifestSize: 1,
-            testBitrate: false, // Desactiva test de bitrate que causa cortes
-            progressive: false,
-            autoStartLoad: false, // Control manual de carga
-            startLevel: -1, // Auto-selección de calidad
-            emeEnabled: false,
-            cmcdUserAgent: true,
+            manifestLoadingMaxRetry: 2,
+            lowLatencyMode: false,
+            testBitrate: false,
+            progressive: false
         };
 
-        // Función para reproducir radio
         function playRadio(el, url, name, img) {
-            // Si ya está reproduciendo la misma radio, solo play/pause
-            if (currentRadio === url && hlsInstancia) {
+            console.log("Iniciando reproducción:", name);
+            
+            // Si es la misma radio, solo toggle play/pause
+            if (currentRadio === url && !isLoading) {
                 togglePlay();
                 return;
             }
 
-            // Actualizar UI
+            isLoading = true;
+            currentRadio = url;
+            currentRadioName = name;
+            
+            // UI Updates
             document.querySelectorAll(".radio").forEach(r => r.classList.remove("activa"));
             el.classList.add("activa");
             title.innerText = name;
             logo.src = img;
             logo.style.display = "block";
-            currentRadio = url;
-
-            // Marcar como cargando
-            isLoadingManifest = true;
-            playBtn.classList.add("loading");
             playBtn.textContent = "⏳ Cargando...";
+            playBtn.classList.add("loading");
             updateStatus(false);
 
-            // Destruir instancia anterior
+            // Limpiar reproducción anterior
+            audio.pause();
+            
+            // Destruir HLS anterior
             if (hlsInstancia) {
                 try {
                     hlsInstancia.destroy();
-                } catch(e) {
-                    console.error("Error destruyendo HLS anterior:", e);
+                    hlsInstancia = null;
+                } catch (e) {
+                    console.log("Error limpiando HLS:", e);
+                    hlsInstancia = null;
                 }
-                hlsInstancia = null;
             }
-
-            // Pausar y limpiar audio
-            audio.pause();
-            audio.currentTime = 0;
-            audio.src = "";
 
             // Pequeño delay para asegurar limpieza
             setTimeout(() => {
-                cargarRadio(url, name);
+                loadAndPlay(url, name);
             }, 100);
         }
 
-        function cargarRadio(url, name) {
+        function loadAndPlay(url, name) {
             try {
+                console.log("Cargando:", url);
+                
                 if (Hls.isSupported()) {
                     hlsInstancia = new Hls(hlsConfig);
-                    
-                    // Evento: Manifest cargado
-                    hlsInstancia.on(Hls.Events.MANIFEST_PARSED, function() {
-                        isLoadingManifest = false;
+
+                    // Cuando el manifest esté listo
+                    hlsInstancia.once(Hls.Events.MANIFEST_PARSED, function() {
+                        console.log("✓ Manifest parsed");
+                        isLoading = false;
                         playBtn.classList.remove("loading");
                         playBtn.textContent = "⏸ Pause";
-                        console.log(`Manifest parsed para ${name}`);
-                        
-                        // Reproducir automáticamente
-                        let playPromise = audio.play();
-                        if (playPromise !== undefined) {
-                            playPromise.catch(err => {
-                                console.error("Error al reproducir:", err);
-                                playBtn.textContent = "▶ Play";
-                            });
-                        }
+                        updateStatus(true);
+                        audio.play().catch(e => console.error("Error play:", e));
                     });
 
-                    // Evento: Error fatal
+                    // Manejo de errores
                     hlsInstancia.on(Hls.Events.ERROR, function(event, data) {
-                        console.error("HLS Error:", data);
+                        console.error("HLS Error:", data.type, data.details);
                         
                         if (data.fatal) {
-                            isLoadingManifest = false;
-                            playBtn.classList.remove("loading");
-                            
-                            switch (data.type) {
-                                case Hls.ErrorTypes.NETWORK_ERROR:
-                                    console.log("Error de red, intentando fallback...");
-                                    intentarFallback(url);
-                                    break;
-                                case Hls.ErrorTypes.MEDIA_ERROR:
-                                    console.log("Error de media, recargando...");
-                                    hlsInstancia.recoverMediaError();
-                                    break;
-                                default:
-                                    console.log("Error fatal, usando fallback directo");
-                                    intentarFallback(url);
+                            console.log("Error fatal, intentando fallback...");
+                            if (hlsInstancia) {
+                                hlsInstancia.destroy();
+                                hlsInstancia = null;
                             }
+                            
+                            // Fallback directo
+                            setTimeout(() => {
+                                fallbackPlay(url, name);
+                            }, 500);
                         }
                     });
 
-                    // Eventos de estado
-                    audio.addEventListener("play", () => updateStatus(true));
-                    audio.addEventListener("pause", () => updateStatus(false));
-                    audio.addEventListener("loadstart", () => {
-                        if (!isLoadingManifest) updateStatus(false);
-                    });
-                    audio.addEventListener("stalled", () => {
-                        console.log("Audio stalled, reintentando...");
-                        audio.load();
-                    });
-
+                    // Cargar source
                     hlsInstancia.loadSource(url);
                     hlsInstancia.attachMedia(audio);
-                    hlsInstancia.startLoad();
-
-                } else if (audio.canPlayType('application/vnd.apple.mpegurl')) {
-                    // Soporte nativo iOS
-                    console.log("Usando soporte nativo HLS (iOS)");
-                    audio.src = url;
                     
-                    audio.addEventListener("canplay", function onCanPlay() {
-                        isLoadingManifest = false;
-                        playBtn.classList.remove("loading");
-                        playBtn.textContent = "⏸ Pause";
-                        audio.removeEventListener("canplay", onCanPlay);
-                        audio.play().catch(err => console.error("Error iOS:", err));
-                    }, { once: true });
-
+                } else if (audio.canPlayType('application/vnd.apple.mpegurl')) {
+                    console.log("Usando soporte nativo HLS");
+                    audio.src = url;
+                    isLoading = false;
+                    playBtn.classList.remove("loading");
+                    playBtn.textContent = "⏸ Pause";
+                    updateStatus(true);
                     audio.load();
+                    audio.play().catch(e => console.error("Error play iOS:", e));
+                } else {
+                    console.log("Usando fallback directo (sin HLS.js support)");
+                    fallbackPlay(url, name);
                 }
-            } catch(err) {
-                console.error("Error cargando radio:", err);
-                isLoadingManifest = false;
-                playBtn.classList.remove("loading");
-                intentarFallback(url);
+
+            } catch (err) {
+                console.error("Error en loadAndPlay:", err);
+                fallbackPlay(url, name);
             }
         }
 
-        function intentarFallback(url) {
-            console.log("Intento fallback directo sin HLS.js");
+        function fallbackPlay(url, name) {
+            console.log("Fallback: Reproducción directa");
             try {
-                if (hlsInstancia) hlsInstancia.destroy();
-                hlsInstancia = null;
-                
                 audio.src = url;
                 audio.load();
+                isLoading = false;
+                playBtn.classList.remove("loading");
+                playBtn.textContent = "⏸ Pause";
+                updateStatus(true);
                 
-                let playPromise = audio.play();
-                if (playPromise) {
-                    playPromise.then(() => {
-                        isLoadingManifest = false;
-                        playBtn.classList.remove("loading");
-                        playBtn.textContent = "⏸ Pause";
-                    }).catch(err => {
-                        console.error("Error fallback:", err);
-                        playBtn.textContent = "✗ Error";
-                        playBtn.classList.remove("loading");
-                    });
-                }
-            } catch(err) {
-                console.error("Fallback también falló:", err);
+                audio.play().catch(e => {
+                    console.error("Error fallback play:", e);
+                    playBtn.textContent = "✗ Error";
+                    playBtn.classList.remove("loading");
+                });
+            } catch (err) {
+                console.error("Error fallback:", err);
                 playBtn.textContent = "✗ Error";
                 playBtn.classList.remove("loading");
             }
         }
 
         function togglePlay() {
-            if (!audio.src) {
-                console.log("Sin fuente de audio");
+            if (!audio.src && !currentRadio) {
+                console.log("Sin radio seleccionada");
                 return;
             }
-            
+
             if (audio.paused) {
-                audio.play().catch(err => console.error("Error play:", err));
+                console.log("Reproduciendo");
+                audio.play().catch(e => console.error("Error:", e));
             } else {
+                console.log("Pausando");
                 audio.pause();
             }
         }
@@ -353,34 +335,64 @@
         function updateStatus(playing) {
             if (playing) {
                 statusIndicator.classList.add("playing");
-                playBtn.textContent = "⏸ Pause";
-                updateStatus(true);
             } else {
                 statusIndicator.classList.remove("playing");
-                if (!isLoadingManifest) {
-                    playBtn.textContent = "▶ Play";
-                }
             }
         }
 
-        // Manejo de cambio de pestaña/app
+        // Events de audio
+        audio.addEventListener("play", function() {
+            console.log("Audio: play");
+            playBtn.textContent = "⏸ Pause";
+            updateStatus(true);
+        });
+
+        audio.addEventListener("pause", function() {
+            console.log("Audio: pause");
+            playBtn.textContent = "▶ Play";
+            updateStatus(false);
+        });
+
+        audio.addEventListener("error", function(e) {
+            console.error("Audio error:", audio.error);
+            playBtn.textContent = "✗ Error";
+            playBtn.classList.remove("loading");
+        });
+
+        audio.addEventListener("stalled", function() {
+            console.log("Audio stalled - recuperando");
+            audio.load();
+        });
+
+        audio.addEventListener("loadstart", function() {
+            console.log("Audio: loadstart");
+        });
+
+        audio.addEventListener("canplay", function() {
+            console.log("Audio: canplay");
+        });
+
+        // Recuperar al volver a la app
         document.addEventListener("visibilitychange", function() {
-            if (document.hidden) {
-                console.log("App en background");
-            } else {
-                console.log("App activa, verificando reproducción");
+            if (!document.hidden && !audio.paused) {
+                console.log("App visible - verificando audio");
                 if (audio.paused && currentRadio) {
-                    audio.play().catch(err => console.error("Error al reanudar:", err));
+                    audio.play().catch(e => console.error("Error resume:", e));
                 }
             }
         });
 
-        // Cleanup al cerrar
+        // Limpiar al cerrar
         window.addEventListener("beforeunload", function() {
             if (hlsInstancia) {
-                hlsInstancia.destroy();
+                try {
+                    hlsInstancia.destroy();
+                } catch (e) {}
             }
+            audio.pause();
         });
+
+        console.log("Script cargado - HLS.js disponible:", typeof Hls !== 'undefined');
     </script>
 </body>
 </html>
