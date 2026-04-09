@@ -8,10 +8,12 @@
 
 <body style="background:#0b1118;color:white;text-align:center;padding-top:100px;">
 
-<h2>Radio Estable</h2>
+<h2>Radio Estable (Optimizada)</h2>
 <button onclick="start()">PLAY</button>
 
-<audio id="audio" controls playsinline></audio>
+<br><br>
+
+<audio id="audio" controls playsinline style="width:90%; max-width:400px;"></audio>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -23,25 +25,24 @@ let hls;
 
 function start(){
 
-    // limpiar instancia anterior
+    // limpiar instancia previa
     if(hls){
         hls.destroy();
     }
 
-    // 👉 iPhone / Safari (usa nativo SIEMPRE)
+    // 👉 iPhone / Safari usa nativo (MEJOR en iOS)
     if(audio.canPlayType('application/vnd.apple.mpegurl')){
         audio.src = URL;
         audio.play();
         return;
     }
 
-    // 👉 Android / Chrome
+    // 👉 Android / Chrome usa HLS.js
     if(Hls.isSupported()){
 
         hls = new Hls({
 
-            // 🔥 CONFIG ESTABLE REAL
-            startLevel: 0,
+            // 🔥 CONFIG ESTABLE
             autoStartLoad: true,
 
             maxBufferLength: 50,
@@ -59,8 +60,15 @@ function start(){
 
         hls.on(Hls.Events.MANIFEST_PARSED, function(){
 
-            // 🔒 bloquear calidad (clave)
-            hls.currentLevel = 0;
+            // 🔥 SELECCIÓN INTELIGENTE DE CALIDAD
+            let levels = hls.levels;
+
+            if(levels.length > 2){
+                hls.currentLevel = 1; // 👈 nivel medio (clave)
+            } else {
+                hls.currentLevel = 0;
+            }
+
             hls.autoLevelEnabled = false;
 
             audio.play();
@@ -71,7 +79,7 @@ function start(){
 
             if (data.fatal) {
 
-                console.warn("Error HLS, usando nativo");
+                console.warn("Error HLS, fallback nativo");
 
                 hls.destroy();
                 audio.src = URL;
