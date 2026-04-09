@@ -12,17 +12,12 @@
             --glass: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.1);
         }
-
         *{box-sizing:border-box;}
-        
         body{
-            margin:0;
-            font-family:'Poppins',sans-serif;
+            margin:0; font-family:'Poppins',sans-serif;
             background: radial-gradient(circle at top, #162431 0%, #0b1118 100%);
-            color:white;
-            min-height: 100vh;
+            color:white; min-height: 100vh;
         }
-
         .header { text-align: center; padding: 60px 20px 40px; }
         .badge-en-vivo {
             display: inline-flex; align-items: center; gap: 8px;
@@ -35,19 +30,16 @@
             box-shadow: 0 0 10px var(--accent); animation: latido 1.5s infinite;
         }
         @keyframes latido { 0% { transform: scale(0.9); opacity: 1; } 70% { transform: scale(1.5); opacity: 0; } 100% { transform: scale(0.9); opacity: 0; } }
-
         .header h1 { margin: 0; font-size: 38px; font-weight: 800; }
         .header h1 span {
             display: block; font-size: 48px;
             background: linear-gradient(90deg, var(--primary), var(--primary-dark));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-
         .contenedor {
             width: 90%; max-width: 1200px; margin: 20px auto 140px;
             display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px;
         }
-
         .radio {
             background: var(--glass); backdrop-filter: blur(10px); border-radius: 20px;
             padding: 25px 15px; cursor: pointer; transition: 0.3s;
@@ -57,7 +49,6 @@
         .radio:hover { transform: translateY(-8px); background: rgba(255, 255, 255, 0.08); border-color: var(--primary); }
         .radio.activa { border: 2px solid var(--primary); background: rgba(0, 229, 255, 0.05); }
         .radio img { width: auto; max-width: 110px; height: 65px; object-fit: contain; margin-bottom: 15px; }
-
         .player {
             position: fixed; bottom: 0; left: 0; width: 100%;
             background: rgba(15, 24, 34, 0.95); backdrop-filter: blur(20px);
@@ -68,14 +59,12 @@
         #playerLogo { width: 50px; height: 50px; border-radius: 10px; background: white; padding: 5px; object-fit: contain; }
         #playerLogo[src=""], #playerLogo:not([src]) { display: none; }
         .player-title { font-size: 15px; font-weight: 600; }
-
         .controls { display: flex; align-items: center; gap: 25px; }
         button {
             background: var(--primary); border: none; padding: 10px 24px; border-radius: 50px;
             cursor: pointer; font-weight: 700; text-transform: uppercase; transition: 0.3s;
         }
         .volume { width: 120px; accent-color: var(--primary); }
-
         @media(max-width: 768px) {
             .header h1 { font-size: 28px; } .header h1 span { font-size: 36px; }
             .contenedor { width: 95%; gap: 15px; }
@@ -84,12 +73,10 @@
     </style>
 </head>
 <body>
-    
     <div class="header">
         <div class="badge-en-vivo"><span class="punto-rojo"></span> EN VIVO</div>
         <h1>CENTRAL DE RADIOS <span>GUATEMALA</span></h1>
     </div>
-
     <div class="contenedor">
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/c2cce928-c69c-45d5-bd0a-5a5eba167a0d/ts:abr.m3u8','Xtrema 101.3 FM','xtrema.png')">
             <img src="xtrema.png"> <span>Xtrema 101.3 FM</span>
@@ -128,7 +115,6 @@
             <img src="fixx.png"> <span>Flix Xela 93.9</span>
         </div>
     </div>
-
     <div class="player">
         <div class="player-info">
             <img id="playerLogo">
@@ -139,11 +125,8 @@
             <input class="volume" type="range" min="0" max="1" step="0.01" value="1.0" onchange="setVolume(this.value)">
         </div>
     </div>
-
     <audio id="audio" playsinline></audio>
-
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
     <script>
         let audio = document.getElementById("audio");
         let title = document.getElementById("playerTitle");
@@ -151,52 +134,57 @@
         let hlsInstancia = null;
 
         function playRadio(el, url, name, img) {
-            // 1. UI Update
             document.querySelectorAll(".radio").forEach(r => r.classList.remove("activa"));
             el.classList.add("activa");
             title.innerText = name;
             logo.src = img;
             logo.style.display = "block";
 
-            // 2. DESBLOQUEO DE AUDIO PARA MÓVIL (CRÍTICO)
-            // Ejecutamos play() inmediatamente tras el click para que el navegador confíe.
+            // Desbloqueo inicial
             audio.pause();
-            audio.src = ""; 
+            audio.src = "";
             audio.load();
-            let unlockPromise = audio.play();
-            if (unlockPromise !== undefined) {
-                unlockPromise.then(() => { audio.pause(); }).catch(() => {});
-            }
 
-            // 3. CARGA DE STREAM
             if (Hls.isSupported()) {
                 if (hlsInstancia) { hlsInstancia.destroy(); }
                 
                 hlsInstancia = new Hls({
-                    // Configuracion estandar ultra-compatible
-                    maxBufferLength: 20,
-                    enableWorker: true,
-                    lowLatencyMode: false
+                    // AJUSTES ANTI-CORTE MÓVIL
+                    maxBufferLength: 30,           // Buffer de 30 segundos
+                    maxMaxBufferLength: 60,        // Máximo colchón de 1 minuto
+                    maxBufferSize: 50 * 1000 * 1000, // 50MB de buffer
+                    liveSyncDuration: 10,          // Se aleja 10 segundos del "vivo" para estabilidad
+                    liveMaxLatencyDuration: 20,    // Permite hasta 20 segundos de retraso antes de saltar
+                    enableWorker: true,            // Usa un hilo separado para no trabar la UI
+                    manifestLoadingMaxRetry: 10,    // Reintenta más veces si falla la red
                 });
 
                 hlsInstancia.loadSource(url);
                 hlsInstancia.attachMedia(audio);
                 hlsInstancia.on(Hls.Events.MANIFEST_PARSED, function() {
-                    audio.play();
+                    audio.play().catch(() => {});
                 });
 
-                // Reintento si hay error de red
+                // Recuperación automática de errores de red o media
                 hlsInstancia.on(Hls.Events.ERROR, function(event, data) {
                     if (data.fatal) {
-                        hlsInstancia.destroy();
-                        // Intentar cargar directo si falla HLS.js
-                        audio.src = url;
-                        audio.play();
+                        switch (data.type) {
+                            case Hls.ErrorTypes.NETWORK_ERROR:
+                                hlsInstancia.startLoad();
+                                break;
+                            case Hls.ErrorTypes.MEDIA_ERROR:
+                                hlsInstancia.recoverMediaError();
+                                break;
+                            default:
+                                hlsInstancia.destroy();
+                                audio.src = url;
+                                audio.play();
+                                break;
+                        }
                     }
                 });
 
             } else if (audio.canPlayType('application/vnd.apple.mpegurl')) {
-                // Soporte nativo de Apple (Safari iOS)
                 audio.src = url;
                 audio.play();
             }
@@ -205,7 +193,6 @@
         function togglePlay() {
             if (audio.paused) { audio.play(); } else { audio.pause(); }
         }
-
         function setVolume(v) { audio.volume = v; }
     </script>
 </body>
