@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Central de Radios Guatemala</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -63,11 +64,20 @@
         button {
             background: var(--primary); border: none; padding: 10px 20px; border-radius: 50px;
             cursor: pointer; font-weight: 700; font-size: 12px; transition: 0.2s;
+            color: #000; font-weight: 600;
         }
         button:hover { background: white; transform: scale(1.05); }
+        button.loading { opacity: 0.6; cursor: not-allowed; }
+        .status-indicator {
+            display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+            margin-right: 8px; background: #ff3366;
+        }
+        .status-indicator.playing { background: #00ff00; animation: pulse 1s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         .volume { width: 100px; accent-color: var(--primary); }
         @media(max-width: 600px) {
-            .player { padding: 15px; } .volume { display: none; }
+            .player { padding: 15px; } 
+            .volume { display: none; }
             .player-title { font-size: 12px; max-width: 140px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
         }
     </style>
@@ -120,68 +130,257 @@
 
     <div class="player">
         <div class="player-info">
+            <span class="status-indicator" id="statusIndicator"></span>
             <img id="playerLogo">
             <div class="player-title" id="playerTitle">Selecciona una radio</div>
         </div>
         <div class="controls">
-            <button onclick="togglePlay()">Play / Pause</button>
+            <button id="playBtn" onclick="togglePlay()">▶ Play</button>
             <input class="volume" type="range" min="0" max="1" step="0.01" value="1.0" onchange="setVolume(this.value)">
         </div>
     </div>
 
-    <audio id="audio" playsinline></audio>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <audio id="audio" crossorigin="anonymous" playsinline controlsList="nodownload"></audio>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.10/dist/hls.min.js"></script>
 
     <script>
         let audio = document.getElementById("audio");
         let title = document.getElementById("playerTitle");
         let logo = document.getElementById("playerLogo");
+        let playBtn = document.getElementById("playBtn");
+        let statusIndicator = document.getElementById("statusIndicator");
         let hlsInstancia = null;
+        let currentRadio = null;
+        let isLoadingManifest = false;
 
+        // Configuración optimizada para HLS.js
+        const hlsConfig = {
+            debug: false,
+            enableWorker: true,
+            lowLatencyMode: true,
+            backBufferLength: 90, // Aumentado para mejor estabilidad en móvil
+            maxBufferLength: 30,
+            maxMaxBufferLength: 600, // Máximo buffer en caso de conexión lenta
+            maxBackBufferLength: 90,
+            fragLoadingTimeOut: 20000, // 20 segundos timeout
+            fragLoadingMaxRetry: 6, // Reintentos agresivos
+            levelLoadingTimeOut: 10000,
+            levelLoadingMaxRetry: 4,
+            manifestLoadingTimeOut: 10000,
+            manifestLoadingMaxRetry: 3,
+            startFragPrefetching: true,
+            initialLiveManifestSize: 1,
+            testBitrate: false, // Desactiva test de bitrate que causa cortes
+            progressive: false,
+            autoStartLoad: false, // Control manual de carga
+            startLevel: -1, // Auto-selección de calidad
+            emeEnabled: false,
+            cmcdUserAgent: true,
+        };
+
+        // Función para reproducir radio
         function playRadio(el, url, name, img) {
-            // UI
+            // Si ya está reproduciendo la misma radio, solo play/pause
+            if (currentRadio === url && hlsInstancia) {
+                togglePlay();
+                return;
+            }
+
+            // Actualizar UI
             document.querySelectorAll(".radio").forEach(r => r.classList.remove("activa"));
             el.classList.add("activa");
             title.innerText = name;
             logo.src = img;
             logo.style.display = "block";
+            currentRadio = url;
 
-            // Detener y limpiar INSTANCIA ANTERIOR (Clave para evitar fallos)
+            // Marcar como cargando
+            isLoadingManifest = true;
+            playBtn.classList.add("loading");
+            playBtn.textContent = "⏳ Cargando...";
+            updateStatus(false);
+
+            // Destruir instancia anterior
             if (hlsInstancia) {
-                hlsInstancia.destroy();
+                try {
+                    hlsInstancia.destroy();
+                } catch(e) {
+                    console.error("Error destruyendo HLS anterior:", e);
+                }
                 hlsInstancia = null;
             }
 
-            // REPRODUCCIÓN (Lógica Original Funcional)
-            if (Hls.isSupported()) {
-                hlsInstancia = new Hls();
-                hlsInstancia.loadSource(url);
-                hlsInstancia.attachMedia(audio);
-                hlsInstancia.on(Hls.Events.MANIFEST_PARSED, function() {
-                    audio.play();
-                });
-                
-                // Si hay error en móvil, intenta cargar directo
-                hlsInstancia.on(Hls.Events.ERROR, function(event, data) {
-                    if (data.fatal) {
-                        hlsInstancia.destroy();
-                        audio.src = url;
-                        audio.play();
-                    }
-                });
+            // Pausar y limpiar audio
+            audio.pause();
+            audio.currentTime = 0;
+            audio.src = "";
 
-            } else if (audio.canPlayType('application/vnd.apple.mpegurl')) {
-                // Soporte nativo para iPhone
+            // Pequeño delay para asegurar limpieza
+            setTimeout(() => {
+                cargarRadio(url, name);
+            }, 100);
+        }
+
+        function cargarRadio(url, name) {
+            try {
+                if (Hls.isSupported()) {
+                    hlsInstancia = new Hls(hlsConfig);
+                    
+                    // Evento: Manifest cargado
+                    hlsInstancia.on(Hls.Events.MANIFEST_PARSED, function() {
+                        isLoadingManifest = false;
+                        playBtn.classList.remove("loading");
+                        playBtn.textContent = "⏸ Pause";
+                        console.log(`Manifest parsed para ${name}`);
+                        
+                        // Reproducir automáticamente
+                        let playPromise = audio.play();
+                        if (playPromise !== undefined) {
+                            playPromise.catch(err => {
+                                console.error("Error al reproducir:", err);
+                                playBtn.textContent = "▶ Play";
+                            });
+                        }
+                    });
+
+                    // Evento: Error fatal
+                    hlsInstancia.on(Hls.Events.ERROR, function(event, data) {
+                        console.error("HLS Error:", data);
+                        
+                        if (data.fatal) {
+                            isLoadingManifest = false;
+                            playBtn.classList.remove("loading");
+                            
+                            switch (data.type) {
+                                case Hls.ErrorTypes.NETWORK_ERROR:
+                                    console.log("Error de red, intentando fallback...");
+                                    intentarFallback(url);
+                                    break;
+                                case Hls.ErrorTypes.MEDIA_ERROR:
+                                    console.log("Error de media, recargando...");
+                                    hlsInstancia.recoverMediaError();
+                                    break;
+                                default:
+                                    console.log("Error fatal, usando fallback directo");
+                                    intentarFallback(url);
+                            }
+                        }
+                    });
+
+                    // Eventos de estado
+                    audio.addEventListener("play", () => updateStatus(true));
+                    audio.addEventListener("pause", () => updateStatus(false));
+                    audio.addEventListener("loadstart", () => {
+                        if (!isLoadingManifest) updateStatus(false);
+                    });
+                    audio.addEventListener("stalled", () => {
+                        console.log("Audio stalled, reintentando...");
+                        audio.load();
+                    });
+
+                    hlsInstancia.loadSource(url);
+                    hlsInstancia.attachMedia(audio);
+                    hlsInstancia.startLoad();
+
+                } else if (audio.canPlayType('application/vnd.apple.mpegurl')) {
+                    // Soporte nativo iOS
+                    console.log("Usando soporte nativo HLS (iOS)");
+                    audio.src = url;
+                    
+                    audio.addEventListener("canplay", function onCanPlay() {
+                        isLoadingManifest = false;
+                        playBtn.classList.remove("loading");
+                        playBtn.textContent = "⏸ Pause";
+                        audio.removeEventListener("canplay", onCanPlay);
+                        audio.play().catch(err => console.error("Error iOS:", err));
+                    }, { once: true });
+
+                    audio.load();
+                }
+            } catch(err) {
+                console.error("Error cargando radio:", err);
+                isLoadingManifest = false;
+                playBtn.classList.remove("loading");
+                intentarFallback(url);
+            }
+        }
+
+        function intentarFallback(url) {
+            console.log("Intento fallback directo sin HLS.js");
+            try {
+                if (hlsInstancia) hlsInstancia.destroy();
+                hlsInstancia = null;
+                
                 audio.src = url;
-                audio.play();
+                audio.load();
+                
+                let playPromise = audio.play();
+                if (playPromise) {
+                    playPromise.then(() => {
+                        isLoadingManifest = false;
+                        playBtn.classList.remove("loading");
+                        playBtn.textContent = "⏸ Pause";
+                    }).catch(err => {
+                        console.error("Error fallback:", err);
+                        playBtn.textContent = "✗ Error";
+                        playBtn.classList.remove("loading");
+                    });
+                }
+            } catch(err) {
+                console.error("Fallback también falló:", err);
+                playBtn.textContent = "✗ Error";
+                playBtn.classList.remove("loading");
             }
         }
 
         function togglePlay() {
-            if (audio.paused) { audio.play(); } else { audio.pause(); }
+            if (!audio.src) {
+                console.log("Sin fuente de audio");
+                return;
+            }
+            
+            if (audio.paused) {
+                audio.play().catch(err => console.error("Error play:", err));
+            } else {
+                audio.pause();
+            }
         }
 
-        function setVolume(v) { audio.volume = v; }
+        function setVolume(v) {
+            audio.volume = parseFloat(v);
+        }
+
+        function updateStatus(playing) {
+            if (playing) {
+                statusIndicator.classList.add("playing");
+                playBtn.textContent = "⏸ Pause";
+                updateStatus(true);
+            } else {
+                statusIndicator.classList.remove("playing");
+                if (!isLoadingManifest) {
+                    playBtn.textContent = "▶ Play";
+                }
+            }
+        }
+
+        // Manejo de cambio de pestaña/app
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                console.log("App en background");
+            } else {
+                console.log("App activa, verificando reproducción");
+                if (audio.paused && currentRadio) {
+                    audio.play().catch(err => console.error("Error al reanudar:", err));
+                }
+            }
+        });
+
+        // Cleanup al cerrar
+        window.addEventListener("beforeunload", function() {
+            if (hlsInstancia) {
+                hlsInstancia.destroy();
+            }
+        });
     </script>
 </body>
 </html>
