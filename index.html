@@ -2,108 +2,159 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Radio PRO</title>
+<title>Radio App PRO</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-    body {
-        margin:0;
-        background:#0b1118;
-        color:white;
-        font-family:Arial;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        height:100vh;
-        flex-direction:column;
-    }
-
-    button {
-        background:#00e5ff;
-        border:none;
-        padding:20px 40px;
-        font-size:18px;
-        border-radius:50px;
-        cursor:pointer;
-        font-weight:bold;
-    }
-
-    .status {
-        margin-top:20px;
-        font-size:14px;
-        opacity:0.7;
-    }
+body{
+    margin:0;
+    background:#0b1118;
+    color:white;
+    font-family:Arial;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    flex-direction:column;
+}
+button{
+    background:#00e5ff;
+    border:none;
+    padding:20px 40px;
+    font-size:18px;
+    border-radius:50px;
+    cursor:pointer;
+    font-weight:bold;
+}
+.status{
+    margin-top:15px;
+    font-size:13px;
+    opacity:0.8;
+}
 </style>
 </head>
 
 <body>
 
-<h2>Radio PRO (Anti Cortes)</h2>
-
-<button onclick="startRadio()">PLAY</button>
-
-<div class="status" id="status">Esperando...</div>
+<h2>Radio Nivel App</h2>
+<button onclick="initRadio()">PLAY</button>
+<div class="status" id="status">Listo</div>
 
 <audio id="audio" playsinline></audio>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <script>
-const URL = "https://d2qsan2ut81n2k.cloudfront.net/live/c2cce928-c69c-45d5-bd0a-5a5eba167a0d/ts:abr.m3u8";
+const STREAM = "https://d2qsan2ut81n2k.cloudfront.net/live/c2cce928-c69c-45d5-bd0a-5a5eba167a0d/ts:abr.m3u8";
 
 let audio = document.getElementById("audio");
 let status = document.getElementById("status");
 let hls = null;
-let retryCount = 0;
 
-function log(msg){
-    console.log(msg);
-    status.innerText = msg;
+let reconnectDelay = 2000;
+let maxDelay = 15000;
+let retry = 0;
+
+// 📶 DETECTAR TIPO DE RED
+function getNetworkProfile(){
+    const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+
+    if(!conn) return "stable";
+
+    if(conn.effectiveType === "4g") return "stable";
+    if(conn.effectiveType === "3g") return "medium";
+    return "bad";
 }
 
-function startRadio(){
+// ⚙️ CONFIG DINÁMICA
+function getConfig(){
+
+    const profile = getNetworkProfile();
+
+    if(profile === "bad"){
+        return {
+            startLevel: 0,
+            maxBufferLength: 80,
+            liveSyncDurationCount: 8
+        };
+    }
+
+    if(profile === "medium"){
+        return {
+            startLevel: 0,
+            maxBufferLength: 60,
+            liveSyncDurationCount: 6
+        };
+    }
+
+    return {
+        startLevel: 0,
+        maxBufferLength: 40,
+        liveSyncDurationCount: 5
+    };
+}
+
+// 🚀 INICIO
+function initRadio(){
 
     if(hls){
         hls.destroy();
     }
 
+    const cfg = getConfig();
+
     if(Hls.isSupported()){
 
         hls = new Hls({
 
-            // 🔥 CONFIG PRO ESTABLE
+            ...cfg,
+
             autoStartLoad: true,
-            startLevel: 0, // calidad fija baja = estabilidad
             capLevelToPlayerSize: false,
 
-            maxBufferLength: 60,
             maxMaxBufferLength: 120,
-            liveSyncDurationCount: 6,
             liveMaxLatencyDurationCount: 20,
+            backBufferLength: 90,
 
             enableWorker: true,
-            lowLatencyMode: false,
-            backBufferLength: 90
+            lowLatencyMode: false
 
         });
 
-        hls.loadSource(URL);
+        hls.loadSource(STREAM);
         hls.attachMedia(audio);
 
-        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
 
-            // ❌ DESACTIVAR ADAPTATIVO
+            // 🔒 BLOQUEAR ADAPTATIVO
             hls.autoLevelEnabled = false;
-            hls.currentLevel = 0;
+            hls.currentLevel = cfg.startLevel;
 
             audio.play();
-            log("Reproduciendo estable...");
+
+            retry = 0;
+            reconnectDelay = 2000;
+
+            log("Reproduciendo (" + getNetworkProfile() + ")");
         });
 
-        // 🔁 MANEJO PRO DE ERRORES
-        hls.on(Hls.Events.ERROR, function (event, data) {
+        // 📊 MONITOREO BUFFER
+        setInterval(() => {
 
-            if (data.fatal) {
+            if(audio.buffered.length > 0){
+                let buffer = audio.buffered.end(0) - audio.currentTime;
+
+                if(buffer < 2){
+                    log("Recuperando buffer...");
+                }
+            }
+
+        }, 3000);
+
+        // 🔁 ERRORES INTELIGENTES
+        hls.on(Hls.Events.ERROR, (event, data) => {
+
+            if(data.fatal){
 
                 log("Reconectando...");
 
@@ -118,35 +169,41 @@ function startRadio(){
                         break;
 
                     default:
-                        retryReconnect();
+                        reconnect();
                         break;
                 }
             }
         });
 
     } else {
-        // fallback nativo
-        audio.src = URL;
+        audio.src = STREAM;
         audio.play();
     }
 }
 
-// 🔁 RECONEXIÓN FUERTE
-function retryReconnect(){
+// 🔁 RECONEXIÓN EXPONENCIAL (como apps reales)
+function reconnect(){
 
-    if(retryCount > 5){
+    if(retry > 10){
         log("Error persistente");
         return;
     }
 
-    retryCount++;
+    retry++;
 
     setTimeout(() => {
-        log("Reintentando ("+retryCount+")...");
-        startRadio();
-    }, 3000);
+        log("Reintento " + retry);
+        initRadio();
+    }, reconnectDelay);
+
+    reconnectDelay = Math.min(reconnectDelay * 1.5, maxDelay);
 }
 
+// 🧠 LOG
+function log(msg){
+    console.log(msg);
+    status.innerText = msg;
+}
 </script>
 
 </body>
