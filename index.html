@@ -18,7 +18,7 @@
             background: radial-gradient(circle at top, #1a1f2c 0%, #0d1017 100%);
             color: #ffffff;
             min-height: 100vh;
-            padding-bottom: 120px;
+            padding-bottom: 140px;
         }
 
         /* HEADER PREMIUM */
@@ -182,7 +182,7 @@
             opacity: 1;
         }
 
-        /* INFO DEL TEMO EN REPRODUCCIÓN */
+        /* INFO DEL TEMA EN REPRODUCCIÓN */
         .player-info {
             display: flex;
             align-items: center;
@@ -208,6 +208,7 @@
         .player-text {
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
         .player-status {
             font-size: 10px;
@@ -263,6 +264,8 @@
         .volume-container i {
             color: #94a3b8;
             font-size: 18px;
+            display: flex;
+            align-items: center;
         }
         .volume {
             -webkit-appearance: none;
@@ -413,7 +416,6 @@
         let btnPlay = document.getElementById("btnPlay");
         
         let hlsInstancia = null;
-        const esMovil = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
         // Inicializar iconos Lucide
         lucide.createIcons();
@@ -424,7 +426,7 @@
             } else {
                 btnPlay.innerHTML = '<i data-lucide="play"></i>';
             }
-            lucide.createIcons(); // Recarga el icono renderizado
+            lucide.createIcons();
         }
 
         function playRadio(el, url, name, img) {
@@ -434,10 +436,11 @@
             title.innerText = name;
             logo.src = img;
             
-            // Mostrar la barra de reproducción de manera elegante
             playerContainer.classList.add("visible");
 
-            if (esMovil && Hls.isSupported()) {
+            // CORRECCIÓN AQUÍ: Quitamos el filtro estricto de "esMovil". 
+            // Ahora si el navegador soporta HLS.js (que son casi todos los de PC), levantará la transmisión correctamente.
+            if (Hls.isSupported()) {
                 if (hlsInstancia) {
                     hlsInstancia.destroy(); 
                 }
@@ -452,31 +455,32 @@
                 hlsInstancia.loadSource(url);
                 hlsInstancia.attachMedia(audio);
                 hlsInstancia.on(Hls.Events.MANIFEST_PARSED, function() {
-                    audio.play();
+                    audio.play().catch(err => console.log("Error al reproducir automáticamente:", err));
                 });
 
                 hlsInstancia.on(Hls.Events.ERROR, function (event, data) {
                     if (data.fatal) {
                         hlsInstancia.destroy();
                         audio.src = url;
-                        audio.play();
+                        audio.play().catch(err => console.log(err));
                     }
                 });
-            } else {
+            } else if (audio.canPlayType('application/vnd.apple.mpegurl')) {
+                // Soporte nativo de HLS (principalmente Safari en iOS/Mac)
                 audio.src = url;
-                audio.play();
+                audio.play().catch(err => console.log(err));
             }
         }
 
-        // Eventos nativos del HTML5 Audio para reaccionar al estado real
+        // Detectar estados del audio para sincronizar el botón de Play/Pause
         audio.addEventListener('play', () => actualizarIconoPlay(true));
         audio.addEventListener('pause', () => actualizarIconoPlay(false));
 
         function togglePlay() {
-            if (!audio.src && !hlsInstancia) return; // Evitar disparar si no hay radio cargada
+            if (!audio.src && !hlsInstancia) return;
             
             if (audio.paused) {
-                audio.play();
+                audio.play().catch(err => console.log(err));
             } else {
                 audio.pause();
             }
@@ -486,13 +490,12 @@
             audio.volume = v;
             let volIcon = document.getElementById("volumeIcon");
             
-            // Cambiar dinámicamente el icono de volumen según el nivel
             if(v == 0) {
-                volIcon.setAttribute("data-lucide", "volume-x");
+                volIcon.parentNode.innerHTML = '<i data-lucide="volume-x" id="volumeIcon"></i>';
             } else if(v < 0.5) {
-                volIcon.setAttribute("data-lucide", "volume-1");
+                volIcon.parentNode.innerHTML = '<i data-lucide="volume-1" id="volumeIcon"></i>';
             } else {
-                volIcon.setAttribute("data-lucide", "volume-2");
+                volIcon.parentNode.innerHTML = '<i data-lucide="volume-2" id="volumeIcon"></i>';
             }
             lucide.createIcons();
         }
