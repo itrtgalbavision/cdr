@@ -503,17 +503,6 @@ input[type=range]::-moz-range-thumb{
 </head>
 <body>
 
-<div id="debugPanel" style="position:fixed;top:0;right:0;z-index:9999;background:#06131d;border:1px solid rgba(0,229,255,.3);color:#9defff;font-family:ui-monospace,monospace;font-size:11px;padding:10px 12px;max-width:360px;max-height:40vh;overflow:auto;border-radius:0 0 0 12px;box-shadow:0 8px 30px rgba(0,0,0,.5)">
-  <div style="font-weight:700;color:#00e5ff;margin-bottom:4px">DEBUG Radio GT</div>
-  <div id="debugLog"></div>
-  <button onclick="document.getElementById('debugPanel').style.display='none'" style="margin-top:6px;font-size:10px;color:#7aa;padding:2px 6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:6px;cursor:pointer">ocultar</button>
-</div>
-<script>
-function dlog(m){ const el=document.getElementById('debugLog'); if(el){ const t=new Date().toLocaleTimeString(); el.innerHTML = '['+t+'] '+m+'<br>'+el.innerHTML; } console.log('[CRG]', m); }
-window.addEventListener('error', e=>dlog('JS Error: '+e.message));
-</script>
-
-
 <div class="wrap">
   <header class="site-header">
     <div class="live-badge"><span class="live-dot" aria-hidden="true"></span> EN VIVO</div>
@@ -589,20 +578,26 @@ window.addEventListener('error', e=>dlog('JS Error: '+e.message));
 
 <script>
 /* ---- Datos de emisoras ---- */
+const CDN_NUEVO = "https://d2b5h5wyivfnfl.cloudfront.net";
+const CDN_VIEJO = "https://d2qsan2ut81n2k.cloudfront.net";
+
 const stations = [
-  { name: "Xtrema", freq: "101.3 FM", file: "xtrema.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/c2cce928-c69c-45d5-bd0a-5a5eba167a0d/ts:abr.m3u8" },
-  { name: "Galaxia", freq: "88.5 FM", file: "galaxia.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/406d6243-a8fc-4215-aca0-ffd43aac2bf3/ts:abr.m3u8" },
-  { name: "Tropicálida", freq: "104.9 FM", file: "tropicalida.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/67aeb080-68fa-4197-89f6-c8bb70f9a395/ts:abr.m3u8" },
-  { name: "Éxitos", freq: "90.9", file: "exitos.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/ca11fca0-0da4-4198-83bd-b50e5607d6f8/ts:abr.m3u8" },
-  { name: "Joya", freq: "92.9 FM", file: "joya.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/e33ed625-2624-4334-a625-a53a70d95791/ts:abr.m3u8" },
-  { name: "Alfa", freq: "97.3 FM", file: "alfa.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/3943e598-9843-4784-9388-80e97aa3674b/ts:abr.m3u8" },
-  { name: "Ranchera", freq: "95.7 FM", file: "ranchera.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/a4e3175d-fa7e-4d4b-979f-e7f875468260/ts:abr.m3u8" },
-  { name: "La Marca", freq: "94.1 FM", file: "lamarca.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/53ee315d-206f-4271-994b-4c1927ae338b/ts:abr.m3u8" },
-  { name: "Fiesta", freq: "103.7 FM", file: "fiesta.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/9c2d6264-2009-49a8-a501-848a7bae1051/ts:abr.m3u8" },
-  { name: "Sonora", freq: "96.9 FM", file: "sonora.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/8e7a8a5b-a2db-4323-8397-46c17f4573ac/ts:abr.m3u8" },
-  { name: "Éxitos Xela", freq: "107.1 FM", file: "exitosx.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/ef0c82f1-e446-4093-8455-3a144ca2e171/ts:abr.m3u8" },
-  { name: "Flix Xela", freq: "93.9", file: "fixx.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/c2af032e-3e29-4551-a757-e4f3d349386c/ts:abr.m3u8" }
-];
+  { name: "Xtrema", freq: "101.3 FM", file: "xtrema.png", id: "c2cce928-c69c-45d5-bd0a-5a5eba167a0d" },
+  { name: "Galaxia", freq: "88.5 FM", file: "galaxia.png", id: "406d6243-a8fc-4215-aca0-ffd43aac2bf3" },
+  { name: "Tropicálida", freq: "104.9 FM", file: "tropicalida.png", id: "67aeb080-68fa-4197-89f6-c8bb70f9a395" },
+  { name: "Éxitos", freq: "90.9", file: "exitos.png", id: "ca11fca0-0da4-4198-83bd-b50e5607d6f8" },
+  { name: "Joya", freq: "92.9 FM", file: "joya.png", id: "e33ed625-2624-4334-a625-a53a70d95791" },
+  { name: "Alfa", freq: "97.3 FM", file: "alfa.png", id: "3943e598-9843-4784-9388-80e97aa3674b" },
+  { name: "Ranchera", freq: "95.7 FM", file: "ranchera.png", id: "a4e3175d-fa7e-4d4b-979f-e7f875468260" },
+  { name: "La Marca", freq: "94.1 FM", file: "lamarca.png", id: "53ee315d-206f-4271-994b-4c1927ae338b" },
+  { name: "Fiesta", freq: "103.7 FM", file: "fiesta.png", id: "9c2d6264-2009-49a8-a501-848a7bae1051" },
+  { name: "Sonora", freq: "96.9 FM", file: "sonora.png", id: "8e7a8a5b-a2db-4323-8397-46c17f4573ac" },
+  { name: "Éxitos Xela", freq: "107.1 FM", file: "exitosx.png", id: "ef0c82f1-e446-4093-8455-3a144ca2e171" },
+  { name: "Flix Xela", freq: "93.9", file: "fixx.png", id: "c2af032e-3e29-4551-a757-e4f3d349386c" }
+].map(s => ({...s, urls: [
+  `${CDN_NUEVO}/live/${s.id}/ts:abr.m3u8`,
+  `${CDN_VIEJO}/live/${s.id}/ts:abr.m3u8`
+]}));
 
 /* ---- Estado ---- */
 let currentIndex = -1;
@@ -745,82 +740,59 @@ function render(){
 }
 
 /* ---- Reproducción HLS ---- */
-const CDN_NEW = 'https://d2b5h5wyivfnfl.cloudfront.net/live/';
-const CDN_OLD = 'https://d2qsan2ut81n2k.cloudfront.net/live/';
-
-function buildStreamUrl(st){
-  // st.url ya trae el CDN nuevo, pero extraemos el UUID por si acaso
-  const m = st.url.match(/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i);
-  const uuid = m ? m[1] : null;
-  return uuid ? CDN_NEW + uuid + '/ts:abr.m3u8' : st.url;
-}
-
-function playStation(index, tryOldCdn){
+function playStation(index){
   if(index < 0 || index >= stations.length) return;
   const st = stations[index];
+  const wasCurrent = index === currentIndex;
+
   currentIndex = index;
-  localStorage.setItem('crg_last', index);
   playerStationName.textContent = `${st.name} — ${st.freq}`;
   playerLogo.src = st.file;
   playerLogo.alt = st.name;
   playerLogo.onerror = function(){ this.onerror=null; this.src = svgFallback(st.name); };
+
   playerLiveText.textContent = "Conectando…";
   render();
 
-  const uuidMatch = st.url.match(/([0-9a-f-]{36})/i);
-  const uuid = uuidMatch ? uuidMatch[1] : null;
-  const url = tryOldCdn && uuid ? CDN_OLD + uuid + '/ts:abr.m3u8' : buildStreamUrl(st);
-  
-  dlog('playStation '+st.name+' → '+(tryOldCdn?'CDN_VIEJO ':'CDN_NUEVO ')+url);
+  const url = st.url;
   audio.pause();
+
+  // Detección móvil
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
   try {
     if (window.Hls && Hls.isSupported()) {
-      dlog('HLS.js soportado, v='+(Hls.version||'??'));
       if (hlsInstance) { try{ hlsInstance.destroy(); } catch(e){} }
       hlsInstance = new Hls({
         maxBufferLength: 15,
         maxMaxBufferLength: 30,
         liveSyncDurationCount: 3,
-        liveMaxLatencyDurationCount: 10,
-        enableWorker: true
-      });
-      hlsInstance.on(Hls.Events.MEDIA_ATTACHED, ()=>dlog('HLS MEDIA_ATTACHED'));
-      hlsInstance.on(Hls.Events.MANIFEST_LOADING, ()=>dlog('HLS MANIFEST_LOADING'));
-      hlsInstance.on(Hls.Events.MANIFEST_PARSED, function(e,d){ dlog('HLS MANIFEST_PARSED, levels='+d.levels.length); tryPlay(); });
-      hlsInstance.on(Hls.Events.ERROR, function(event, data){
-        dlog('HLS ERROR type='+data.type+' details='+data.details+' fatal='+data.fatal+' url='+(data.url||''));
-        if(data.fatal){
-          try{ hlsInstance.destroy(); }catch(e){}
-          if(!tryOldCdn && uuid){
-            dlog('Reintentando con CDN VIEJO…');
-            setTimeout(()=>playStation(index, true), 400);
-            return;
-          }
-          // Fallback nativo
-          audio.src = url;
-          audio.load();
-          tryPlay();
-        }
+        liveMaxLatencyDurationCount: 10
       });
       hlsInstance.loadSource(url);
       hlsInstance.attachMedia(audio);
-    } else if (audio.canPlayType('application/vnd.apple.mpegurl')) {
-      dlog('Usando HLS nativo (Safari)');
-      audio.src = url;
-      audio.load();
-      tryPlay();
+      hlsInstance.on(Hls.Events.MANIFEST_PARSED, function() {
+        audio.play().catch(()=>{});
+      });
+      hlsInstance.on(Hls.Events.ERROR, function(event, data){
+        if(data.fatal){
+          // Fallback directo
+          try{ hlsInstance.destroy(); }catch(e){}
+          audio.src = url;
+          audio.load();
+          audio.play().catch(()=>{});
+        }
+      });
     } else {
-      dlog('HLS no soportado, intento directo');
+      // Safari / nativo / fallback
       audio.src = url;
       audio.load();
-      tryPlay();
+      audio.play().catch(()=>{});
     }
   } catch(err){
-    dlog('EXCEPCION playStation: '+err);
     audio.src = url;
     audio.load();
-    tryPlay();
+    audio.play().catch(()=>{});
   }
 
   if('mediaSession' in navigator){
@@ -835,7 +807,6 @@ function playStation(index, tryOldCdn){
 }
 
 function togglePlay(){
-
   if(currentIndex === -1){
     playStation(0);
     return;
@@ -881,12 +852,9 @@ audio.addEventListener('pause', ()=>{
   playerLiveText.textContent = currentIndex >= 0 ? "Pausado" : "En espera";
   render();
 });
-audio.addEventListener('loadstart', ()=>dlog('audio loadstart'));
-audio.addEventListener('waiting', ()=>{ playerLiveText.textContent = "Cargando…"; dlog('audio waiting'); });
-audio.addEventListener('playing', ()=>{ playerLiveText.textContent = "EN VIVO"; dlog('audio playing OK'); });
-audio.addEventListener('stalled', ()=>dlog('audio stalled'));
-audio.addEventListener('suspend', ()=>dlog('audio suspend'));
-audio.addEventListener('error', ()=>{ const e=audio.error; dlog('audio ERROR code='+(e?e.code:'?')+' msg='+(e?e.message:'')); playerLiveText.textContent = "Error de señal"; showToast("No se pudo conectar a la emisora"); });
+audio.addEventListener('waiting', ()=>{ playerLiveText.textContent = "Cargando…"; });
+audio.addEventListener('playing', ()=>{ playerLiveText.textContent = "EN VIVO"; });
+audio.addEventListener('error', ()=>{ playerLiveText.textContent = "Error de señal"; showToast("No se pudo conectar a la emisora"); });
 
 /* Controles UI */
 document.getElementById('playPauseBtn').addEventListener('click', togglePlay);
@@ -935,6 +903,8 @@ if('mediaSession' in navigator){
     navigator.mediaSession.setActionHandler('nexttrack', nextStation);
   }catch(e){}
 }
+
+audio.crossOrigin = "anonymous";
 
 /* Init */
 (function init(){
