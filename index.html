@@ -2,191 +2,402 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Central de Radios Guatemala</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Iconos Lucide para un look moderno -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        *{box-sizing:border-box;}
-        body{
-            margin:0;
-            font-family:'Poppins',sans-serif;
-            background:linear-gradient(180deg,#0b1118,#121c27 40%,#0b1118);
-            color:white;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at top, #1a1f2c 0%, #0d1017 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding-bottom: 120px;
         }
 
-        /* HEADER MEJORADO */
+        /* HEADER PREMIUM */
         .header {
             text-align: center;
-            padding: 60px 20px 40px;
+            padding: 50px 20px 30px;
             position: relative;
         }
-        /* Brillo sutil de fondo */
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 250px;
-            height: 150px;
-            background: radial-gradient(circle, rgba(0,229,255,0.15) 0%, rgba(0,0,0,0) 70%);
-            z-index: -1;
-        }
-        /* Etiqueta de En Vivo */
         .badge-en-vivo {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 6px 14px;
+            background: rgba(255, 51, 102, 0.1);
+            border: 1px solid rgba(255, 51, 102, 0.2);
+            padding: 6px 16px;
             border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: #ff3366;
             margin-bottom: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            text-transform: uppercase;
         }
         .punto-rojo {
             width: 8px;
             height: 8px;
             background-color: #ff3366;
             border-radius: 50%;
-            box-shadow: 0 0 8px #ff3366;
+            box-shadow: 0 0 10px #ff3366;
             animation: latido 1.5s infinite;
         }
         @keyframes latido {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 51, 102, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(255, 51, 102, 0); }
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 51, 102, 0.5); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(255, 51, 102, 0); }
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 51, 102, 0); }
         }
-        /* Título Principal */
         .header h1 {
-            margin: 0;
-            font-size: 36px;
+            font-size: 28px;
+            font-weight: 400;
+            letter-spacing: 2px;
+            color: #e2e8f0;
             line-height: 1.2;
-            letter-spacing: 1px;
-            font-weight: 800;
         }
         .header h1 span {
             display: block;
-            font-size: 44px;
-            background: linear-gradient(90deg, #00e5ff, #00bfff);
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0px 4px 15px rgba(0, 229, 255, 0.2);
-        }
-        .header p {
-            margin-top: 15px;
-            color: #a0aec0;
-            font-size: 15px;
-            font-weight: 400;
-            letter-spacing: 0.5px;
-        }
-        /* Ajuste para pantallas pequeñas */
-        @media(max-width: 600px) {
-            .header h1 { font-size: 28px; }
-            .header h1 span { font-size: 34px; }
+            letter-spacing: 1px;
         }
 
-        /* GRID */
-        .contenedor{
-            width:90%; max-width:1200px; margin:40px auto 120px;
-            display:grid; grid-template-columns:repeat(4,1fr); gap:22px;
+        /* GRID DE RADIOS */
+        .contenedor {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
         }
-        /* TARJETAS */
-        .radio{
-            background:rgba(255,255,255,0.05); border-radius:16px; padding:18px 14px;
-            cursor:pointer; transition:.3s; border:1px solid rgba(255,255,255,0.08);
-            box-shadow:0 8px 22px rgba(0,0,0,.35); display:flex; flex-direction:column;
-            align-items:center; justify-content:center; height:140px; text-align:center;
+
+        /* TARJETAS ESTILO GLASSMORPHISM */
+        .radio {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 25px 20px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
-        .radio:hover{ transform:translateY(-6px); background:rgba(255,255,255,0.1); }
-        .radio.activa{ border:1px solid #00e5ff; box-shadow:0 0 18px rgba(0,229,255,.5); }
-        .radio img{
-            width:90px; height:55px; object-fit:contain; margin-bottom:8px; padding:6px;
-            border-radius:10px; border:2px solid rgba(0,191,255,.6); box-shadow:0 0 8px rgba(0,191,255,.4);
+        .radio::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(0,242,254,0.05) 0%, rgba(79,172,254,0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.4s;
         }
-        .radio span{ font-size:13px; font-weight:500; line-height:1.2; }
-        /* PLAYER */
-        .player{
-            position:fixed; bottom:0; left:0; width:100%; background:#0f1822;
-            border-top:1px solid rgba(255,255,255,.1); padding:14px 20px;
-            display:flex; align-items:center; justify-content:space-between;
+        .radio:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(0, 242, 254, 0.3);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         }
-        .player-info{ display:flex; align-items:center; gap:12px; }
-        .player-info img{ width:45px; border-radius:6px; }
-        .player-title{ font-size:14px; }
-        .controls{ display:flex; align-items:center; gap:15px; }
-        button{
-            background:#00bfff; border:none; color:white; padding:7px 16px;
-            border-radius:6px; cursor:pointer; font-weight:500;
+        .radio:hover::before {
+            opacity: 1;
         }
-        button:hover{ background:#00e5ff; }
-        .volume{ width:110px; }
+        .radio.activa {
+            background: rgba(0, 242, 254, 0.08);
+            border-color: #00f2fe;
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.2);
+        }
+        
+        /* CONTENEDOR DE LOGO */
+        .logo-wrapper {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s;
+            z-index: 1;
+        }
+        .radio:hover .logo-wrapper {
+            transform: scale(1.05);
+        }
+        .radio img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .radio span {
+            font-size: 14px;
+            font-weight: 500;
+            color: #cbd5e1;
+            transition: color 0.3s;
+            z-index: 1;
+        }
+        .radio:hover span, .radio.activa span {
+            color: #ffffff;
+        }
+
+        /* REPRODUCTOR FLOTANTE PREMIUM */
+        .player {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 900px;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 16px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            z-index: 100;
+            visibility: hidden; /* Oculto hasta que se seleccione una radio */
+            opacity: 0;
+            transition: opacity 0.4s, visibility 0.4s, transform 0.4s;
+        }
+        .player.visible {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* INFO DEL TEMO EN REPRODUCCIÓN */
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            width: 35%;
+        }
+        .player-logo-container {
+            width: 50px;
+            height: 50px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        #playerLogo {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .player-text {
+            display: flex;
+            flex-direction: column;
+        }
+        .player-status {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #00f2fe;
+            font-weight: 600;
+        }
+        .player-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* CONTROLES DE AUDIO */
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .btn-play {
+            background: #ffffff;
+            border: none;
+            color: #0f172a;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255,255,255,0.2);
+        }
+        .btn-play:hover {
+            transform: scale(1.08);
+            background: #00f2fe;
+            color: #0f172a;
+            box-shadow: 0 4px 20px rgba(0, 242, 254, 0.4);
+        }
+        
+        /* VOLUMEN */
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 25%;
+            justify-content: flex-end;
+        }
+        .volume-container i {
+            color: #94a3b8;
+            font-size: 18px;
+        }
+        .volume {
+            -webkit-appearance: none;
+            width: 100px;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            outline: none;
+            transition: background 0.3s;
+        }
+        .volume::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #00f2fe;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .volume::-webkit-slider-thumb:hover {
+            transform: scale(1.3);
+        }
+
         /* RESPONSIVE */
-        @media(max-width:1000px){ .contenedor{grid-template-columns:repeat(3,1fr);} }
-        @media(max-width:700px){ .contenedor{grid-template-columns:repeat(2,1fr);} }
-        @media(max-width:450px){ .contenedor{grid-template-columns:1fr;} }
+        @media(max-width: 768px) {
+            .header h1 { font-size: 22px; }
+            .header h1 span { font-size: 38px; }
+            .player {
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px;
+                bottom: 12px;
+                text-align: center;
+            }
+            .player-info {
+                width: 100%;
+                justify-content: center;
+            }
+            .volume-container {
+                width: 100%;
+                justify-content: center;
+            }
+            .contenedor {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 12px;
+                width: 95%;
+            }
+            .radio { padding: 15px 10px; border-radius: 16px;}
+            .logo-wrapper { width: 70px; height: 70px; margin-bottom: 8px; padding: 6px;}
+            .radio span { font-size: 12px; }
+        }
     </style>
 </head>
 <body>
     
     <div class="header">
         <div class="badge-en-vivo">
-            <span class="punto-rojo"></span> EN VIVO
+            <span class="punto-rojo"></span> Transmitiendo En Vivo
         </div>
         <h1>
             CENTRAL DE RADIOS
             <span>GUATEMALA</span>
-</div>
+        </h1>
+    </div>
+
     <div class="contenedor">
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/c2cce928-c69c-45d5-bd0a-5a5eba167a0d/ts:abr.m3u8','Xtrema 101.3 FM','xtrema.png')">
-            <img src="xtrema.png"> <span>Xtrema 101.3 FM</span>
+            <div class="logo-wrapper"><img src="xtrema.png" alt="Xtrema 101.3 FM"></div>
+            <span>Xtrema 101.3 FM</span>
         </div>
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/406d6243-a8fc-4215-aca0-ffd43aac2bf3/ts:abr.m3u8','Galaxia 88.5 FM','galaxia.png')">
-            <img src="galaxia.png"> <span>Galaxia 88.5 FM</span>
+            <div class="logo-wrapper"><img src="galaxia.png" alt="Galaxia 88.5 FM"></div>
+            <span>Galaxia 88.5 FM</span>
         </div>
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/67aeb080-68fa-4197-89f6-c8bb70f9a395/ts:abr.m3u8','Tropicálida 104.9 FM','tropicalida.png')">
-            <img src="tropicalida.png"> <span>Tropicálida 104.9 FM</span>
+            <div class="logo-wrapper"><img src="tropicalida.png" alt="Tropicálida 104.9 FM"></div>
+            <span>Tropicálida 104.9 FM</span>
         </div>
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/ca11fca0-0da4-4198-83bd-b50e5607d6f8/ts:abr.m3u8','Éxitos 90.9','exitos.png')">
-            <img src="exitos.png"> <span>Éxitos 90.9</span>
+            <div class="logo-wrapper"><img src="exitos.png" alt="Éxitos 90.9"></div>
+            <span>Éxitos 90.9</span>
         </div>
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/e33ed625-2624-4334-a625-a53a70d95791/ts:abr.m3u8','Joya 92.9 FM','joya.png')">
-            <img src="joya.png"> <span>Joya 92.9 FM</span>
+            <div class="logo-wrapper"><img src="joya.png" alt="Joya 92.9 FM"></div>
+            <span>Joya 92.9 FM</span>
         </div>
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/3943e598-9843-4784-9388-80e97aa3674b/ts:abr.m3u8','Alfa 97.3 FM','alfa.png')">
-            <img src="alfa.png"> <span>Alfa 97.3 FM</span>
+            <div class="logo-wrapper"><img src="alfa.png" alt="Alfa 97.3 FM"></div>
+            <span>Alfa 97.3 FM</span>
         </div>
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/a4e3175d-fa7e-4d4b-979f-e7f875468260/ts:abr.m3u8','Ranchera 95.7 FM','ranchera.png')">
-            <img src="ranchera.png"> <span>Ranchera 95.7 FM</span>
+            <div class="logo-wrapper"><img src="ranchera.png" alt="Ranchera 95.7 FM"></div>
+            <span>Ranchera 95.7 FM</span>
         </div>
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/53ee315d-206f-4271-994b-4c1927ae338b/ts:abr.m3u8','La Marca 94.1 FM','lamarca.png')">
-            <img src="lamarca.png"> <span>La Marca 94.1 FM</span>
+            <div class="logo-wrapper"><img src="lamarca.png" alt="La Marca 94.1 FM"></div>
+            <span>La Marca 94.1 FM</span>
         </div>
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/9c2d6264-2009-49a8-a501-848a7bae1051/ts:abr.m3u8','Fiesta 103.7 FM','fiesta.png')">
-            <img src="fiesta.png"> <span>Fiesta 103.7 FM</span>
+            <div class="logo-wrapper"><img src="fiesta.png" alt="Fiesta 103.7 FM"></div>
+            <span>Fiesta 103.7 FM</span>
         </div>
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/8e7a8a5b-a2db-4323-8397-46c17f4573ac/ts:abr.m3u8','Sonora 96.9 FM','sonora.png')">
-            <img src="sonora.png"> <span>Sonora 96.9 FM</span>
+            <div class="logo-wrapper"><img src="sonora.png" alt="Sonora 96.9 FM"></div>
+            <span>Sonora 96.9 FM</span>
         </div>
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/ef0c82f1-e446-4093-8455-3a144ca2e171/ts:abr.m3u8','Éxitos Xela 107.1 FM','exitosx.png')">
-            <img src="exitosx.png"> <span>Éxitos Xela 107.1 FM</span>
+            <div class="logo-wrapper"><img src="exitosx.png" alt="Éxitos Xela 107.1 FM"></div>
+            <span>Éxitos Xela 107.1 FM</span>
         </div>
         <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/c2af032e-3e29-4551-a757-e4f3d349386c/ts:abr.m3u8','Flix Xela 93.9','fixx.png')">
-            <img src="fixx.png"> <span>Flix Xela 93.9</span>
+            <div class="logo-wrapper"><img src="fixx.png" alt="Flix Xela 93.9"></div>
+            <span>Flix Xela 93.9</span>
         </div>
     </div>
 
-    <div class="player">
+    <!-- REPRODUCTOR FLOTANTE MODERNO -->
+    <div class="player" id="mainPlayer">
         <div class="player-info">
-            <img id="playerLogo">
-            <div class="player-title" id="playerTitle">Selecciona una radio</div>
+            <div class="player-logo-container">
+                <img id="playerLogo" src="" alt="Logo Radio">
+            </div>
+            <div class="player-text">
+                <span class="player-status">Escuchando:</span>
+                <div class="player-title" id="playerTitle">Selecciona una radio</div>
+            </div>
         </div>
         <div class="controls">
-            <button onclick="togglePlay()">Play / Pause</button>
-            <input class="volume" type="range" min="0" max="1" step="0.01" value="1.0" onchange="setVolume(this.value)">
+            <button class="btn-play" onclick="togglePlay()" id="btnPlay">
+                <i data-lucide="play"></i>
+            </button>
+        </div>
+        <div class="volume-container">
+            <i data-lucide="volume-2" id="volumeIcon"></i>
+            <input class="volume" type="range" min="0" max="1" step="0.01" value="1.0" oninput="setVolume(this.value)">
         </div>
     </div>
 
@@ -198,33 +409,44 @@
         let audio = document.getElementById("audio");
         let title = document.getElementById("playerTitle");
         let logo = document.getElementById("playerLogo");
+        let playerContainer = document.getElementById("mainPlayer");
+        let btnPlay = document.getElementById("btnPlay");
         
         let hlsInstancia = null;
-
         const esMovil = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        // Inicializar iconos Lucide
+        lucide.createIcons();
+
+        function actualizarIconoPlay(reproduciendo) {
+            if (reproduciendo) {
+                btnPlay.innerHTML = '<i data-lucide="pause"></i>';
+            } else {
+                btnPlay.innerHTML = '<i data-lucide="play"></i>';
+            }
+            lucide.createIcons(); // Recarga el icono renderizado
+        }
 
         function playRadio(el, url, name, img) {
             document.querySelectorAll(".radio").forEach(r => r.classList.remove("activa"));
             el.classList.add("activa");
+            
             title.innerText = name;
             logo.src = img;
-
-            let playPromise = audio.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(() => { /* Ignoramos error temporal */ });
-            }
+            
+            // Mostrar la barra de reproducción de manera elegante
+            playerContainer.classList.add("visible");
 
             if (esMovil && Hls.isSupported()) {
                 if (hlsInstancia) {
                     hlsInstancia.destroy(); 
                 }
                 
-                // AQUÍ ESTÁ EL SEGUNDO CAMBIO: Configuración optimizada para streams en vivo
                 hlsInstancia = new Hls({
-                    maxBufferLength: 15, // Un poco más de colchón
+                    maxBufferLength: 15,
                     maxMaxBufferLength: 30,
-                    liveSyncDurationCount: 3, // Se aleja unos segundos del "en vivo" para evitar cortes
-                    liveMaxLatencyDurationCount: 10 // Si se atrasa mucho, lo corrige suavemente
+                    liveSyncDurationCount: 3,
+                    liveMaxLatencyDurationCount: 10
                 });
                 
                 hlsInstancia.loadSource(url);
@@ -235,20 +457,24 @@
 
                 hlsInstancia.on(Hls.Events.ERROR, function (event, data) {
                     if (data.fatal) {
-                        console.warn("La librería falló, usando reproductor original...", data);
                         hlsInstancia.destroy();
                         audio.src = url;
                         audio.play();
                     }
                 });
-
             } else {
                 audio.src = url;
                 audio.play();
             }
         }
 
+        // Eventos nativos del HTML5 Audio para reaccionar al estado real
+        audio.addEventListener('play', () => actualizarIconoPlay(true));
+        audio.addEventListener('pause', () => actualizarIconoPlay(false));
+
         function togglePlay() {
+            if (!audio.src && !hlsInstancia) return; // Evitar disparar si no hay radio cargada
+            
             if (audio.paused) {
                 audio.play();
             } else {
@@ -258,9 +484,18 @@
 
         function setVolume(v) {
             audio.volume = v;
+            let volIcon = document.getElementById("volumeIcon");
+            
+            // Cambiar dinámicamente el icono de volumen según el nivel
+            if(v == 0) {
+                volIcon.setAttribute("data-lucide", "volume-x");
+            } else if(v < 0.5) {
+                volIcon.setAttribute("data-lucide", "volume-1");
+            } else {
+                volIcon.setAttribute("data-lucide", "volume-2");
+            }
+            lucide.createIcons();
         }
     </script>
 </body>
 </html>
-
-
