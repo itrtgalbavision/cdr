@@ -1,504 +1,922 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Central de Radios Guatemala</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Iconos Lucide para un look moderno -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: radial-gradient(circle at top, #1a1f2c 0%, #0d1017 100%);
-            color: #ffffff;
-            min-height: 100vh;
-            padding-bottom: 140px;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Central de Radios Guatemala</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<style>
+:root{
+  --bg-top: #0b1118;
+  --bg-bottom: #121c27;
+  --card: rgba(255,255,255,0.05);
+  --card-hover: rgba(255,255,255,0.08);
+  --card-active: rgba(0, 229, 255, 0.07);
+  --border: rgba(255,255,255,0.08);
+  --border-active: #00e5ff;
+  --text: #e6edf3;
+  --muted: #8a98a8;
+  --muted-2: #617081;
+  --cyan: #00e5ff;
+  --cyan-strong: #00bfff;
+  --red: #ff3b4c;
+  --player-bg: #0f1822;
+  --radius: 16px;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --glow: 0 0 24px rgba(0,229,255,.18), 0 0 46px rgba(0,229,255,.07);
+}
 
-        /* HEADER PREMIUM */
-        .header {
-            text-align: center;
-            padding: 50px 20px 30px;
-            position: relative;
-        }
-        .badge-en-vivo {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 51, 102, 0.1);
-            border: 1px solid rgba(255, 51, 102, 0.2);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            color: #ff3366;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-        .punto-rojo {
-            width: 8px;
-            height: 8px;
-            background-color: #ff3366;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #ff3366;
-            animation: latido 1.5s infinite;
-        }
-        @keyframes latido {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 51, 102, 0.5); }
-            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(255, 51, 102, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 51, 102, 0); }
-        }
-        .header h1 {
-            font-size: 28px;
-            font-weight: 400;
-            letter-spacing: 2px;
-            color: #e2e8f0;
-            line-height: 1.2;
-        }
-        .header h1 span {
-            display: block;
-            font-size: 48px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 1px;
-        }
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+  background-attachment: fixed;
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
 
-        /* GRID DE RADIOS */
-        .contenedor {
-            width: 90%;
-            max-width: 1200px;
-            margin: 30px auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 20px;
-        }
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+input{font-family:inherit}
 
-        /* TARJETAS ESTILO GLASSMORPHISM */
-        .radio {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 25px 20px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .radio::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, rgba(0,242,254,0.05) 0%, rgba(79,172,254,0.05) 100%);
-            opacity: 0;
-            transition: opacity 0.4s;
-        }
-        .radio:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(0, 242, 254, 0.3);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
-        }
-        .radio:hover::before {
-            opacity: 1;
-        }
-        .radio.activa {
-            background: rgba(0, 242, 254, 0.08);
-            border-color: #00f2fe;
-            box-shadow: 0 0 25px rgba(0, 242, 254, 0.2);
-        }
-        
-        /* CONTENEDOR DE LOGO */
-        .logo-wrapper {
-            width: 100px;
-            height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 16px;
-            margin-bottom: 15px;
-            padding: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: transform 0.3s;
-            z-index: 1;
-        }
-        .radio:hover .logo-wrapper {
-            transform: scale(1.05);
-        }
-        .radio img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-        .radio span {
-            font-size: 14px;
-            font-weight: 500;
-            color: #cbd5e1;
-            transition: color 0.3s;
-            z-index: 1;
-        }
-        .radio:hover span, .radio.activa span {
-            color: #ffffff;
-        }
+.wrap{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 24px 140px;
+}
 
-        /* REPRODUCTOR FLOTANTE PREMIUM */
-        .player {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 900px;
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            padding: 16px 28px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            z-index: 100;
-            visibility: hidden; /* Oculto hasta que se seleccione una radio */
-            opacity: 0;
-            transition: opacity 0.4s, visibility 0.4s, transform 0.4s;
-        }
-        .player.visible {
-            visibility: visible;
-            opacity: 1;
-        }
+/* Header */
+.site-header{
+  text-align:center;
+  padding: 14px 0 32px;
+}
+.live-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.16em;
+  color:#ffb8be;
+  background: rgba(255,59,76,.08);
+  border:1px solid rgba(255,59,76,.22);
+  padding:6px 13px;
+  border-radius:100px;
+  margin-bottom:18px;
+}
+.live-dot{
+  width:8px;height:8px;border-radius:50%;
+  background: var(--red);
+  box-shadow: 0 0 10px rgba(255,59,76,.65);
+  animation: pulseDot 1.6s infinite;
+}
+@keyframes pulseDot{
+  0%,100%{transform:scale(1); opacity:1}
+  50%{transform:scale(1.15); opacity:.75}
+}
 
-        /* INFO DEL TEMA EN REPRODUCCIÓN */
-        .player-info {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            width: 35%;
-        }
-        .player-logo-container {
-            width: 50px;
-            height: 50px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 6px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        #playerLogo {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-        .player-text {
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        .player-status {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #00f2fe;
-            font-weight: 600;
-        }
-        .player-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #ffffff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+.site-title{
+  font-size: clamp(28px, 5.2vw, 56px);
+  font-weight:800;
+  line-height:1.04;
+  letter-spacing:-.02em;
+}
+.site-title .thin{font-weight:700; color:#dfe7ef; display:block;}
+.site-title .grad{
+  background: linear-gradient(90deg, #00e5ff 0%, #5ef3ff 38%, #76eaff 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.site-subtitle{
+  margin-top:14px;
+  color: var(--muted);
+  font-size:15px;
+  font-weight:500;
+}
 
-        /* CONTROLES DE AUDIO */
-        .controls {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-        .btn-play {
-            background: #ffffff;
-            border: none;
-            color: #0f172a;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(255,255,255,0.2);
-        }
-        .btn-play:hover {
-            transform: scale(1.08);
-            background: #00f2fe;
-            color: #0f172a;
-            box-shadow: 0 4px 20px rgba(0, 242, 254, 0.4);
-        }
-        
-        /* VOLUMEN */
-        .volume-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            width: 25%;
-            justify-content: flex-end;
-        }
-        .volume-container i {
-            color: #94a3b8;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-        }
-        .volume {
-            -webkit-appearance: none;
-            width: 100px;
-            height: 4px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 2px;
-            outline: none;
-            transition: background 0.3s;
-        }
-        .volume::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #00f2fe;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .volume::-webkit-slider-thumb:hover {
-            transform: scale(1.3);
-        }
+/* Controls */
+.controls-bar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  align-items:center;
+  justify-content: space-between;
+  margin: 30px 0 24px;
+}
+.search-wrap{
+  position:relative;
+  flex:1 1 320px;
+  min-width: 240px;
+  max-width: 520px;
+}
+.search-wrap svg{
+  position:absolute; left:14px; top:50%; transform:translateY(-50%);
+  color:#6d7b8c; width:18px; height:18px; pointer-events:none;
+}
+.search-input{
+  width:100%;
+  background: rgba(255,255,255,0.045);
+  border:1px solid var(--border);
+  color:var(--text);
+  border-radius: 14px;
+  padding:13px 15px 13px 42px;
+  font-size:14px;
+  outline:none;
+  transition: border-color .2s, background .2s, box-shadow .2s;
+}
+.search-input::placeholder{ color:#6d7b8c; }
+.search-input:focus{
+  border-color: rgba(0,229,255,.5);
+  background: rgba(255,255,255,0.06);
+  box-shadow: 0 0 0 4px rgba(0,229,255,.072);
+}
 
-        /* RESPONSIVE */
-        @media(max-width: 768px) {
-            .header h1 { font-size: 22px; }
-            .header h1 span { font-size: 38px; }
-            .player {
-                flex-direction: column;
-                gap: 16px;
-                padding: 16px;
-                bottom: 12px;
-                text-align: center;
-            }
-            .player-info {
-                width: 100%;
-                justify-content: center;
-            }
-            .volume-container {
-                width: 100%;
-                justify-content: center;
-            }
-            .contenedor {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-                gap: 12px;
-                width: 95%;
-            }
-            .radio { padding: 15px 10px; border-radius: 16px;}
-            .logo-wrapper { width: 70px; height: 70px; margin-bottom: 8px; padding: 6px;}
-            .radio span { font-size: 12px; }
-        }
-    </style>
+.view-controls{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.view-btn, .fav-toggle{
+  border:1px solid var(--border);
+  background: rgba(255,255,255,0.035);
+  color:#b8c4d2;
+  font-size:13px;
+  font-weight:600;
+  padding:10px 15px;
+  border-radius:12px;
+  transition: .18s ease;
+  white-space:nowrap;
+}
+.view-btn:hover, .fav-toggle:hover{
+  background: rgba(255,255,255,0.07);
+  color:#fff;
+}
+.view-btn.active{
+  border-color: rgba(0,229,255,.45);
+  background: rgba(0,229,255,.085);
+  color:#7cf1ff;
+  box-shadow: inset 0 0 16px rgba(0,229,255,.05);
+}
+.fav-toggle{
+  display:inline-flex;align-items:center;gap:7px;
+}
+.fav-toggle.on{
+  border-color: rgba(255,197,61,.38);
+  background: rgba(255,197,61,.085);
+  color:#ffd272;
+}
+.star-ico{ font-size:14px; line-height:1; }
+
+/* Count */
+.list-meta{
+  color: var(--muted-2);
+  font-size:13px;
+  font-weight:500;
+  margin: 6px 2px 18px;
+}
+
+/* GRID view */
+.stations-grid{
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:16px;
+}
+@media (max-width:1000px){ .stations-grid{ grid-template-columns: repeat(3, 1fr);} }
+@media (max-width:700px){ .stations-grid{ grid-template-columns: repeat(2, 1fr);} }
+@media (max-width:450px){ .stations-grid{ grid-template-columns: 1fr;} }
+
+.station-card{
+  background: var(--card);
+  border:1px solid var(--border);
+  border-radius: var(--radius);
+  height:140px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:14px 14px 12px;
+  cursor:pointer;
+  transition: .2s ease;
+  position:relative;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  text-align:center;
+}
+.station-card:hover{
+  background: var(--card-hover);
+  border-color: rgba(255,255,255,.16);
+  transform: translateY(-2px);
+}
+.station-card.active{
+  border-color: var(--border-active);
+  background: var(--card-active);
+  box-shadow: var(--glow);
+}
+.card-logo-wrap{
+  width: 132px;
+  height: 62px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:9px;
+}
+.card-logo-wrap img{
+  max-width:100%;
+  max-height:55px;
+  object-fit:contain;
+  filter: drop-shadow(0 0 14px rgba(0,229,255,.10));
+}
+.station-card.active .card-logo-wrap img{
+  filter: drop-shadow(0 0 16px rgba(0,229,255,.26));
+}
+.card-name{
+  font-size:13.4px;
+  font-weight:600;
+  color:#d9e3ec;
+  line-height:1.3;
+}
+.card-freq{
+  font-size:11.8px;
+  color:#78909f;
+  margin-top:1px;
+}
+.card-fav-btn{
+  position:absolute;
+  top:9px; right:10px;
+  width:28px; height:28px;
+  border-radius:9px;
+  display:grid; place-items:center;
+  color:#6a7988;
+  background: rgba(255,255,255,.025);
+  border:1px solid transparent;
+  transition:.15s;
+  font-size:13px;
+}
+.card-fav-btn:hover{ color:#ffd272; background:rgba(255,255,255,.06);}
+.card-fav-btn.is-fav{ color:#ffc53d; }
+.card-fav-btn.is-fav svg{ fill:#ffc53d; }
+
+/* LIST view */
+.stations-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.list-row{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  background: var(--card);
+  border:1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 16px;
+  transition:.18s ease;
+  cursor:pointer;
+}
+.list-row:hover{ background: var(--card-hover); border-color: rgba(255,255,255,.15);}
+.list-row.active{
+  border-color: var(--border-active);
+  background: var(--card-active);
+  box-shadow: var(--glow);
+}
+.list-logo{
+  width:52px; height:44px;
+  border-radius:9px;
+  background: rgba(255,255,255,.035);
+  display:grid; place-items:center;
+  flex-shrink:0;
+}
+.list-logo img{ max-width:44px; max-height:34px; object-fit:contain;}
+.list-info{flex:1; min-width:0}
+.list-name{font-weight:600; font-size:14.5px; color:#dde7f0;}
+.list-freq{font-size:12.5px; color:#7d8f9f; margin-top:1px;}
+.list-actions{display:flex; align-items:center; gap:10px;}
+.list-play{
+  width:40px; height:40px; border-radius:50%;
+  background: rgba(0,229,255,.10);
+  color:#7cf2ff;
+  display:grid; place-items:center;
+  border:1px solid rgba(0,229,255,.22);
+  transition:.15s;
+}
+.list-play:hover{ background: rgba(0,229,255,.18); }
+.list-play svg{ width:16px;height:16px; }
+.list-fav{
+  color:#6b7987; transition:.15s; padding:6px;
+}
+.list-fav.is-fav{ color:#ffc53d;}
+.list-fav:hover{ color:#ffd272; }
+
+/* COMPACT view */
+.stations-compact{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.compact-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  background: var(--card);
+  border:1px solid var(--border);
+  border-radius: 999px;
+  padding: 8px 14px 8px 10px;
+  cursor:pointer;
+  transition:.18s;
+  font-size:13.2px;
+  font-weight:600;
+  color:#cbd6e2;
+}
+.compact-pill:hover{ background: var(--card-hover); border-color:rgba(255,255,255,.16);}
+.compact-pill.active{
+  border-color: var(--border-active);
+  background: var(--card-active);
+  color:#bff8ff;
+  box-shadow: var(--glow);
+}
+.compact-pill img{
+  width: 30px; height:22px; object-fit:contain; border-radius:4px;
+}
+.compact-pill .cp-freq{ color:#7a8b9a; font-weight:500; font-size:12px; margin-left:2px;}
+.pill-fav{
+  margin-left:4px;
+  color:#697888;
+  font-size:12px;
+}
+.pill-fav.is-fav{ color:#ffc53d; }
+
+/* Empty state */
+.empty-state{
+  background: var(--card);
+  border:1px dashed rgba(255,255,255,.14);
+  border-radius: var(--radius);
+  padding: 36px 24px;
+  text-align:center;
+  color:#8a98a8;
+}
+.empty-state strong{ color:#c7d3e0; display:block; margin-bottom:6px; font-size:15px; }
+
+/* Player */
+.player-bar{
+  position:fixed;
+  left:0; right:0; bottom:0;
+  background: #0f1822;
+  border-top:1px solid rgba(255,255,255,.10);
+  box-shadow: 0 -10px 40px rgba(0,0,0,.45);
+  z-index: 60;
+}
+.player-inner{
+  max-width:1100px;
+  margin:0 auto;
+  padding: 14px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+}
+.player-left{
+  display:flex; align-items:center; gap:14px;
+  min-width:0; flex:1;
+}
+.player-logo{
+  width:52px; height:46px;
+  background: rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:10px;
+  display:grid; place-items:center;
+  flex-shrink:0;
+}
+.player-logo img{ max-width:44px; max-height:34px; object-fit:contain;}
+.player-meta{ min-width:0;}
+.player-station{ font-weight:700; font-size:14.6px; color:#e8f0f6; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.player-live{ font-size:11.5px; color:#7c8d9d; display:flex; align-items:center; gap:7px; }
+.p-live-dot{ width:6px; height:6px; border-radius:50%; background:#4b5563;}
+.player-bar.playing .p-live-dot{ background:#ff4356; box-shadow:0 0 8px rgba(255,67,86,.55); animation: pulseDot 1.5s infinite;}
+/* Visualizer */
+.visualizer{
+  display:flex; align-items:flex-end; gap:3px; height:18px; margin-left:8px; opacity:.55;
+}
+.vbar{
+  width:3px; background:#355260; border-radius:3px; height:5px; transition: height .12s;
+}
+.player-bar.playing .vbar{
+  background: #00e5ff;
+}
+.player-bar.playing .vbar:nth-child(1){ animation: vb 0.55s ease-in-out infinite alternate;}
+.player-bar.playing .vbar:nth-child(2){ animation: vb 0.6s .08s ease-in-out infinite alternate;}
+.player-bar.playing .vbar:nth-child(3){ animation: vb 0.48s .13s ease-in-out infinite alternate;}
+.player-bar.playing .vbar:nth-child(4){ animation: vb 0.62s .05s ease-in-out infinite alternate;}
+@keyframes vb{
+  from{ height:4px;}
+  to{ height:16px;}
+}
+
+.player-center{
+  display:flex; align-items:center; gap:10px;
+}
+.ctrl-btn{
+  width:44px; height:44px; border-radius:50%;
+  display:grid; place-items:center;
+  background: rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.10);
+  color:#b9c7d6;
+  transition:.15s;
+}
+.ctrl-btn:hover{ background: rgba(255,255,255,.09); color:#fff;}
+.ctrl-btn.play{
+  width:54px; height:54px;
+  background: linear-gradient(180deg, #00c8ff 0%, #00aadd 100%);
+  color:#06232b;
+  border-color: rgba(255,255,255,.14);
+  box-shadow: 0 6px 22px rgba(0,191,255,.28);
+}
+.ctrl-btn.play:hover{ filter:brightness(1.06); }
+.ctrl-btn svg{ width:19px; height:19px;}
+.ctrl-btn.play svg{ width:22px; height:22px;}
+
+.player-right{
+  display:flex; align-items:center; gap:14px;
+  min-width:180px; justify-content:flex-end;
+}
+.vol-wrap{ display:flex; align-items:center; gap:10px; color:#7b8b9a;}
+.vol-wrap svg{ width:18px; height:18px; flex-shrink:0;}
+input[type=range]{
+  -webkit-appearance:none; appearance:none;
+  background:transparent;
+  width:124px;
+}
+input[type=range]::-webkit-slider-runnable-track{
+  height:4px; background:#2a3643; border-radius:4px;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none; appearance:none;
+  width:14px; height:14px; border-radius:50%;
+  background:#00e5ff; margin-top:-5px;
+  box-shadow: 0 0 10px rgba(0,229,255,.45);
+}
+input[type=range]::-moz-range-track{ height:4px; background:#2a3643; border-radius:4px;}
+input[type=range]::-moz-range-thumb{
+  width:14px; height:14px; border-radius:50%; background:#00e5ff; border:none;
+}
+
+/* Responsive */
+@media (max-width: 820px){
+  .player-inner{ flex-wrap:wrap; gap:10px 16px; padding:12px 16px;}
+  .player-center{ order:3; width:100%; justify-content:center;}
+  .player-right{ min-width:auto;}
+  input[type=range]{ width:96px; }
+  .wrap{ padding-bottom: 162px;}
+}
+@media (max-width: 560px){
+  .wrap{ padding: 30px 16px 170px;}
+  .site-header{ padding-bottom: 22px;}
+  .controls-bar{ gap:10px;}
+  .search-wrap{ flex-basis:100%; max-width:none;}
+  .view-controls{ width:100%; }
+  .view-btn{ flex:1; text-align:center; padding:10px 10px;}
+  .fav-toggle{ width:100%; justify-content:center; margin-top:2px;}
+  .view-controls{ display:grid; grid-template-columns: 1fr 1fr 1fr; }
+  .view-controls .fav-toggle{ grid-column: 1 / -1;}
+  .player-right .vol-label{ display:none;}
+  input[type=range]{ width:96px;}
+}
+
+/* Toast */
+.toast{
+  position:fixed; bottom:104px; left:50%; transform:translateX(-50%) translateY(10px);
+  background:#132131; border:1px solid rgba(255,255,255,.12);
+  color:#dbe7f1; padding:10px 15px; border-radius:12px; font-size:13px; font-weight:600;
+  box-shadow: var(--shadow); z-index:80; opacity:0; pointer-events:none; transition:.22s;
+}
+.toast.show{ opacity:1; transform:translateX(-50%) translateY(0);}
+
+/* Utility */
+.hidden{display:none !important;}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+</style>
 </head>
 <body>
-    
-    <div class="header">
-        <div class="badge-en-vivo">
-            <span class="punto-rojo"></span> Transmitiendo En Vivo
-        </div>
-        <h1>
-            CENTRAL DE RADIOS
-            <span>GUATEMALA</span>
-        </h1>
+
+<div class="wrap">
+  <header class="site-header">
+    <div class="live-badge"><span class="live-dot" aria-hidden="true"></span> EN VIVO</div>
+    <h1 class="site-title">
+      <span class="thin">CENTRAL DE RADIOS</span>
+      <span class="grad">GUATEMALA</span>
+    </h1>
+    <p class="site-subtitle">Las emisoras de Guatemala en un solo lugar</p>
+  </header>
+
+  <div class="controls-bar" role="region" aria-label="Controles de listado">
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg>
+      <input id="searchInput" class="search-input" type="search" placeholder="Buscar emisora..." autocomplete="off" />
     </div>
 
-    <div class="contenedor">
-        <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/c2cce928-c69c-45d5-bd0a-5a5eba167a0d/ts:abr.m3u8','Xtrema 101.3 FM','xtrema.png')">
-            <div class="logo-wrapper"><img src="xtrema.png" alt="Xtrema 101.3 FM"></div>
-            <span>Xtrema 101.3 FM</span>
-        </div>
-        <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/406d6243-a8fc-4215-aca0-ffd43aac2bf3/ts:abr.m3u8','Galaxia 88.5 FM','galaxia.png')">
-            <div class="logo-wrapper"><img src="galaxia.png" alt="Galaxia 88.5 FM"></div>
-            <span>Galaxia 88.5 FM</span>
-        </div>
-        <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/67aeb080-68fa-4197-89f6-c8bb70f9a395/ts:abr.m3u8','Tropicálida 104.9 FM','tropicalida.png')">
-            <div class="logo-wrapper"><img src="tropicalida.png" alt="Tropicálida 104.9 FM"></div>
-            <span>Tropicálida 104.9 FM</span>
-        </div>
-        <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/ca11fca0-0da4-4198-83bd-b50e5607d6f8/ts:abr.m3u8','Éxitos 90.9','exitos.png')">
-            <div class="logo-wrapper"><img src="exitos.png" alt="Éxitos 90.9"></div>
-            <span>Éxitos 90.9</span>
-        </div>
-        <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/e33ed625-2624-4334-a625-a53a70d95791/ts:abr.m3u8','Joya 92.9 FM','joya.png')">
-            <div class="logo-wrapper"><img src="joya.png" alt="Joya 92.9 FM"></div>
-            <span>Joya 92.9 FM</span>
-        </div>
-        <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/3943e598-9843-4784-9388-80e97aa3674b/ts:abr.m3u8','Alfa 97.3 FM','alfa.png')">
-            <div class="logo-wrapper"><img src="alfa.png" alt="Alfa 97.3 FM"></div>
-            <span>Alfa 97.3 FM</span>
-        </div>
-        <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/a4e3175d-fa7e-4d4b-979f-e7f875468260/ts:abr.m3u8','Ranchera 95.7 FM','ranchera.png')">
-            <div class="logo-wrapper"><img src="ranchera.png" alt="Ranchera 95.7 FM"></div>
-            <span>Ranchera 95.7 FM</span>
-        </div>
-        <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/53ee315d-206f-4271-994b-4c1927ae338b/ts:abr.m3u8','La Marca 94.1 FM','lamarca.png')">
-            <div class="logo-wrapper"><img src="lamarca.png" alt="La Marca 94.1 FM"></div>
-            <span>La Marca 94.1 FM</span>
-        </div>
-        <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/9c2d6264-2009-49a8-a501-848a7bae1051/ts:abr.m3u8','Fiesta 103.7 FM','fiesta.png')">
-            <div class="logo-wrapper"><img src="fiesta.png" alt="Fiesta 103.7 FM"></div>
-            <span>Fiesta 103.7 FM</span>
-        </div>
-        <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/8e7a8a5b-a2db-4323-8397-46c17f4573ac/ts:abr.m3u8','Sonora 96.9 FM','sonora.png')">
-            <div class="logo-wrapper"><img src="sonora.png" alt="Sonora 96.9 FM"></div>
-            <span>Sonora 96.9 FM</span>
-        </div>
-        <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/ef0c82f1-e446-4093-8455-3a144ca2e171/ts:abr.m3u8','Éxitos Xela 107.1 FM','exitosx.png')">
-            <div class="logo-wrapper"><img src="exitosx.png" alt="Éxitos Xela 107.1 FM"></div>
-            <span>Éxitos Xela 107.1 FM</span>
-        </div>
-        <div class="radio" onclick="playRadio(this,'https://d2qsan2ut81n2k.cloudfront.net/live/c2af032e-3e29-4551-a757-e4f3d349386c/ts:abr.m3u8','Flix Xela 93.9','fixx.png')">
-            <div class="logo-wrapper"><img src="fixx.png" alt="Flix Xela 93.9"></div>
-            <span>Flix Xela 93.9</span>
-        </div>
+    <div class="view-controls" id="viewControls" role="tablist" aria-label="Vista">
+      <button class="view-btn active" data-view="grid" role="tab" aria-selected="true">Grid</button>
+      <button class="view-btn" data-view="list" role="tab" aria-selected="false">Lista</button>
+      <button class="view-btn" data-view="compact" role="tab" aria-selected="false">Compacto</button>
+      <button class="fav-toggle" id="favToggle" aria-pressed="false"><span class="star-ico">★</span> Favoritas</button>
+    </div>
+  </div>
+
+  <div class="list-meta" id="listMeta">12 emisoras</div>
+
+  <main id="stationsContainer" aria-live="polite">
+    <!-- Rendered by JS -->
+  </main>
+</div>
+
+<!-- Sticky Player -->
+<div class="player-bar" id="playerBar" role="region" aria-label="Reproductor">
+  <div class="player-inner">
+    <div class="player-left">
+      <div class="player-logo" id="playerLogoWrap">
+        <img id="playerLogo" alt="Logo emisora" width="44" height="34" />
+      </div>
+      <div class="player-meta">
+        <div class="player-station" id="playerStationName">Selecciona una emisora</div>
+        <div class="player-live"><span class="p-live-dot" aria-hidden="true"></span><span id="playerLiveText">En espera</span></div>
+      </div>
+      <div class="visualizer" aria-hidden="true">
+        <div class="vbar"></div><div class="vbar"></div><div class="vbar"></div><div class="vbar"></div>
+      </div>
     </div>
 
-    <!-- REPRODUCTOR FLOTANTE MODERNO -->
-    <div class="player" id="mainPlayer">
-        <div class="player-info">
-            <div class="player-logo-container">
-                <img id="playerLogo" src="" alt="Logo Radio">
-            </div>
-            <div class="player-text">
-                <span class="player-status">Escuchando:</span>
-                <div class="player-title" id="playerTitle">Selecciona una radio</div>
-            </div>
-        </div>
-        <div class="controls">
-            <button class="btn-play" onclick="togglePlay()" id="btnPlay">
-                <i data-lucide="play"></i>
-            </button>
-        </div>
-        <div class="volume-container">
-            <i data-lucide="volume-2" id="volumeIcon"></i>
-            <input class="volume" type="range" min="0" max="1" step="0.01" value="1.0" oninput="setVolume(this.value)">
-        </div>
+    <div class="player-center">
+      <button class="ctrl-btn" id="prevBtn" aria-label="Anterior">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 6h2v12H7zM17.5 18l-9-6 9-6v12z"/></svg>
+      </button>
+      <button class="ctrl-btn play" id="playPauseBtn" aria-label="Reproducir / Pausar">
+        <svg id="playIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.6v12.8L18.5 12 8 5.6z"/></svg>
+        <svg id="pauseIcon" class="hidden" viewBox="0 0 24 24" fill="currentColor"><path d="M8 6h3v12H8zM13 6h3v12h-3z"/></svg>
+      </button>
+      <button class="ctrl-btn" id="nextBtn" aria-label="Siguiente">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 6h2v12h-2zM6.5 6v12l9-6-9-6z"/></svg>
+      </button>
     </div>
 
-    <audio id="audio" playsinline preload="auto"></audio>
+    <div class="player-right">
+      <div class="vol-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path><path d="M15.54 8.46a5 5 0 0 1 0 7.08"></path></svg>
+        <label class="sr-only" for="volumeRange">Volumen</label>
+        <input type="range" id="volumeRange" min="0" max="1" step="0.01" value="0.8" />
+      </div>
+    </div>
+  </div>
+  <audio id="audioEl" preload="none" crossorigin="anonymous"></audio>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <script>
-        let audio = document.getElementById("audio");
-        let title = document.getElementById("playerTitle");
-        let logo = document.getElementById("playerLogo");
-        let playerContainer = document.getElementById("mainPlayer");
-        let btnPlay = document.getElementById("btnPlay");
-        
-        let hlsInstancia = null;
+<script>
+/* ---- Datos de emisoras ---- */
+const stations = [
+  { name: "Xtrema", freq: "101.3 FM", file: "xtrema.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/c2cce928-c69c-45d5-bd0a-5a5eba167a0d/ts:abr.m3u8" },
+  { name: "Galaxia", freq: "88.5 FM", file: "galaxia.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/406d6243-a8fc-4215-aca0-ffd43aac2bf3/ts:abr.m3u8" },
+  { name: "Tropicálida", freq: "104.9 FM", file: "tropicalida.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/67aeb080-68fa-4197-89f6-c8bb70f9a395/ts:abr.m3u8" },
+  { name: "Éxitos", freq: "90.9", file: "exitos.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/ca11fca0-0da4-4198-83bd-b50e5607d6f8/ts:abr.m3u8" },
+  { name: "Joya", freq: "92.9 FM", file: "joya.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/e33ed625-2624-4334-a625-a53a70d95791/ts:abr.m3u8" },
+  { name: "Alfa", freq: "97.3 FM", file: "alfa.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/3943e598-9843-4784-9388-80e97aa3674b/ts:abr.m3u8" },
+  { name: "Ranchera", freq: "95.7 FM", file: "ranchera.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/a4e3175d-fa7e-4d4b-979f-e7f875468260/ts:abr.m3u8" },
+  { name: "La Marca", freq: "94.1 FM", file: "lamarca.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/53ee315d-206f-4271-994b-4c1927ae338b/ts:abr.m3u8" },
+  { name: "Fiesta", freq: "103.7 FM", file: "fiesta.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/9c2d6264-2009-49a8-a501-848a7bae1051/ts:abr.m3u8" },
+  { name: "Sonora", freq: "96.9 FM", file: "sonora.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/8e7a8a5b-a2db-4323-8397-46c17f4573ac/ts:abr.m3u8" },
+  { name: "Éxitos Xela", freq: "107.1 FM", file: "exitosx.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/ef0c82f1-e446-4093-8455-3a144ca2e171/ts:abr.m3u8" },
+  { name: "Flix Xela", freq: "93.9", file: "fixx.png", url: "https://d2qsan2ut81n2k.cloudfront.net/live/c2af032e-3e29-4551-a757-e4f3d349386c/ts:abr.m3u8" }
+];
 
-        // Inicializar iconos Lucide
-        lucide.createIcons();
+/* ---- Estado ---- */
+let currentIndex = -1;
+let isPlaying = false;
+let viewMode = localStorage.getItem('crg_view') || 'grid';
+let showFavoritesOnly = false;
+let favorites = JSON.parse(localStorage.getItem('crg_favs') || '[]');
+let hlsInstance = null;
 
-        function actualizarIconoPlay(reproduciendo) {
-            if (reproduciendo) {
-                btnPlay.innerHTML = '<i data-lucide="pause"></i>';
-            } else {
-                btnPlay.innerHTML = '<i data-lucide="play"></i>';
-            }
-            lucide.createIcons();
+const audio = document.getElementById('audioEl');
+const playerBar = document.getElementById('playerBar');
+const playerStationName = document.getElementById('playerStationName');
+const playerLogo = document.getElementById('playerLogo');
+const playerLiveText = document.getElementById('playerLiveText');
+const playPauseBtn = document.getElementById('playPauseBtn');
+const playIcon = document.getElementById('playIcon');
+const pauseIcon = document.getElementById('pauseIcon');
+const container = document.getElementById('stationsContainer');
+const searchInput = document.getElementById('searchInput');
+const listMeta = document.getElementById('listMeta');
+
+/* Imagen fallback SVG (si los PNG locales no existen, así no hay imágenes rotas) */
+function svgFallback(name){
+  const safe = encodeURIComponent(name);
+  return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(
+    `<svg xmlns='http://www.w3.org/2000/svg' width='180' height='110' viewBox='0 0 180 110'>
+      <defs><linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='#0f1f2b'/><stop offset='100%' stop-color='#102835'/></linearGradient></defs>
+      <rect width='180' height='110' rx='14' fill='url(#g)'/>
+      <text x='50%' y='50%' fill='#00e5ff' font-family='Poppins,Arial,sans-serif' font-size='14' font-weight='700' text-anchor='middle' dominant-baseline='middle' opacity='.95'>${name}</text>
+    </svg>`
+  );
+}
+
+/* Toast */
+let toastTimer;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> t.classList.remove('show'), 2100);
+}
+
+/* Favoritos */
+function isFav(i){ return favorites.includes(i); }
+function toggleFav(i, e){
+  if(e) e.stopPropagation();
+  const pos = favorites.indexOf(i);
+  if(pos > -1){ favorites.splice(pos,1); showToast('Eliminada de favoritas'); }
+  else { favorites.push(i); showToast('Añadida a favoritas'); }
+  localStorage.setItem('crg_favs', JSON.stringify(favorites));
+  render();
+}
+
+/* Filtrado */
+function getFilteredStations(){
+  const q = searchInput.value.trim().toLowerCase();
+  return stations.map((s, i)=>({...s, _i:i}))
+    .filter(s=>{
+      const matches = !q || (s.name.toLowerCase().includes(q) || s.freq.toLowerCase().includes(q));
+      const favOk = !showFavoritesOnly || isFav(s._i);
+      return matches && favOk;
+    });
+}
+
+/* Render */
+function render(){
+  const list = getFilteredStations();
+  listMeta.textContent = `${list.length} emisora${list.length!==1?'s':''}${showFavoritesOnly ? ' • Favoritas' : ''}`;
+
+  if(list.length === 0){
+    container.innerHTML = `<div class="empty-state"><strong>Sin resultados</strong>Prueba con otro término o desactiva el filtro de favoritas.</div>`;
+    return;
+  }
+
+  if(viewMode === 'grid'){
+    container.innerHTML = `<div class="stations-grid" id="gridWrap"></div>`;
+    const grid = document.getElementById('gridWrap');
+    list.forEach(s=>{
+      const el = document.createElement('div');
+      el.className = 'station-card' + (s._i === currentIndex ? ' active' : '');
+      el.setAttribute('role','button');
+      el.setAttribute('tabindex','0');
+      el.innerHTML = `
+        <button class="card-fav-btn ${isFav(s._i)?'is-fav':''}" aria-label="Favorito" data-fav="${s._i}">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="${isFav(s._i)?'currentColor':'none'}" stroke="currentColor" stroke-width="1.9"><path d="M12 17.3l-6.18 3.25 1.18-6.88L2 8.93l6.91-1L12 1.5l3.09 6.43 6.91 1-5 4.74 1.18 6.88z"/></svg>
+        </button>
+        <div class="card-logo-wrap">
+          <img src="${s.file}" alt="${s.name}" loading="lazy"
+            onerror="this.onerror=null;this.src='${svgFallback(s.name)}'">
+        </div>
+        <div class="card-name">${s.name}</div>
+        <div class="card-freq">${s.freq}</div>
+      `;
+      el.addEventListener('click', ()=> playStation(s._i));
+      el.querySelector('[data-fav]').addEventListener('click', (e)=> toggleFav(s._i, e));
+      grid.appendChild(el);
+    });
+  }
+  else if(viewMode === 'list'){
+    container.innerHTML = `<div class="stations-list" id="listWrap"></div>`;
+    const wrap = document.getElementById('listWrap');
+    list.forEach(s=>{
+      const row = document.createElement('div');
+      row.className = 'list-row' + (s._i === currentIndex ? ' active' : '');
+      row.innerHTML = `
+        <div class="list-logo"><img src="${s.file}" alt="${s.name}" loading="lazy" onerror="this.onerror=null;this.src='${svgFallback(s.name)}'"></div>
+        <div class="list-info">
+          <div class="list-name">${s.name}</div>
+          <div class="list-freq">${s.freq}</div>
+        </div>
+        <div class="list-actions">
+          <button class="list-fav ${isFav(s._i)?'is-fav':''}" aria-label="Favorito" data-fav="${s._i}">★</button>
+          <button class="list-play" aria-label="Reproducir">${s._i === currentIndex && isPlaying ? 
+            '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 6h3v12H8zM13 6h3v12h-3z"/></svg>' :
+            '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.6v12.8L18.5 12 8 5.6z"/></svg>'}</button>
+        </div>
+      `;
+      row.addEventListener('click', (e)=>{ if(!e.target.closest('.list-fav')) playStation(s._i); });
+      row.querySelector('.list-play').addEventListener('click', (e)=>{ e.stopPropagation(); playStation(s._i); });
+      row.querySelector('[data-fav]').addEventListener('click', (e)=> toggleFav(s._i, e));
+      wrap.appendChild(row);
+    });
+  }
+  else { // compact
+    container.innerHTML = `<div class="stations-compact" id="compactWrap"></div>`;
+    const wrap = document.getElementById('compactWrap');
+    list.forEach(s=>{
+      const pill = document.createElement('button');
+      pill.className = 'compact-pill' + (s._i === currentIndex ? ' active' : '');
+      pill.innerHTML = `
+        <img src="${s.file}" alt="" onerror="this.onerror=null;this.src='${svgFallback(s.name)}'">
+        <span>${s.name} <span class="cp-freq">${s.freq}</span></span>
+        <span class="pill-fav ${isFav(s._i)?'is-fav':''}">★</span>
+      `;
+      pill.addEventListener('click', ()=> playStation(s._i));
+      wrap.appendChild(pill);
+    });
+  }
+}
+
+/* ---- Reproducción HLS ---- */
+function playStation(index){
+  if(index < 0 || index >= stations.length) return;
+  const st = stations[index];
+  const wasCurrent = index === currentIndex;
+
+  currentIndex = index;
+  playerStationName.textContent = `${st.name} — ${st.freq}`;
+  playerLogo.src = st.file;
+  playerLogo.alt = st.name;
+  playerLogo.onerror = function(){ this.onerror=null; this.src = svgFallback(st.name); };
+
+  playerLiveText.textContent = "Conectando…";
+  render();
+
+  const url = st.url;
+  audio.pause();
+
+  // Detección móvil
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+  try {
+    if (window.Hls && Hls.isSupported()) {
+      if (hlsInstance) { try{ hlsInstance.destroy(); } catch(e){} }
+      hlsInstance = new Hls({
+        maxBufferLength: 15,
+        maxMaxBufferLength: 30,
+        liveSyncDurationCount: 3,
+        liveMaxLatencyDurationCount: 10
+      });
+      hlsInstance.loadSource(url);
+      hlsInstance.attachMedia(audio);
+      hlsInstance.on(Hls.Events.MANIFEST_PARSED, function() {
+        audio.play().catch(()=>{});
+      });
+      hlsInstance.on(Hls.Events.ERROR, function(event, data){
+        if(data.fatal){
+          // Fallback directo
+          try{ hlsInstance.destroy(); }catch(e){}
+          audio.src = url;
+          audio.load();
+          audio.play().catch(()=>{});
         }
+      });
+    } else {
+      // Safari / nativo / fallback
+      audio.src = url;
+      audio.load();
+      audio.play().catch(()=>{});
+    }
+  } catch(err){
+    audio.src = url;
+    audio.load();
+    audio.play().catch(()=>{});
+  }
 
-        function playRadio(el, url, name, img) {
-            document.querySelectorAll(".radio").forEach(r => r.classList.remove("activa"));
-            el.classList.add("activa");
-            
-            title.innerText = name;
-            logo.src = img;
-            
-            playerContainer.classList.add("visible");
+  if('mediaSession' in navigator){
+    try{
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: st.name,
+        artist: 'Central de Radios Guatemala',
+        album: st.freq
+      });
+    }catch(e){}
+  }
+}
 
-            // CORRECCIÓN AQUÍ: Quitamos el filtro estricto de "esMovil". 
-            // Ahora si el navegador soporta HLS.js (que son casi todos los de PC), levantará la transmisión correctamente.
-            if (Hls.isSupported()) {
-                if (hlsInstancia) {
-                    hlsInstancia.destroy(); 
-                }
-                
-                hlsInstancia = new Hls({
-                    maxBufferLength: 15,
-                    maxMaxBufferLength: 30,
-                    liveSyncDurationCount: 3,
-                    liveMaxLatencyDurationCount: 10
-                });
-                
-                hlsInstancia.loadSource(url);
-                hlsInstancia.attachMedia(audio);
-                hlsInstancia.on(Hls.Events.MANIFEST_PARSED, function() {
-                    audio.play().catch(err => console.log("Error al reproducir automáticamente:", err));
-                });
+function togglePlay(){
+  if(currentIndex === -1){
+    playStation(0);
+    return;
+  }
+  if(audio.paused){
+    audio.play().catch(()=>{});
+  } else {
+    audio.pause();
+  }
+}
 
-                hlsInstancia.on(Hls.Events.ERROR, function (event, data) {
-                    if (data.fatal) {
-                        hlsInstancia.destroy();
-                        audio.src = url;
-                        audio.play().catch(err => console.log(err));
-                    }
-                });
-            } else if (audio.canPlayType('application/vnd.apple.mpegurl')) {
-                // Soporte nativo de HLS (principalmente Safari en iOS/Mac)
-                audio.src = url;
-                audio.play().catch(err => console.log(err));
-            }
-        }
+function nextStation(){
+  if(currentIndex === -1){ playStation(0); return; }
+  const next = (currentIndex + 1) % stations.length;
+  playStation(next);
+}
+function prevStation(){
+  if(currentIndex === -1){ playStation(0); return; }
+  const prev = (currentIndex - 1 + stations.length) % stations.length;
+  playStation(prev);
+}
 
-        // Detectar estados del audio para sincronizar el botón de Play/Pause
-        audio.addEventListener('play', () => actualizarIconoPlay(true));
-        audio.addEventListener('pause', () => actualizarIconoPlay(false));
+function setVolume(v){
+  audio.volume = v;
+  document.getElementById('volumeRange').value = v;
+  localStorage.setItem('crg_vol', v);
+}
 
-        function togglePlay() {
-            if (!audio.src && !hlsInstancia) return;
-            
-            if (audio.paused) {
-                audio.play().catch(err => console.log(err));
-            } else {
-                audio.pause();
-            }
-        }
+/* Audio events */
+audio.addEventListener('play', ()=>{
+  isPlaying = true;
+  playerBar.classList.add('playing');
+  playIcon.classList.add('hidden');
+  pauseIcon.classList.remove('hidden');
+  playerLiveText.textContent = "EN VIVO";
+  render();
+});
+audio.addEventListener('pause', ()=>{
+  isPlaying = false;
+  playerBar.classList.remove('playing');
+  pauseIcon.classList.add('hidden');
+  playIcon.classList.remove('hidden');
+  playerLiveText.textContent = currentIndex >= 0 ? "Pausado" : "En espera";
+  render();
+});
+audio.addEventListener('waiting', ()=>{ playerLiveText.textContent = "Cargando…"; });
+audio.addEventListener('playing', ()=>{ playerLiveText.textContent = "EN VIVO"; });
+audio.addEventListener('error', ()=>{ playerLiveText.textContent = "Error de señal"; showToast("No se pudo conectar a la emisora"); });
 
-        function setVolume(v) {
-            audio.volume = v;
-            let volIcon = document.getElementById("volumeIcon");
-            
-            if(v == 0) {
-                volIcon.parentNode.innerHTML = '<i data-lucide="volume-x" id="volumeIcon"></i>';
-            } else if(v < 0.5) {
-                volIcon.parentNode.innerHTML = '<i data-lucide="volume-1" id="volumeIcon"></i>';
-            } else {
-                volIcon.parentNode.innerHTML = '<i data-lucide="volume-2" id="volumeIcon"></i>';
-            }
-            lucide.createIcons();
-        }
-    </script>
+/* Controles UI */
+document.getElementById('playPauseBtn').addEventListener('click', togglePlay);
+document.getElementById('nextBtn').addEventListener('click', nextStation);
+document.getElementById('prevBtn').addEventListener('click', prevStation);
+
+document.getElementById('volumeRange').addEventListener('input', e => setVolume(parseFloat(e.target.value)));
+
+searchInput.addEventListener('input', render);
+
+/* View toggle */
+document.querySelectorAll('.view-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    viewMode = btn.dataset.view;
+    localStorage.setItem('crg_view', viewMode);
+    document.querySelectorAll('.view-btn').forEach(b=>{
+      b.classList.toggle('active', b === btn);
+      b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
+    });
+    render();
+  });
+});
+
+/* Fav filter toggle */
+document.getElementById('favToggle').addEventListener('click', function(){
+  showFavoritesOnly = !showFavoritesOnly;
+  this.classList.toggle('on', showFavoritesOnly);
+  this.setAttribute('aria-pressed', showFavoritesOnly ? 'true' : 'false');
+  render();
+});
+
+/* Keyboard */
+document.addEventListener('keydown', e=>{
+  if(e.code === 'Space' && document.activeElement.tagName !== 'INPUT'){
+    e.preventDefault();
+    togglePlay();
+  }
+});
+
+/* Media session */
+if('mediaSession' in navigator){
+  try{
+    navigator.mediaSession.setActionHandler('play', ()=> audio.play());
+    navigator.mediaSession.setActionHandler('pause', ()=> audio.pause());
+    navigator.mediaSession.setActionHandler('previoustrack', prevStation);
+    navigator.mediaSession.setActionHandler('nexttrack', nextStation);
+  }catch(e){}
+}
+
+/* Init */
+(function init(){
+  // restaurar volumen
+  const savedVol = localStorage.getItem('crg_vol');
+  if(savedVol !== null) setVolume(parseFloat(savedVol));
+  else setVolume(0.8);
+
+  // restaurar vista
+  document.querySelectorAll('.view-btn').forEach(b=>{
+    const on = b.dataset.view === viewMode;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+
+  // logo inicial (genérico)
+  playerLogo.src = svgFallback('CRG');
+  render();
+})();
+</script>
+<script>(function(){document.addEventListener("click",function(e){var a=e.target.closest("[data-product-id]");if(!a)return;e.preventDefault();var pid=a.getAttribute("data-product-id");if(pid)parent.postMessage({type:"ecto-artifact-link-click",productId:pid},"*")})})();</script>
 </body>
 </html>
