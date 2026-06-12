@@ -1,40 +1,67 @@
 <!DOCTYPE html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Test Xtrema</title>
+<title>Xtrema Force Play</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.12"></script>
-<style>body{font-family:system-ui;background:#0b1118;color:#e6edf3;padding:24px}button{padding:12px 20px;font-size:16px}pre{background:#111a24;padding:12px;border-radius:8px;white-space:pre-wrap;max-height:50vh;overflow:auto}</style>
+<style>body{font-family:system-ui;background:#0b1118;color:#e6edf3;padding:24px}button{padding:14px 24px;font-size:16px;font-weight:700;background:#00e5ff;color:#06232b;border:0;border-radius:12px;cursor:pointer}pre{background:#111a24;padding:12px;border-radius:8px;white-space:pre-wrap;max-height:45vh;overflow:auto;font-size:12px}video{width:100%;max-width:480px;background:#000;border-radius:12px}</style>
 </head><body>
-<h2>Test Xtrema 101.3</h2>
-<button id="play">► Probar</button>
-<audio id="a" controls style="display:block;margin:12px 0;width:100%"></audio>
+<h2>Xtrema 101.3 – Force Play</h2>
+<button id="play">► Reproducir</button>
+<video id="v" controls playsinline style="display:block;margin:12px 0"></video>
 <pre id="log"></pre>
 <script>
-const log = m => { document.getElementById('log').textContent = new Date().toLocaleTimeString()+' '+m+'\n' + document.getElementById('log').textContent; console.log(m); };
-const urls = [
-  'https://d2b5h5wyivfnfl.cloudfront.net/live/c2cce928-c69c-45d5-bd0a-5a5eba167a0d/ts:abr.m3u8',
-  'https://d2qsan2ut81n2k.cloudfront.net/live/c2cce928-c69c-45d5-bd0a-5a5eba167a0d/ts:abr.m3u8'
-];
-let idx=0;
-function tryUrl(i){
-  idx=i;
-  const url = urls[i];
-  const a = document.getElementById('a');
-  log('Probando: '+url);
+const url = 'https://d2b5h5wyivfnfl.cloudfront.net/live/c2cce928-c69c-45d5-bd0a-5a5eba167a0d/ts:abr.m3u8';
+const log = m => { const el=document.getElementById('log'); el.textContent = new Date().toLocaleTimeString()+' '+m+'\n' + el.textContent; console.log(m); };
+const v = document.getElementById('v');
+v.crossOrigin = null;
+v.removeAttribute('crossorigin');
+
+for(const ev of ['loadstart','waiting','playing','canplay','error','stalled']) {
+  v.addEventListener(ev, ()=>log('video '+ev + (v.error ? ' code='+v.error.code : '')));
+}
+
+function playNative(src){
+  log('Probando NATIVO: '+src);
+  v.src = src;
+  v.load();
+  return v.play().then(()=>log('play() OK nativo')).catch(e=>log('play() bloqueado: '+e.name));
+}
+
+function playHls(src, useProxy){
+  const realSrc = useProxy ? 'https://corsproxy.io/?' + encodeURIComponent(src) : src;
+  log((useProxy?'[PROXY] ':'')+'HLS.js → '+realSrc);
   if(window.hls){ try{hls.destroy()}catch(e){} }
-  if(Hls.isSupported()){
-    window.hls = new Hls({enableWorker:true});
-    hls.on(Hls.Events.ERROR, (e,d)=>{ log('HLS ERROR '+d.type+'/'+d.details+' fatal='+d.fatal); if(d.fatal && idx+1 < urls.length){ log('Failover → siguiente CDN'); setTimeout(()=>tryUrl(idx+1),500);} });
-    hls.on(Hls.Events.MANIFEST_PARSED, ()=>{ log('MANIFEST_PARSED OK'); a.play().catch(e=>log('play() bloqueado: '+e)); });
-    hls.loadSource(url);
-    hls.attachMedia(a);
+  const hls = new Hls({
+    enableWorker: false,
+    lowLatencyMode: false,
+    xhrSetup: function(xhr, url){
+      xhr.withCredentials = false;
+    }
+  });
+  window.hls = hls;
+  hls.on(Hls.Events.ERROR, (e,d)=>{
+    log('HLS ERROR '+d.type+'/'+d.details+' fatal='+d.fatal);
+    if(d.fatal && !useProxy){
+      log('Reintentando con CORS proxy…');
+      setTimeout(()=>playHls(src, true), 400);
+    }
+  });
+  hls.on(Hls.Events.MANIFEST_PARSED, ()=>{ log('MANIFEST_PARSED OK'); v.play().catch(e=>log('play() '+e)); });
+  hls.loadSource(realSrc);
+  hls.attachMedia(v);
+}
+
+document.getElementById('play').onclick = ()=>{
+  v.muted = false;
+  // 1. Intenta nativo (Safari)
+  if(v.canPlayType('application/vnd.apple.mpegurl')){
+    playNative(url);
+  } else if(Hls.isSupported()){
+    // 2. hls.js directo
+    playHls(url, false);
   } else {
-    a.src = url; a.load(); a.play().catch(e=>log('play() '+e));
+    playNative(url);
   }
-}
-document.getElementById('play').onclick = ()=> tryUrl(0);
-for(const ev of ['loadstart','waiting','playing','error','stalled']) {
-  document.getElementById('a').addEventListener(ev, ()=>log('audio '+ev + (document.getElementById('a').error ? ' code='+document.getElementById('a').error.code : '')));
-}
-log('Listo. Toca ► Probar. NO abras como file://, usa http://localhost');
+};
+log('Listo. Sirve por http://localhost, no file://. Toca ► Reproducir');
 </script>
 </body></html>
