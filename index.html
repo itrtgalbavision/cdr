@@ -941,7 +941,7 @@ if('mediaSession' in navigator){
 (function init(){
   const savedVol = localStorage.getItem('crg_vol');
   if(savedVol!== null) setVolume(parseFloat(savedVol));
-  else setVolume(0.8);
+  else setVolume(1.0);
 
   document.querySelectorAll('.view-btn').forEach(b=>{
     const on = b.dataset.view === viewMode;
