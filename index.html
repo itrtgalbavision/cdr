@@ -112,79 +112,8 @@ input{font-family:inherit}
 .player-logo img{max-width:44px;max-height:34px;object-fit:contain}
 .player-meta{min-width:0}
 .player-station{font-weight:700;font-size:14.6px;color:#e8f0f6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.player-live{font-size:11.5px;color:#7c8d9d;display:flex;align-items:center;gap:7px}
-.p-live-dot{width:6px;height:6px;border-radius:50%;background:#4b5563}
-.player-bar.playing .p-live-dot{background:#ff4356;box-shadow:0 0 8px rgba(255,67,86,.55);animation:pulseDot 1.5s infinite}
-.visualizer{display:flex;align-items:flex-end;gap:3px;height:18px;margin-left:8px;opacity:.55}
-.vbar{width:3px;background:#355260;border-radius:3px;height:5px;transition:height .12s}
-.player-bar.playing .vbar{background:#00e5ff}
-.player-bar.playing .vbar:nth-child(1){animation:vb 0.55s ease-in-out infinite alternate}
-.player-bar.playing .vbar:nth-child(2){animation:vb 0.6s .08s ease-in-out infinite alternate}
-.player-bar.playing .vbar:nth-child(3){animation:vb 0.48s .13s ease-in-out infinite alternate}
-.player-bar.playing .vbar:nth-child(4){animation:vb 0.62s .05s ease-in-out infinite alternate}
-@keyframes vb{from{height:4px}to{height:16px}}
-.player-center{display:flex;align-items:center;gap:10px}
-.ctrl-btn{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.10);color:#b9c7d6;transition:.15s}
-.ctrl-btn:hover{background:rgba(255,255,255,.09);color:#fff}
-.ctrl-btn.play{width:54px;height:54px;background:linear-gradient(180deg,#00c8ff 0%,#00aadd 100%);color:#06232b;border-color:rgba(255,255,255,.14);box-shadow:0 6px 22px rgba(0,191,255,.28)}
-.ctrl-btn.play:hover{filter:brightness(1.06)}
-.ctrl-btn svg{width:19px;height:19px}
-.ctrl-btn.play svg{width:22px;height:22px}
-.player-right{display:flex;align-items:center;gap:14px;min-width:180px;justify-content:flex-end}
-.vol-wrap{display:flex;align-items:center;gap:10px;color:#7b8b9a}
-.vol-wrap svg{width:18px;height:18px;flex-shrink:0}
-input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;width:124px}
-input[type=range]::-webkit-slider-runnable-track{height:4px;background:#2a3643;border-radius:4px}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;border-radius:50%;background:#00e5ff;margin-top:-5px;box-shadow:0 0 10px rgba(0,229,255,.45)}
-input[type=range]::-moz-range-track{height:4px;background:#2a3643;border-radius:4px}
-input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#00e5ff;border:none}
-@media (max-width:820px){.player-inner{flex-wrap:wrap;gap:10px 16px;padding:12px 16px}.player-center{order:3;width:100%;justify-content:center}.player-right{min-width:auto}input[type=range]{width:96px}.wrap{padding-bottom:162px}}
-@media (max-width:560px){.wrap{padding:30px 16px 170px}.site-header{padding-bottom:22px}.controls-bar{gap:10px}.search-wrap{flex-basis:100%;max-width:none}.view-controls{width:100%;display:grid;grid-template-columns:1fr 1fr 1fr}.view-controls .fav-toggle{grid-column:1 / -1}.view-btn{flex:1;text-align:center;padding:10px 10px}.fav-toggle{width:100%;justify-content:center;margin-top:2px}.visualizer{display:none}input[type=range]{width:96px}}
-.toast{position:fixed;bottom:104px;left:50%;transform:translateX(-50%) translateY(10px);background:#132131;border:1px solid rgba(255,255,255,.12);color:#dbe7f1;padding:10px 15px;border-radius:12px;font-size:13px;font-weight:600;box-shadow:var(--shadow);z-index:80;opacity:0;pointer-events:none;transition:.22s}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.hidden{display:none!important}
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-</style>
-</head>
-<body>
-
-<div class="wrap">
-  <header class="site-header">
-    <div class="live-badge"><span class="live-dot" aria-hidden="true"></span> EN VIVO</div>
-    <h1 class="site-title">
-      <span class="thin">CENTRAL DE RADIOS</span>
-      <span class="grad">GUATEMALA</span>
-    </h1>
-    <p class="site-subtitle">Las emisoras de Guatemala en un solo lugar</p>
-  </header>
-
-  <div class="controls-bar" role="region" aria-label="Controles de listado">
-    <div class="search-wrap">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg>
-      <input id="searchInput" class="search-input" type="search" placeholder="Buscar emisora..." autocomplete="off" />
-    </div>
-    <div class="view-controls" id="viewControls" role="tablist" aria-label="Vista">
-      <button class="view-btn active" data-view="grid" role="tab" aria-selected="true">Grid</button>
-      <button class="view-btn" data-view="list" role="tab" aria-selected="false">Lista</button>
-      <button class="view-btn" data-view="compact" role="tab" aria-selected="false">Compacto</button>
-      <button class="fav-toggle" id="favToggle" aria-pressed="false"><span class="star-ico">★</span> Favoritas</button>
-    </div>
-  </div>
-
-  <div class="list-meta" id="listMeta"></div>
-  <main id="stationsContainer" aria-live="polite"></main>
-</div>
-
-<div class="player-bar" id="playerBar" role="region" aria-label="Reproductor">
-  <div class="player-inner">
-    <div class="player-left">
-      <div class="player-logo" id="playerLogoWrap">
-        <img id="playerLogo" alt="Logo emisora" width="44" height="34" />
-      </div>
-      <div class="player-meta">
-        <div class="player-station" id="playerStationName">Selecciona una emisora</div>
-        <div class="player-live"><span class="p-live-dot" aria-hidden="true"></span><span id="playerLiveText">En espera</span></div>
-      </div>
+.player-live"><span class="p-live-dot" aria-hidden="true"></span><span id="playerLiveText">En espera</span></div>
+  </div >
       <div class="visualizer" aria-hidden="true">
         <div class="vbar"></div><div class="vbar"></div><div class="vbar"></div><div class="vbar"></div>
       </div>
@@ -228,13 +157,18 @@ const stations = [
   { name: "Ranchera", freq: "95.7 FM", file: "ranchera.png", id: "a4e3175d-fa7e-4d4b-979f-e7f875468260" },
   { name: "La Marca", freq: "94.1 FM", file: "lamarca.png", id: "53ee315d-206f-4271-994b-4c1927ae338b" },
   { name: "Fiesta", freq: "103.7 FM", file: "fiesta.png", id: "9c2d6264-2009-49a8-a501-848a7bae1051" },
-  { name: "Sonora", freq: "96.9 FM", file: "offline.png", id: "8e7a8a5b-a2db-4323-8397-46c17f4573ac" },
+  { name: "Sonora", freq: "96.9 FM", file: "offline.png", id: "8e7a8a5b-a2db-4323-8397-46c17f4573ac", isCustom: true, customUrl: "https://d1iowt63cq06qa.cloudfront.net/live/8e7a8a5b-a2db-4323-8397-46c17f4573ac/ts:abr.m3u8" },
   { name: "Éxitos Xela", freq: "107.1 FM", file: "exitosx.png", id: "ef0c82f1-e446-4093-8455-3a144ca2e171" },
   { name: "Flix Xela", freq: "93.9", file: "fixx.png", id: "c2af032e-3e29-4551-a757-e4f3d349386c" }
-].map(s => ({...s, urls: [
-  `${CDN_NUEVO}/live/${s.id}/ts:abr.m3u8`,
-  `${CDN_VIEJO}/live/${s.id}/ts:abr.m3u8`
-]}));
+].map(s => {
+  if (s.isCustom) {
+    return { ...s, urls: [s.customUrl] };
+  }
+  return { ...s, urls: [
+    `${CDN_NUEVO}/live/${s.id}/ts:abr.m3u8`,
+    `${CDN_VIEJO}/live/${s.id}/ts:abr.m3u8`
+  ]};
+});
 
 let currentIndex = -1;
 let isPlaying = false;
