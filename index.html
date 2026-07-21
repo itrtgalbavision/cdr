@@ -217,8 +217,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bac
 <script>
 const CDN_NUEVO = "https://d2b5h5wyivfnfl.cloudfront.net";
 const CDN_VIEJO = "https://d2qsan2ut81n2k.cloudfront.net";
-// LINK REAL DE SONORA - diferente a los demás
-const SONORA_URL = "https://d1iowt63cq06qa.cloudfront.net/medialist_14854753276708185244_hls.m3u8";
+const SONORA_CUSTOM = "https://d1iowt63cq06qa.cloudfront.net/medialist_14854753276708185244_hls.m3u8";
 
 const stations = [
   { name: "Xtrema", freq: "101.3 FM", file: "xtrema.png", id: "c2cce928-c69c-45d5-bd0a-5a5eba167a0d" },
@@ -230,13 +229,22 @@ const stations = [
   { name: "Ranchera", freq: "95.7 FM", file: "ranchera.png", id: "a4e3175d-fa7e-4d4b-979f-e7f875468260" },
   { name: "La Marca", freq: "94.1 FM", file: "lamarca.png", id: "53ee315d-206f-4271-994b-4c1927ae338b" },
   { name: "Fiesta", freq: "103.7 FM", file: "fiesta.png", id: "9c2d6264-2009-49a8-a501-848a7bae1051" },
-   { name: "Sonora", freq: "96.9 FM", file: "sonora.png", id: "8e7a8a5b-a2db-4323-8397-46c17f4573ac", customUrl: SONORA_URL },
+  { name: "Sonora", freq: "96.9 FM", file: "sonora.png", id: "8e7a8a5b-a2db-4323-8397-46c17f4573ac", customUrl: SONORA_CUSTOM },
   { name: "Éxitos Xela", freq: "107.1 FM", file: "exitosx.png", id: "ef0c82f1-e446-4093-8455-3a144ca2e171" },
   { name: "Flix Xela", freq: "93.9", file: "fixx.png", id: "c2af032e-3e29-4551-a757-e4f3d349386c" }
-].map(s => ({...s, urls: [
-  `${CDN_NUEVO}/live/${s.id}/ts:abr.m3u8`,
-  `${CDN_VIEJO}/live/${s.id}/ts:abr.m3u8`
-]}));
+].map(s => {
+  if(s.customUrl){
+    return {...s, urls: [
+      s.customUrl,
+      `${CDN_NUEVO}/live/${s.id}/ts:abr.m3u8`,
+      `${CDN_VIEJO}/live/${s.id}/ts:abr.m3u8`
+    ]};
+  }
+  return {...s, urls: [
+    `${CDN_NUEVO}/live/${s.id}/ts:abr.m3u8`,
+    `${CDN_VIEJO}/live/${s.id}/ts:abr.m3u8`
+  ]};
+});
 
 let currentIndex = -1;
 let isPlaying = false;
