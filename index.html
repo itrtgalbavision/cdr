@@ -290,7 +290,7 @@ input { font-family: inherit; }
 .player-bar {
   position: fixed;
   left: 12px; right: 12px; bottom: 12px;
-  max-width: 1176px;
+  max-width: 1240px;
   margin: 0 auto;
   background: rgba(10, 15, 23, 0.92);
   backdrop-filter: blur(24px);
@@ -312,15 +312,16 @@ input { font-family: inherit; }
 }
 
 .player-bar.playing::before {
-  background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-gold), #ff00ff, transparent);
+  box-shadow: 0 0 12px var(--accent-cyan);
 }
 
 .player-inner {
-  padding: 12px 20px;
+  padding: 10px 18px;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .player-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
@@ -384,8 +385,24 @@ input { font-family: inherit; }
   100% { height: 16px; opacity: 1; }
 }
 
-/* CONTROLES CENTRADOS Y PERSONAJES INFLABLES BAILANDO */
-.player-center { display: flex; align-items: center; gap: 10px; justify-content: center; position: relative; }
+/* ===== NUEVO: CONTROLES CENTRADOS + INFLABLES NEON ===== */
+.player-center {
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+  justify-content: center;
+  position: relative;
+  min-width: 320px;
+}
+
+.controls-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  z-index: 3;
+  padding: 0 6px;
+}
 
 .ctrl-btn {
   width: 36px; height: 36px;
@@ -409,23 +426,45 @@ input { font-family: inherit; }
 .ctrl-btn.play:hover { transform: scale(1.06); background: #fff; }
 .player-bar.playing .ctrl-btn.play { background: var(--accent-cyan); box-shadow: 0 0 20px var(--accent-cyan-glow); }
 
-/* PERSONAJES INFLABLES DESDE EL BOTÓN NEXT */
+/* Escenario de inflables */
 .dancers-stage {
   display: flex;
   align-items: flex-end;
-  gap: 6px;
-  margin-left: 6px;
-  height: 48px;
+  gap: 8px;
+  height: 58px;
   pointer-events: none;
   user-select: none;
+  position: relative;
 }
+.dancers-stage.left { padding-right: 4px; }
+.dancers-stage.right { padding-left: 4px; }
+
+/* Luz de piso neon para cada escenario */
+.dancers-stage::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: -8px; right: -8px;
+  height: 18px;
+  background: radial-gradient(ellipse at center, rgba(0,217,255,0.22), transparent 70%);
+  filter: blur(6px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+.dancers-stage.right::after {
+  background: radial-gradient(ellipse at center, rgba(255,0,255,0.22), transparent 70%);
+}
+.player-bar.playing .dancers-stage::after { opacity: 0.9; animation: floorPulse 0.6s infinite alternate; }
+@keyframes floorPulse { 0% { transform: scaleX(0.8); opacity:0.4;} 100% { transform: scaleX(1.15); opacity:0.9;} }
 
 .inflatable-wrapper {
-  width: 26px;
-  height: 46px;
+  width: 30px;
+  height: 54px;
   position: relative;
   transform-origin: bottom center;
-  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
+  transition: transform 0.6s cubic-bezier(.34,1.56,.64,1), opacity 0.5s ease, filter 0.3s;
+  opacity: 0.65;
+  transform: scaleY(0.78) rotate(0deg);
 }
 
 .inflatable-svg {
@@ -434,50 +473,61 @@ input { font-family: inherit; }
   overflow: visible;
 }
 
-/* Estado de reposo / Pausa */
-.inflatable-wrapper {
-  transform: scaleY(0.85) rotate(0deg);
-  opacity: 0.6;
-  transition: transform 0.5s ease, opacity 0.5s ease;
+/* Colores neon + glow base */
+.neon-cyan   { filter: drop-shadow(0 0 6px #00d9ff) drop-shadow(0 0 14px rgba(0,217,255,0.7)); }
+.neon-pink   { filter: drop-shadow(0 0 6px #ff00aa) drop-shadow(0 0 14px rgba(255,0,170,0.7)); }
+.neon-lime   { filter: drop-shadow(0 0 6px #39ff14) drop-shadow(0 0 14px rgba(57,255,20,0.7)); }
+.neon-yellow { filter: drop-shadow(0 0 6px #ffe600) drop-shadow(0 0 14px rgba(255,230,0,0.7)); }
+.neon-orange { filter: drop-shadow(0 0 6px #ff6a00) drop-shadow(0 0 14px rgba(255,106,0,0.7)); }
+.neon-violet { filter: drop-shadow(0 0 6px #9d00ff) drop-shadow(0 0 14px rgba(157,0,255,0.7)); }
+
+.player-bar.playing .neon-cyan   { filter: drop-shadow(0 0 8px #00d9ff) drop-shadow(0 0 18px rgba(0,217,255,1)) drop-shadow(0 0 30px rgba(0,217,255,0.5)); }
+.player-bar.playing .neon-pink   { filter: drop-shadow(0 0 8px #ff00aa) drop-shadow(0 0 18px rgba(255,0,170,1)) drop-shadow(0 0 30px rgba(255,0,170,0.5)); }
+.player-bar.playing .neon-lime   { filter: drop-shadow(0 0 8px #39ff14) drop-shadow(0 0 18px rgba(57,255,20,1)) drop-shadow(0 0 30px rgba(57,255,20,0.5)); }
+.player-bar.playing .neon-yellow { filter: drop-shadow(0 0 8px #ffe600) drop-shadow(0 0 18px rgba(255,230,0,1)) drop-shadow(0 0 30px rgba(255,230,0,0.5)); }
+.player-bar.playing .neon-orange { filter: drop-shadow(0 0 8px #ff6a00) drop-shadow(0 0 18px rgba(255,106,0,1)) drop-shadow(0 0 30px rgba(255,106,0,0.5)); }
+.player-bar.playing .neon-violet { filter: drop-shadow(0 0 8px #9d00ff) drop-shadow(0 0 18px rgba(157,0,255,1)) drop-shadow(0 0 30px rgba(157,0,255,0.5)); }
+
+/* Animaciones de baile cuando esta playing */
+.player-bar.playing .dancer-1 { opacity: 1; animation: danceWiggleA 0.68s infinite alternate ease-in-out; }
+.player-bar.playing .dancer-2 { opacity: 1; animation: danceWiggleB 0.62s infinite alternate ease-in-out 0.12s; }
+.player-bar.playing .dancer-3 { opacity: 1; animation: danceWiggleA 0.74s infinite alternate ease-in-out 0.08s; }
+.player-bar.playing .dancer-4 { opacity: 1; animation: danceWiggleB 0.58s infinite alternate ease-in-out 0.18s; }
+.player-bar.playing .dancer-5 { opacity: 1; animation: danceWiggleC 0.66s infinite alternate ease-in-out 0.04s; }
+.player-bar.playing .dancer-6 { opacity: 1; animation: danceWiggleA 0.72s infinite alternate ease-in-out 0.22s; }
+
+.player-bar.playing .arm { transform-origin: 16px 18px; }
+.player-bar.playing .arm-l { animation: armFlail 0.38s infinite alternate ease-in-out; }
+.player-bar.playing .arm-r { animation: armFlailRev 0.42s infinite alternate ease-in-out; }
+.player-bar.playing .dancer-2 .arm-l { animation-duration: 0.34s; animation-delay: 0.07s; }
+.player-bar.playing .dancer-2 .arm-r { animation-duration: 0.45s; }
+.player-bar.playing .dancer-3 .arm-l { animation-duration: 0.4s; animation-delay: 0.11s; }
+.player-bar.playing .dancer-4 .arm-l { animation-duration: 0.33s; }
+.player-bar.playing .dancer-5 .arm-r { animation-duration: 0.36s; animation-delay: 0.05s; }
+.player-bar.playing .dancer-6 .arm-l { animation-duration: 0.44s; }
+
+@keyframes danceWiggleA {
+  0% { transform: scaleY(0.82) scaleX(1.08) skewX(-12deg) rotate(-6deg) translateY(2px); }
+  50% { transform: scaleY(1.18) scaleX(0.92) skewX(2deg) rotate(3deg) translateY(-2px); }
+  100% { transform: scaleY(0.92) scaleX(1.06) skewX(12deg) rotate(8deg) translateY(1px); }
+}
+@keyframes danceWiggleB {
+  0% { transform: scaleY(1.12) skewX(10deg) rotate(7deg) translateY(-1px); }
+  50% { transform: scaleY(0.85) skewX(-4deg) rotate(-4deg) translateY(2px); }
+  100% { transform: scaleY(1.15) skewX(-10deg) rotate(-7deg) translateY(-2px); }
+}
+@keyframes danceWiggleC {
+  0% { transform: scaleY(0.9) skewX(-8deg) rotate(-8deg) translateX(-2px); }
+  100% { transform: scaleY(1.2) skewX(8deg) rotate(8deg) translateX(2px); }
 }
 
-/* Animaciones de baile reactivas cuando el reproductor esta 'playing' */
-.player-bar.playing .dancer-1 {
-  opacity: 1;
-  animation: dancerWiggle1 0.7s infinite alternate ease-in-out;
+@keyframes armFlail {
+  0% { transform: rotate(-38deg) scaleY(0.85) translateX(-2px); }
+  100% { transform: rotate(52deg) scaleY(1.15) translateX(2px); }
 }
-
-.player-bar.playing .dancer-2 {
-  opacity: 1;
-  animation: dancerWiggle2 0.6s infinite alternate ease-in-out 0.15s;
-}
-
-.player-bar.playing .arm-left-1 { animation: armDance 0.4s infinite alternate ease-in-out; transform-origin: 12px 18px; }
-.player-bar.playing .arm-right-1 { animation: armDanceReverse 0.5s infinite alternate ease-in-out; transform-origin: 20px 18px; }
-
-.player-bar.playing .arm-left-2 { animation: armDanceReverse 0.45s infinite alternate ease-in-out 0.1s; transform-origin: 12px 18px; }
-.player-bar.playing .arm-right-2 { animation: armDance 0.38s infinite alternate ease-in-out 0.05s; transform-origin: 20px 18px; }
-
-@keyframes dancerWiggle1 {
-  0% { transform: scaleY(0.9) skewX(-8deg) rotate(-5deg); }
-  50% { transform: scaleY(1.1) skewX(0deg) rotate(2deg); }
-  100% { transform: scaleY(0.95) skewX(8deg) rotate(6deg); }
-}
-
-@keyframes dancerWiggle2 {
-  0% { transform: scaleY(1.05) skewX(7deg) rotate(4deg); }
-  50% { transform: scaleY(0.88) skewX(-3deg) rotate(-3deg); }
-  100% { transform: scaleY(1.1) skewX(-7deg) rotate(-5deg); }
-}
-
-@keyframes armDance {
-  0% { transform: rotate(-20deg) scaleY(0.9); }
-  100% { transform: rotate(45deg) scaleY(1.1); }
-}
-
-@keyframes armDanceReverse {
-  0% { transform: rotate(30deg) scaleY(1.1); }
-  100% { transform: rotate(-35deg) scaleY(0.85); }
+@keyframes armFlailRev {
+  0% { transform: rotate(42deg) scaleY(1.1); }
+  100% { transform: rotate(-45deg) scaleY(0.9); }
 }
 
 .player-right { display: flex; align-items: center; gap: 12px; justify-content: flex-end; }
@@ -523,14 +573,29 @@ input[type=range]::-webkit-slider-thumb {
 .hidden { display: none !important; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
 
+@media (max-width: 960px) {
+  .player-inner { grid-template-columns: 1fr auto; }
+  .player-right { display: none; }
+  .player-center { min-width: auto; gap: 10px; }
+  .dancers-stage.left { display: none; }
+  .dancers-stage.right { gap: 6px; height: 48px; }
+  .dancers-stage.right .inflatable-wrapper:nth-child(n+3) { display: none; }
+  .inflatable-wrapper { width: 26px; height: 46px; }
+}
+
 @media (max-width: 768px) {
   .controls-bar { flex-direction: column; align-items: stretch; }
   .view-controls { justify-content: space-between; }
-  .player-inner { grid-template-columns: 1fr auto; }
-  .player-right { display: none; }
   .wrap { padding-bottom: 150px; }
   .player-bar { left: 8px; right: 8px; bottom: 8px; }
-  .dancers-stage { display: none; }
+  .player-center { gap: 6px; }
+  .dancers-stage.left { display: flex; }
+  .dancers-stage.left .inflatable-wrapper:nth-child(n+2) { display: none; }
+  .dancers-stage.right .inflatable-wrapper:nth-child(n+2) { display: none; }
+}
+
+@media (max-width: 480px) {
+  .dancers-stage.left, .dancers-stage.right { display: none; }
 }
 </style>
 </head>
@@ -563,7 +628,7 @@ input[type=range]::-webkit-slider-thumb {
   <main id="stationsContainer" aria-live="polite"></main>
 </div>
 
-<!-- REPRODUCTOR BARRA CONSOLA PRO -->
+<!-- REPRODUCTOR BARRA CONSOLA PRO + INFLABLES NEON -->
 <div class="player-bar" id="playerBar" role="region" aria-label="Reproductor">
   <div class="player-inner">
     <div class="player-left">
@@ -584,70 +649,90 @@ input[type=range]::-webkit-slider-thumb {
     </div>
     
     <div class="player-center">
-      <button class="ctrl-btn" id="prevBtn" aria-label="Anterior">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
-      </button>
-      <button class="ctrl-btn play" id="playPauseBtn" aria-label="Reproducir / Pausar">
-        <svg id="playIcon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-        <svg id="pauseIcon" class="hidden" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-      </button>
-      <button class="ctrl-btn" id="nextBtn" aria-label="Siguiente">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
-      </button>
-
-      <!-- PERSONAJES INFLABLES DESDE EL BOTÓN NEXT -->
-      <div class="dancers-stage" aria-hidden="true">
-        <!-- Inflable Cyan -->
-        <div class="inflatable-wrapper dancer-1">
+      <!-- IZQUIERDA: 3 inflables neon -->
+      <div class="dancers-stage left" aria-hidden="true">
+        <div class="inflatable-wrapper neon-cyan dancer-1">
           <svg class="inflatable-svg" viewBox="0 0 32 60">
-            <defs>
-              <linearGradient id="gradCyan" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#00ffff" />
-                <stop offset="100%" stop-color="#0088cc" />
-              </linearGradient>
-            </defs>
-            <!-- Brazo Izquierdo -->
-            <path class="arm-left-1" d="M12,20 C5,15 2,25 4,32" stroke="url(#gradCyan)" stroke-width="3.5" stroke-linecap="round" fill="none" />
-            <!-- Brazo Derecho -->
-            <path class="arm-right-1" d="M20,20 C27,15 30,25 28,32" stroke="url(#gradCyan)" stroke-width="3.5" stroke-linecap="round" fill="none" />
-            <!-- Cuerpo Tubo Inflable -->
-            <rect x="11" y="14" width="10" height="38" rx="5" fill="url(#gradCyan)" />
-            <!-- Cara / Ojos -->
-            <circle cx="14" cy="20" r="1.8" fill="#fff" />
-            <circle cx="18" cy="20" r="1.8" fill="#fff" />
-            <circle cx="14" cy="20" r="0.8" fill="#000" />
-            <circle cx="18" cy="20" r="0.8" fill="#000" />
-            <!-- Boca Asombrada -->
-            <ellipse cx="16" cy="25" rx="2" ry="3" fill="#000" />
-            <!-- Base Puntero ventilador -->
-            <rect x="10" y="50" width="12" height="4" rx="1" fill="#1e293b" />
+            <defs><linearGradient id="gCyan" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00ffff"/><stop offset="100%" stop-color="#00aacc"/></linearGradient></defs>
+            <path class="arm arm-l" d="M12,20 C4,12 0,24 3,33" stroke="url(#gCyan)" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path class="arm arm-r" d="M20,20 C28,12 32,24 29,33" stroke="url(#gCyan)" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <rect x="11" y="14" width="10" height="38" rx="5" fill="url(#gCyan)"/>
+            <circle cx="14" cy="20" r="1.9" fill="#fff"/><circle cx="18" cy="20" r="1.9" fill="#fff"/><circle cx="14" cy="20" r="0.9" fill="#000"/><circle cx="18" cy="20" r="0.9" fill="#000"/>
+            <ellipse cx="16" cy="26" rx="2.2" ry="2.8" fill="#000"/>
+            <rect x="10" y="50" width="12" height="4.5" rx="1.5" fill="#0f172a" stroke="#00d9ff" stroke-width="0.6"/>
           </svg>
         </div>
-
-        <!-- Inflable Rojo / Neon -->
-        <div class="inflatable-wrapper dancer-2">
+        <div class="inflatable-wrapper neon-pink dancer-2">
           <svg class="inflatable-svg" viewBox="0 0 32 60">
-            <defs>
-              <linearGradient id="gradRed" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#ff3366" />
-                <stop offset="100%" stop-color="#990033" />
-              </linearGradient>
-            </defs>
-            <!-- Brazo Izquierdo -->
-            <path class="arm-left-2" d="M12,20 C5,12 2,22 5,30" stroke="url(#gradRed)" stroke-width="3.5" stroke-linecap="round" fill="none" />
-            <!-- Brazo Derecho -->
-            <path class="arm-right-2" d="M20,20 C27,12 30,22 27,30" stroke="url(#gradRed)" stroke-width="3.5" stroke-linecap="round" fill="none" />
-            <!-- Cuerpo Tubo Inflable -->
-            <rect x="11" y="14" width="10" height="38" rx="5" fill="url(#gradRed)" />
-            <!-- Cara / Ojos -->
-            <circle cx="14" cy="20" r="1.8" fill="#fff" />
-            <circle cx="18" cy="20" r="1.8" fill="#fff" />
-            <circle cx="14" cy="20" r="0.8" fill="#000" />
-            <circle cx="18" cy="20" r="0.8" fill="#000" />
-            <!-- Boca Sonriente -->
-            <path d="M13,24 Q16,28 19,24" stroke="#000" stroke-width="1.5" fill="none" stroke-linecap="round" />
-            <!-- Base Puntero ventilador -->
-            <rect x="10" y="50" width="12" height="4" rx="1" fill="#1e293b" />
+            <defs><linearGradient id="gPink" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ff6ad5"/><stop offset="100%" stop-color="#ff0099"/></linearGradient></defs>
+            <path class="arm arm-l" d="M12,20 C4,13 1,25 4,32" stroke="url(#gPink)" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path class="arm arm-r" d="M20,20 C28,13 31,25 28,32" stroke="url(#gPink)" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <rect x="11" y="14" width="10" height="38" rx="5" fill="url(#gPink)"/>
+            <circle cx="13.5" cy="20" r="1.9" fill="#fff"/><circle cx="18.5" cy="20" r="1.9" fill="#fff"/><circle cx="13.5" cy="20" r="0.9" fill="#000"/><circle cx="18.5" cy="20" r="0.9" fill="#000"/>
+            <path d="M12.5,25 Q16,29 19.5,25" stroke="#000" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <rect x="10" y="50" width="12" height="4.5" rx="1.5" fill="#0f172a" stroke="#ff00aa" stroke-width="0.6"/>
+          </svg>
+        </div>
+        <div class="inflatable-wrapper neon-lime dancer-3">
+          <svg class="inflatable-svg" viewBox="0 0 32 60">
+            <defs><linearGradient id="gLime" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#aaff66"/><stop offset="100%" stop-color="#39ff14"/></linearGradient></defs>
+            <path class="arm arm-l" d="M12,20 C5,11 0,22 3,31" stroke="url(#gLime)" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path class="arm arm-r" d="M20,20 C27,11 32,22 29,31" stroke="url(#gLime)" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <rect x="11" y="14" width="10" height="38" rx="5" fill="url(#gLime)"/>
+            <circle cx="14" cy="20" r="1.9" fill="#fff"/><circle cx="18" cy="20" r="1.9" fill="#fff"/><circle cx="14" cy="20" r="0.9" fill="#000"/><circle cx="18" cy="20" r="0.9" fill="#000"/>
+            <ellipse cx="16" cy="25.5" rx="2" ry="2.2" fill="#000"/>
+            <rect x="10" y="50" width="12" height="4.5" rx="1.5" fill="#0f172a" stroke="#39ff14" stroke-width="0.6"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- BOTONES CENTRALES -->
+      <div class="controls-group">
+        <button class="ctrl-btn" id="prevBtn" aria-label="Anterior">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+        </button>
+        <button class="ctrl-btn play" id="playPauseBtn" aria-label="Reproducir / Pausar">
+          <svg id="playIcon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <svg id="pauseIcon" class="hidden" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </button>
+        <button class="ctrl-btn" id="nextBtn" aria-label="Siguiente">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+        </button>
+      </div>
+
+      <!-- DERECHA: 3 inflables neon -->
+      <div class="dancers-stage right" aria-hidden="true">
+        <div class="inflatable-wrapper neon-yellow dancer-4">
+          <svg class="inflatable-svg" viewBox="0 0 32 60">
+            <defs><linearGradient id="gYellow" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fff176"/><stop offset="100%" stop-color="#ffcc00"/></linearGradient></defs>
+            <path class="arm arm-l" d="M12,20 C4,12 0,24 3,33" stroke="url(#gYellow)" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path class="arm arm-r" d="M20,20 C28,12 32,24 29,33" stroke="url(#gYellow)" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <rect x="11" y="14" width="10" height="38" rx="5" fill="url(#gYellow)"/>
+            <circle cx="14" cy="20" r="1.9" fill="#fff"/><circle cx="18" cy="20" r="1.9" fill="#fff"/><circle cx="14" cy="20" r="0.9" fill="#000"/><circle cx="18" cy="20" r="0.9" fill="#000"/>
+            <path d="M12.5,25.5 Q16,28 19.5,25.5" stroke="#000" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <rect x="10" y="50" width="12" height="4.5" rx="1.5" fill="#0f172a" stroke="#ffe600" stroke-width="0.6"/>
+          </svg>
+        </div>
+        <div class="inflatable-wrapper neon-orange dancer-5">
+          <svg class="inflatable-svg" viewBox="0 0 32 60">
+            <defs><linearGradient id="gOrange" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ff9a44"/><stop offset="100%" stop-color="#ff3c00"/></linearGradient></defs>
+            <path class="arm arm-l" d="M12,20 C5,13 1,25 4,32" stroke="url(#gOrange)" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path class="arm arm-r" d="M20,20 C27,13 31,25 28,32" stroke="url(#gOrange)" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <rect x="11" y="14" width="10" height="38" rx="5" fill="url(#gOrange)"/>
+            <circle cx="14" cy="20" r="1.9" fill="#fff"/><circle cx="18" cy="20" r="1.9" fill="#fff"/><circle cx="14" cy="20" r="0.9" fill="#000"/><circle cx="18" cy="20" r="0.9" fill="#000"/>
+            <ellipse cx="16" cy="26" rx="1.8" ry="2.5" fill="#000"/>
+            <rect x="10" y="50" width="12" height="4.5" rx="1.5" fill="#0f172a" stroke="#ff6a00" stroke-width="0.6"/>
+          </svg>
+        </div>
+        <div class="inflatable-wrapper neon-violet dancer-6">
+          <svg class="inflatable-svg" viewBox="0 0 32 60">
+            <defs><linearGradient id="gViolet" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#d88cff"/><stop offset="100%" stop-color="#7a00ff"/></linearGradient></defs>
+            <path class="arm arm-l" d="M12,20 C4,12 0,23 3,32" stroke="url(#gViolet)" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <path class="arm arm-r" d="M20,20 C28,12 32,23 29,32" stroke="url(#gViolet)" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <rect x="11" y="14" width="10" height="38" rx="5" fill="url(#gViolet)"/>
+            <circle cx="14" cy="20" r="1.9" fill="#fff"/><circle cx="18" cy="20" r="1.9" fill="#fff"/><circle cx="14" cy="20" r="0.9" fill="#000"/><circle cx="18" cy="20" r="0.9" fill="#000"/>
+            <path d="M13,25 Q16,28.5 19,25" stroke="#000" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <rect x="10" y="50" width="12" height="4.5" rx="1.5" fill="#0f172a" stroke="#9d00ff" stroke-width="0.6"/>
           </svg>
         </div>
       </div>
