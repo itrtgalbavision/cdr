@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Central Radios — Volumen Neon</title>
+<title>Central Radios — Final Centrado</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.12"></script>
 <style>
-:root{--bg-deep:#06090e;--bg-surface:#0e141d;--bg-card:rgba(14,20,29,0.6);--border:rgba(255,255,255,0.06);--text-primary:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#475569;--radius-xl:18px;--radius-lg:14px;--font-sans:'Inter',system-ui,sans-serif}
+:root{--bg-deep:#06090e;--bg-surface:#0e141d;--bg-card:rgba(14,20,29,0.6);--border:rgba(255,255,255,0.06);--text-primary:#f1f5f9;--text-secondary:#94a3b8;--text-muted:#475569;--radius-xl:18px;--font-sans:'Inter',system-ui,sans-serif}
 *{box-sizing:border-box;margin:0;padding:0}html,body{min-height:100vh;background:var(--bg-deep)}body{font-family:var(--font-sans);color:var(--text-primary);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 #ambientGlow{position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:0;transition:opacity 0.8s ease, background 0.8s ease;background:radial-gradient(600px 400px at 50% -10%, var(--glow, rgba(0,217,255,0.12)), transparent 70%), radial-gradient(800px 600px at 100% 100%, var(--glow2, rgba(255,0,170,0.06)), transparent 60%);filter:blur(20px)}#ambientGlow.on{opacity:1}
-.wrap{max-width:1200px;margin:0 auto;padding:40px 20px 190px}
+.wrap{max-width:1200px;margin:0 auto;padding:40px 20px 170px}
 .site-header{text-align:center;margin-bottom:36px}.live-badge{display:inline-flex;align-items:center;gap:8px;font-size:10px;font-weight:800;letter-spacing:0.22em;color:#ff99aa;background:rgba(255,51,85,0.08);border:1px solid rgba(255,51,85,0.18);padding:5px 14px;border-radius:100px;margin-bottom:16px;text-transform:uppercase}
 .live-dot{width:6px;height:6px;border-radius:50%;background:#ff3355;box-shadow:0 0 8px #ff3355;animation:pulseDot 1.4s ease-in-out infinite}@keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.3;transform:scale(0.8)}}
 .site-title{font-size:clamp(28px,4.5vw,48px);font-weight:900;line-height:1.05;letter-spacing:-0.03em;text-transform:uppercase}.site-title .thin{color:var(--text-muted);font-weight:700;display:block;font-size:0.55em;letter-spacing:0.08em}.site-title .grad{background:linear-gradient(135deg,#ffffff 40%, #8be9ff 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
@@ -33,20 +33,46 @@
 .list-info{flex:1}.list-name{font-weight:700;font-size:13.5px}.list-freq{font-size:11px;color:var(--text-secondary)}.list-actions{display:flex;align-items:center;gap:8px}.list-play{width:28px;height:28px;border-radius:50%;border:1px solid var(--neon-border);color:var(--neon);display:grid;place-items:center;font-size:10px}
 .stations-compact{display:flex;flex-wrap:wrap;gap:8px}.compact-pill{--neon:#00d9ff;--neon-border:rgba(0,217,255,0.28);--neon-soft:rgba(0,217,255,0.12);display:inline-flex;align-items:center;gap:8px;background:rgba(14,20,29,0.6);border:1px solid var(--neon-border);border-radius:100px;padding:6px 14px 6px 8px;cursor:pointer;font-size:12px;font-weight:600;color:#cbd5e1}.compact-pill.active{background:var(--neon);color:#000}
 
-/* PLAYER + VOLUMEN REDISEÑADO */
+/* PLAYER FINAL CENTRADO */
 .player-bar{position:fixed;left:12px;right:12px;bottom:12px;max-width:1360px;margin:0 auto;background:rgba(10,15,23,0.94);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,0.08);border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,0.75);z-index:100;overflow:visible;--player-neon:#00d9ff;--player-neon-soft:rgba(0,217,255,0.15);--player-neon-border:rgba(0,217,255,0.28)}
-.player-inner{padding:10px 14px;display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:12px}
+.player-inner{padding:10px 16px;display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:16px}
 .player-left{display:flex;align-items:center;gap:12px;min-width:0}.player-logo{width:42px;height:42px;background:rgba(0,0,0,0.35);border:1px solid var(--player-neon-border);border-radius:10px;display:grid;place-items:center;flex-shrink:0;padding:4px;box-shadow:0 0 10px var(--player-neon-soft);transition:all 0.5s ease}
 .player-logo img{max-width:100%;max-height:100%;object-fit:contain}.player-meta{min-width:0}.player-station{font-weight:800;font-size:13.5px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.player-live{font-size:10.5px;font-weight:600;color:var(--text-muted);display:flex;align-items:center;gap:7px;margin-top:2px}.p-live-dot{width:5px;height:5px;border-radius:50%;background:var(--text-muted)}.player-bar.playing .p-live-dot{background:#ff3355;box-shadow:0 0 6px #ff3355;animation:pulseDot 1.4s infinite}
 .visualizer{display:flex;align-items:flex-end;gap:2.5px;height:14px;padding:2px 5px;background:rgba(0,0,0,0.28);border:1px solid rgba(255,255,255,0.05);border-radius:5px}.vbar{width:2.5px;height:3px;background:var(--text-muted);border-radius:2px}.player-bar.playing .vbar{background:var(--player-neon)}
 .player-bar.playing .vbar:nth-child(1){animation:waveAnim 0.7s infinite alternate 0.05s}.player-bar.playing .vbar:nth-child(2){animation:waveAnim 0.5s infinite alternate 0.2s}.player-bar.playing .vbar:nth-child(3){animation:waveAnim 0.9s infinite alternate 0.1s}.player-bar.playing .vbar:nth-child(4){animation:waveAnim 0.6s infinite alternate 0.3s}.player-bar.playing .vbar:nth-child(5){animation:waveAnim 0.8s infinite alternate 0.15s}.player-bar.playing .vbar:nth-child(6){animation:waveAnim 0.5s infinite alternate 0.25s}.player-bar.playing .vbar:nth-child(7){animation:waveAnim 0.7s infinite alternate 0s}.player-bar.playing .vbar:nth-child(8){animation:waveAnim 0.6s infinite alternate 0.35s}@keyframes waveAnim{0%{height:3px;opacity:0.4}100%{height:13px;opacity:1}}
-.player-center{display:flex;align-items:flex-end;gap:8px;justify-content:center;position:relative;min-width:500px}
-.controls-group{display:flex;align-items:center;gap:8px;justify-content:center;z-index:3;padding:0 4px}.ctrl-btn{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:var(--text-primary);transition:all 0.2s;z-index:2}.ctrl-btn.play{width:42px;height:42px;background:#f1f5f9;color:#000;border:none}.player-bar.playing .ctrl-btn.play{background:var(--player-neon)}
-.dancers-stage{display:flex;align-items:flex-end;gap:4px;height:54px;pointer-events:none;user-select:none;position:relative;opacity:0.95;flex:1}
-.dancers-stage.left{justify-content:flex-end}.dancers-stage.right{justify-content:flex-start}
+
+/* CENTRADO PERFECTO */
+.player-center{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:end;
+  gap:16px;
+  justify-items:center;
+  min-width:580px;
+}
+.controls-group{
+  display:flex;align-items:center;gap:10px;
+  justify-content:center;
+  justify-self:center;
+  grid-column:2;
+  z-index:3;
+  background:rgba(0,0,0,0.18);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:100px;
+  padding:5px 8px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 12px rgba(0,0,0,0.3);
+}
+.ctrl-btn{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:var(--text-primary);transition:all 0.22s;z-index:2}
+.ctrl-btn:hover{background:rgba(255,255,255,0.1);transform:scale(1.06);border-color:rgba(255,255,255,0.15)}
+.ctrl-btn.play{width:44px;height:44px;background:#f1f5f9;color:#000;border:none;box-shadow:0 0 0 1px rgba(255,255,255,0.2) inset, 0 2px 10px rgba(0,0,0,0.3)}
+.player-bar.playing .ctrl-btn.play{background:var(--player-neon);box-shadow:0 0 16px var(--player-neon-soft), 0 0 0 1px var(--player-neon-border) inset}
+
+.dancers-stage{display:flex;align-items:flex-end;gap:5px;height:54px;pointer-events:none;user-select:none;position:relative;opacity:0.95}
+.dancers-stage.left{justify-content:flex-end;grid-column:1;justify-self:end}
+.dancers-stage.right{justify-content:flex-start;grid-column:3;justify-self:start}
 .dancers-stage::after{content:'';position:absolute;bottom:-4px;left:-6px;right:-6px;height:14px;background:radial-gradient(ellipse at center,var(--glow-color,rgba(0,217,255,0.14)),transparent 70%);filter:blur(5px);opacity:0.3}
 .dancers-stage.left{--glow-color:rgba(0,217,255,0.16)}.dancers-stage.right{--glow-color:rgba(255,0,170,0.14)}
-.inflatable-wrapper{width:26px;height:48px;position:relative;transform-origin:bottom center;transition:transform 0.5s, opacity 0.5s;opacity:0.55;transform:scaleY(0.78);flex-shrink:0;z-index:2}
+.inflatable-wrapper{width:28px;height:50px;position:relative;transform-origin:bottom center;transition:transform 0.5s, opacity 0.5s;opacity:0.55;transform:scaleY(0.78);flex-shrink:0;z-index:2}
 .inflatable-svg{width:100%;height:100%;overflow:visible}
 .neon-cyan{color:#00d9ff;filter:drop-shadow(0 0 4px rgba(0,217,255,0.4))}.neon-pink{color:#ff4dbe;filter:drop-shadow(0 0 4px rgba(255,77,190,0.4))}.neon-lime{color:#8aff4d;filter:drop-shadow(0 0 4px rgba(138,255,77,0.35))}.neon-yellow{color:#ffe066;filter:drop-shadow(0 0 4px rgba(255,224,102,0.35))}.neon-orange{color:#ff8c42;filter:drop-shadow(0 0 4px rgba(255,140,66,0.35))}.neon-violet{color:#b07cff;filter:drop-shadow(0 0 4px rgba(176,124,255,0.35))}
 .player-bar.playing .inflatable-wrapper{opacity:1}
@@ -57,78 +83,34 @@
 @keyframes danceC{0%{transform:scaleY(0.9) skewX(-8deg) rotate(-7deg)}100%{transform:scaleY(1.15) skewX(8deg) rotate(7deg)}}
 @keyframes armFlail{0%{transform:rotate(-38deg) scaleY(0.85)}100%{transform:rotate(48deg) scaleY(1.1)}}
 @keyframes armFlailRev{0%{transform:rotate(42deg) scaleY(1.05)}100%{transform:rotate(-42deg) scaleY(0.9)}}
-.pacman-lane{position:absolute;left:0;right:0;bottom:-2px;height:22px;z-index:1;pointer-events:none;overflow:hidden}
-.pacman-mini{position:absolute;bottom:0;width:20px;height:20px;filter:drop-shadow(0 0 6px currentColor);z-index:1;will-change:left}
-.pacman-mini.yellow{color:#ffeb00}.pacman-mini.pink{color:#ff8abe}
-.pacman-mini::before,.pacman-mini::after{content:'';position:absolute;left:0;width:100%;height:50%;background:currentColor}
-.pacman-mini::before{top:0;border-radius:20px 20px 0 0;transform-origin:50% 100%;animation:pacTop 0.18s ease-in-out infinite alternate}
-.pacman-mini::after{bottom:0;border-radius:0 0 20px 20px;transform-origin:50% 0%;animation:pacBottom 0.18s ease-in-out infinite alternate}
-.pacman-mini.rev{transform:scaleX(-1)}@keyframes pacTop{0%{transform:rotate(-28deg)}100%{transform:rotate(0deg)}}@keyframes pacBottom{0%{transform:rotate(28deg)}100%{transform:rotate(0deg)}}
-.pac-eye{position:absolute;width:3px;height:3px;background:#000;border-radius:50%;top:4px;left:11px;z-index:2}
 
-/* ===== NUEVO VOLUMEN ACOPLE NEON ===== */
+/* VOLUMEN ACOPLADO */
 .player-right{display:flex;align-items:center;justify-content:flex-end;min-width:140px}
-.vol-wrap{
-  display:flex;align-items:center;gap:0;
-  background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.35));
-  border:1px solid var(--player-neon-border);
-  border-radius:100px;
-  padding:4px;
-  box-shadow:0 0 0 1px rgba(0,0,0,0.4) inset, 0 0 12px var(--player-neon-soft);
-  transition:all 0.35s ease;
-  position:relative;
-}
-.vol-wrap:hover{border-color:var(--player-neon);box-shadow:0 0 0 1px var(--player-neon-border) inset, 0 0 18px var(--player-neon-soft), 0 2px 10px rgba(0,0,0,0.3)}
-.vol-wrap::before{
-  content:'';position:absolute;inset:-6px;border-radius:100px;
-  background:var(--player-neon);filter:blur(14px);opacity:0;transition:opacity 0.35s;z-index:-1;
-}
-.vol-wrap:hover::before{opacity:0.18}
-.vol-icon-btn{
-  width:32px;height:32px;border-radius:50%;
-  display:grid;place-items:center;
-  background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.08);
-  color:var(--player-neon);
-  cursor:pointer;flex-shrink:0;
-  transition:all 0.25s ease;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,0.08);
-}
+.vol-wrap{display:flex;align-items:center;gap:0;background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.35));border:1px solid var(--player-neon-border);border-radius:100px;padding:4px;box-shadow:0 0 0 1px rgba(0,0,0,0.4) inset, 0 0 12px var(--player-neon-soft);transition:all 0.35s ease;position:relative}
+.vol-wrap:hover{border-color:var(--player-neon);box-shadow:0 0 0 1px var(--player-neon-border) inset, 0 0 18px var(--player-neon-soft)}
+.vol-wrap::before{content:'';position:absolute;inset:-6px;border-radius:100px;background:var(--player-neon);filter:blur(14px);opacity:0;transition:opacity 0.35s;z-index:-1}
+.vol-wrap:hover::before{opacity:0.15}
+.vol-icon-btn{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);color:var(--player-neon);cursor:pointer;flex-shrink:0;transition:all 0.25s ease;box-shadow:inset 0 1px 0 rgba(255,255,255,0.08)}
 .vol-icon-btn:hover{background:var(--player-neon);color:#000;border-color:var(--player-neon);box-shadow:0 0 12px var(--player-neon-soft);transform:scale(1.05)}
-.vol-icon-btn.muted{color:var(--text-muted);background:rgba(255,255,255,0.03)}
 .vol-slider-wrap{width:0;overflow:hidden;transition:width 0.35s cubic-bezier(.34,1.56,.64,1), opacity 0.25s, margin 0.35s;display:flex;align-items:center;gap:8px;opacity:0;margin-left:0}
 .vol-wrap:hover .vol-slider-wrap,.vol-wrap.expanded .vol-slider-wrap{width:110px;opacity:1;margin-left:8px;margin-right:6px}
-.vol-track{
-  -webkit-appearance:none;appearance:none;
-  width:78px;height:4px;border-radius:2px;
-  background:linear-gradient(to right, var(--player-neon) 0%, var(--player-neon) var(--vol-p, 100%), rgba(255,255,255,0.12) var(--vol-p, 100%), rgba(255,255,255,0.12) 100%);
-  outline:none;cursor:pointer;transition:background 0.2s;
-}
-.vol-track::-webkit-slider-thumb{
-  -webkit-appearance:none;appearance:none;
-  width:14px;height:14px;border-radius:50%;
-  background:var(--player-neon);
-  border:2px solid #0a0f17;
-  box-shadow:0 0 0 1px var(--player-neon-border), 0 0 10px var(--player-neon-soft), 0 2px 6px rgba(0,0,0,0.5);
-  transition:all 0.2s;cursor:pointer;
-}
-.vol-track::-webkit-slider-thumb:hover{transform:scale(1.2);box-shadow:0 0 0 2px var(--player-neon-border), 0 0 16px var(--player-neon), 0 2px 8px rgba(0,0,0,0.6)}
-.vol-track::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--player-neon);border:2px solid #0a0f17;box-shadow:0 0 10px var(--player-neon-soft);cursor:pointer}
+.vol-track{-webkit-appearance:none;appearance:none;width:78px;height:4px;border-radius:2px;background:linear-gradient(to right, var(--player-neon) 0%, var(--player-neon) var(--vol-p, 100%), rgba(255,255,255,0.12) var(--vol-p, 100%), rgba(255,255,255,0.12) 100%);outline:none;cursor:pointer}
+.vol-track::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;border-radius:50%;background:var(--player-neon);border:2px solid #0a0f17;box-shadow:0 0 0 1px var(--player-neon-border), 0 0 10px var(--player-neon-soft), 0 2px 6px rgba(0,0,0,0.5);transition:all 0.2s;cursor:pointer}
+.vol-track::-webkit-slider-thumb:hover{transform:scale(1.2);box-shadow:0 0 0 2px var(--player-neon-border), 0 0 16px var(--player-neon)}
 .vol-pct{font-size:10px;font-weight:800;color:var(--player-neon);min-width:28px;text-align:right;letter-spacing:0.03em;text-shadow:0 0 8px var(--player-neon-soft);font-variant-numeric:tabular-nums}
-
 .toast{position:fixed;bottom:92px;left:50%;transform:translateX(-50%) translateY(8px);background:#0f172a;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:7px 13px;border-radius:100px;font-size:11px;font-weight:600;box-shadow:0 10px 25px rgba(0,0,0,0.45);z-index:120;opacity:0;pointer-events:none;transition:all 0.2s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .empty-state{background:var(--bg-card);border:1px dashed var(--border);border-radius:12px;padding:36px 20px;text-align:center;color:var(--text-secondary);font-size:13px}
 .hidden{display:none !important}
-@media (max-width:1150px){.player-center{min-width:420px}.dancers-stage .inflatable-wrapper:nth-child(n+4){display:none}.player-right{min-width:44px}.vol-slider-wrap{display:none !important}.vol-wrap{padding:4px}.vol-wrap:hover .vol-slider-wrap{display:none !important}}
+@media (max-width:1150px){.player-center{min-width:420px;grid-template-columns:1fr auto 1fr}.dancers-stage .inflatable-wrapper:nth-child(n+4){display:none}.player-right{min-width:44px}.vol-slider-wrap{display:none !important}.vol-wrap{padding:4px}}
 @media (max-width:980px){.player-inner{grid-template-columns:1fr auto auto}.player-center{min-width:auto}.dancers-stage.left{display:none}}
-@media (max-width:768px){.controls-bar{flex-direction:column;align-items:stretch}.view-controls{justify-content:space-between}.wrap{padding-bottom:190px}.player-bar{left:8px;right:8px;bottom:8px}.dancers-stage.left{display:flex}.dancers-stage.left .inflatable-wrapper:nth-child(n+2),.dancers-stage.right .inflatable-wrapper:nth-child(n+2){display:none}.player-right{display:none}}
-@media (max-width:480px){.dancers-stage.left,.dancers-stage.right{display:none}}
+@media (max-width:768px){.controls-bar{flex-direction:column;align-items:stretch}.view-controls{justify-content:space-between}.wrap{padding-bottom:190px}.player-bar{left:8px;right:8px;bottom:8px}.player-center{grid-template-columns:1fr auto 1fr;min-width:auto;gap:6px}.dancers-stage.left{display:flex}.dancers-stage.left .inflatable-wrapper:nth-child(n+2),.dancers-stage.right .inflatable-wrapper:nth-child(n+2){display:none}.player-right{display:none}}
+@media (max-width:480px){.dancers-stage.left,.dancers-stage.right{display:none}.player-center{grid-template-columns:1fr;justify-items:center}.dancers-stage{display:none !important}.controls-group{grid-column:1}}
 </style>
 </head>
 <body>
 <div id="ambientGlow"></div>
 <div class="wrap">
-<header class="site-header"><div class="live-badge"><span class="live-dot"></span> VOLUMEN NEON ACOPLADO</div><h1 class="site-title"><span class="thin">CENTRAL DE RADIOS</span><span class="grad">GUATEMALA</span></h1><p class="site-subtitle">Botón de volumen integrado al sistema neón</p></header>
+<header class="site-header"><div class="live-badge"><span class="live-dot"></span> FINAL — 10 INFLABLES CENTRADOS</div><h1 class="site-title"><span class="thin">CENTRAL DE RADIOS</span><span class="grad">GUATEMALA</span></h1><p class="site-subtitle">Controles perfectamente centrados • Solo inflables neón elegante</p></header>
 <div class="controls-bar"><div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg><input id="searchInput" class="search-input" type="search" placeholder="Buscar emisora..." autocomplete="off" /></div><div class="view-controls"><button class="view-btn active" data-view="grid">Grid</button><button class="view-btn" data-view="list">Lista</button><button class="view-btn" data-view="compact">Compacto</button><button class="fav-toggle" id="favToggle">★ Favoritas</button></div></div>
 <div class="list-meta" id="listMeta"></div><main id="stationsContainer"></main>
 </div>
@@ -137,25 +119,24 @@
 
 <div class="player-center">
   <div class="dancers-stage left" id="stageLeft">
-    <div class="inflatable-wrapper neon-cyan dancer-1"><svg class="inflatable-svg" viewBox="0 0 32 60"><defs><linearGradient id="v1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7defff"/><stop offset="100%" stop-color="#00aacc"/></linearGradient></defs><path class="arm arm-l" d="M12,20 C4,12 0,24 3,33" stroke="url(#v1)" stroke-width="3.4" stroke-linecap="round" fill="none"/><path class="arm arm-r" d="M20,20 C28,12 32,24 29,33" stroke="url(#v1)" stroke-width="3.4" stroke-linecap="round" fill="none"/><rect x="11" y="14" width="10" height="38" rx="5" fill="url(#v1)"/><circle cx="14" cy="20" r="1.4" fill="#fff"/><circle cx="18" cy="20" r="1.4" fill="#fff"/><circle cx="14" cy="20" r="0.6" fill="#000"/><circle cx="18" cy="20" r="0.6" fill="#000"/><ellipse cx="16" cy="25" rx="1.5" ry="1.9" fill="#000"/><rect x="10" y="50" width="12" height="3.5" rx="1" fill="#0f172a" stroke="#00d9ff" stroke-width="0.5"/></svg></div>
-    <div class="inflatable-wrapper neon-pink dancer-2"><svg class="inflatable-svg" viewBox="0 0 32 60"><defs><linearGradient id="v2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ff9ad5"/><stop offset="100%" stop-color="#e6008a"/></linearGradient></defs><path class="arm arm-l" d="M12,20 C4,13 1,25 4,32" stroke="url(#v2)" stroke-width="3.4" stroke-linecap="round" fill="none"/><path class="arm arm-r" d="M20,20 C28,13 31,25 28,32" stroke="url(#v2)" stroke-width="3.4" stroke-linecap="round" fill="none"/><rect x="11" y="14" width="10" height="38" rx="5" fill="url(#v2)"/><circle cx="13.5" cy="20" r="1.4" fill="#fff"/><circle cx="18.5" cy="20" r="1.4" fill="#fff"/><circle cx="13.5" cy="20" r="0.6" fill="#000"/><circle cx="18.5" cy="20" r="0.6" fill="#000"/><path d="M12.5,25 Q16,28 19.5,25" stroke="#000" stroke-width="1.1" fill="none" stroke-linecap="round"/><rect x="10" y="50" width="12" height="3.5" rx="1" fill="#0f172a" stroke="#ff4dbe" stroke-width="0.5"/></svg></div>
-    <div class="inflatable-wrapper neon-lime dancer-3"><svg class="inflatable-svg" viewBox="0 0 32 60"><defs><linearGradient id="v3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#b8ff8a"/><stop offset="100%" stop-color="#5ad62a"/></linearGradient></defs><path class="arm arm-l" d="M12,20 C5,11 0,22 3,31" stroke="url(#v3)" stroke-width="3.4" stroke-linecap="round" fill="none"/><path class="arm arm-r" d="M20,20 C27,11 32,22 29,31" stroke="url(#v3)" stroke-width="3.4" stroke-linecap="round" fill="none"/><rect x="11" y="14" width="10" height="38" rx="5" fill="url(#v3)"/><circle cx="14" cy="20" r="1.4" fill="#fff"/><circle cx="18" cy="20" r="1.4" fill="#fff"/><circle cx="14" cy="20" r="0.6" fill="#000"/><circle cx="18" cy="20" r="0.6" fill="#000"/><ellipse cx="16" cy="24.5" rx="1.3" ry="1.5" fill="#000"/><rect x="10" y="50" width="12" height="3.5" rx="1" fill="#0f172a" stroke="#8aff4d" stroke-width="0.5"/></svg></div>
-    <div class="inflatable-wrapper neon-yellow dancer-4"><svg class="inflatable-svg" viewBox="0 0 32 60"><defs><linearGradient id="v4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fff0a0"/><stop offset="100%" stop-color="#e6b800"/></linearGradient></defs><path class="arm arm-l" d="M12,20 C4,12 0,24 3,33" stroke="url(#v4)" stroke-width="3.4" stroke-linecap="round" fill="none"/><path class="arm arm-r" d="M20,20 C28,12 32,24 29,33" stroke="url(#v4)" stroke-width="3.4" stroke-linecap="round" fill="none"/><rect x="11" y="14" width="10" height="38" rx="5" fill="url(#v4)"/><circle cx="14" cy="20" r="1.4" fill="#fff"/><circle cx="18" cy="20" r="1.4" fill="#fff"/><circle cx="14" cy="20" r="0.6" fill="#000"/><circle cx="18" cy="20" r="0.6" fill="#000"/><path d="M12.5,25 Q16,27.5 19.5,25" stroke="#000" stroke-width="1.1" fill="none" stroke-linecap="round"/><rect x="10" y="50" width="12" height="3.5" rx="1" fill="#0f172a" stroke="#ffe066" stroke-width="0.5"/></svg></div>
-    <div class="inflatable-wrapper neon-orange dancer-5"><svg class="inflatable-svg" viewBox="0 0 32 60"><defs><linearGradient id="v5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffb07a"/><stop offset="100%" stop-color="#e65a20"/></linearGradient></defs><path class="arm arm-l" d="M12,20 C5,13 1,25 4,32" stroke="url(#v5)" stroke-width="3.4" stroke-linecap="round" fill="none"/><path class="arm arm-r" d="M20,20 C27,13 31,25 28,32" stroke="url(#v5)" stroke-width="3.4" stroke-linecap="round" fill="none"/><rect x="11" y="14" width="10" height="38" rx="5" fill="url(#v5)"/><circle cx="14" cy="20" r="1.4" fill="#fff"/><circle cx="18" cy="20" r="1.4" fill="#fff"/><circle cx="14" cy="20" r="0.6" fill="#000"/><circle cx="18" cy="20" r="0.6" fill="#000"/><ellipse cx="16" cy="25" rx="1.3" ry="1.7" fill="#000"/><rect x="10" y="50" width="12" height="3.5" rx="1" fill="#0f172a" stroke="#ff8c42" stroke-width="0.5"/></svg></div>
-    <div class="pacman-lane"><div class="pacman-mini yellow" id="pacLeft"><div class="pac-eye"></div></div></div>
+    <div class="inflatable-wrapper neon-cyan dancer-1"><svg class="inflatable-svg" viewBox="0 0 32 60"><defs><linearGradient id="z1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7defff"/><stop offset="100%" stop-color="#00aacc"/></linearGradient></defs><path class="arm arm-l" d="M12,20 C4,12 0,24 3,33" stroke="url(#z1)" stroke-width="3.4" stroke-linecap="round" fill="none"/><path class="arm arm-r" d="M20,20 C28,12 32,24 29,33" stroke="url(#z1)" stroke-width="3.4" stroke-linecap="round" fill="none"/><rect x="11" y="14" width="10" height="38" rx="5" fill="url(#z1)"/><circle cx="14" cy="20" r="1.4" fill="#fff"/><circle cx="18" cy="20" r="1.4" fill="#fff"/><circle cx="14" cy="20" r="0.6" fill="#000"/><circle cx="18" cy="20" r="0.6" fill="#000"/><ellipse cx="16" cy="25" rx="1.5" ry="1.9" fill="#000"/><rect x="10" y="50" width="12" height="3.5" rx="1" fill="#0f172a" stroke="#00d9ff" stroke-width="0.5"/></svg></div>
+    <div class="inflatable-wrapper neon-pink dancer-2"><svg class="inflatable-svg" viewBox="0 0 32 60"><defs><linearGradient id="z2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ff9ad5"/><stop offset="100%" stop-color="#e6008a"/></linearGradient></defs><path class="arm arm-l" d="M12,20 C4,13 1,25 4,32" stroke="url(#z2)" stroke-width="3.4" stroke-linecap="round" fill="none"/><path class="arm arm-r" d="M20,20 C28,13 31,25 28,32" stroke="url(#z2)" stroke-width="3.4" stroke-linecap="round" fill="none"/><rect x="11" y="14" width="10" height="38" rx="5" fill="url(#z2)"/><circle cx="13.5" cy="20" r="1.4" fill="#fff"/><circle cx="18.5" cy="20" r="1.4" fill="#fff"/><circle cx="13.5" cy="20" r="0.6" fill="#000"/><circle cx="18.5" cy="20" r="0.6" fill="#000"/><path d="M12.5,25 Q16,28 19.5,25" stroke="#000" stroke-width="1.1" fill="none" stroke-linecap="round"/><rect x="10" y="50" width="12" height="3.5" rx="1" fill="#0f172a" stroke="#ff4dbe" stroke-width="0.5"/></svg></div>
+    <div class="inflatable-wrapper neon-lime dancer-3"><svg class="inflatable-svg" viewBox="0 0 32 60"><defs><linearGradient id="z3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#b8ff8a"/><stop offset="100%" stop-color="#5ad62a"/></linearGradient></defs><path class="arm arm-l" d="M12,20 C5,11 0,22 3,31" stroke="url(#z3)" stroke-width="3.4" stroke-linecap="round" fill="none"/><path class="arm arm-r" d="M20,20 C27,11 32,22 29,31" stroke="url(#z3)" stroke-width="3.4" stroke-linecap="round" fill="none"/><rect x="11" y="14" width="10" height="38" rx="5" fill="url(#z3)"/><circle cx="14" cy="20" r="1.4" fill="#fff"/><circle cx="18" cy="20" r="1.4" fill="#fff"/><circle cx="14" cy="20" r="0.6" fill="#000"/><circle cx="18" cy="20" r="0.6" fill="#000"/><ellipse cx="16" cy="24.5" rx="1.3" ry="1.5" fill="#000"/><rect x="10" y="50" width="12" height="3.5" rx="1" fill="#0f172a" stroke="#8aff4d" stroke-width="0.5"/></svg></div>
+    <div class="inflatable-wrapper neon-yellow dancer-4"><svg class="inflatable-svg" viewBox="0 0 32 60"><defs><linearGradient id="z4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fff0a0"/><stop offset="100%" stop-color="#e6b800"/></linearGradient></defs><path class="arm arm-l" d="M12,20 C4,12 0,24 3,33" stroke="url(#z4)" stroke-width="3.4" stroke-linecap="round" fill="none"/><path class="arm arm-r" d="M20,20 C28,12 32,24 29,33" stroke="url(#z4)" stroke-width="3.4" stroke-linecap="round" fill="none"/><rect x="11" y="14" width="10" height="38" rx="5" fill="url(#z4)"/><circle cx="14" cy="20" r="1.4" fill="#fff"/><circle cx="18" cy="20" r="1.4" fill="#fff"/><circle cx="14" cy="20" r="0.6" fill="#000"/><circle cx="18" cy="20" r="0.6" fill="#000"/><path d="M12.5,25 Q16,27.5 19.5,25" stroke="#000" stroke-width="1.1" fill="none" stroke-linecap="round"/><rect x="10" y="50" width="12" height="3.5" rx="1" fill="#0f172a" stroke="#ffe066" stroke-width="0.5"/></svg></div>
+    <div class="inflatable-wrapper neon-orange dancer-5"><svg class="inflatable-svg" viewBox="0 0 32 60"><defs><linearGradient id="z5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffb07a"/><stop offset="100%" stop-color="#e65a20"/></linearGradient></defs><path class="arm arm-l" d="M12,20 C5,13 1,25 4,32" stroke="url(#z5)" stroke-width="3.4" stroke-linecap="round" fill="none"/><path class="arm arm-r" d="M20,20 C27,13 31,25 28,32" stroke="url(#z5)" stroke-width="3.4" stroke-linecap="round" fill="none"/><rect x="11" y="14" width="10" height="38" rx="5" fill="url(#z5)"/><circle cx="14" cy="20" r="1.4" fill="#fff"/><circle cx="18" cy="20" r="1.4" fill="#fff"/><circle cx="14" cy="20" r="0.6" fill="#000"/><circle cx="18" cy="20" r="0.6" fill="#000"/><ellipse cx="16" cy="25" rx="1.3" ry="1.7" fill="#000"/><rect x="10" y="50" width="12" height="3.5" rx="1" fill="#0f172a" stroke="#ff8c42" stroke-width="0.5"/></svg></div>
   </div>
+
   <div class="controls-group"><button class="ctrl-btn" id="prevBtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button><button class="ctrl-btn play" id="playPauseBtn"><svg id="playIcon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><svg id="pauseIcon" class="hidden" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg></button><button class="ctrl-btn" id="nextBtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button></div>
+
   <div class="dancers-stage right" id="stageRight">
-    <div class="inflatable-wrapper neon-violet dancer-6"><svg class="inflatable-svg" viewBox="0 0 32 60"><defs><linearGradient id="v6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#c9a6ff"/><stop offset="100%" stop-color="#7a3fcc"/></linearGradient></defs><path class="arm arm-l" d="M12,20 C4,12 0,23 3,32" stroke="url(#v6)" stroke-width="3.4" stroke-linecap="round" fill="none"/><path class="arm arm-r" d="M20,20 C28,12 32,23 29,32" stroke="url(#v6)" stroke-width="3.4" stroke-linecap="round" fill="none"/><rect x="11" y="14" width="10" height="38" rx="5" fill="url(#v6)"/><circle cx="14" cy="20" r="1.4" fill="#fff"/><circle cx="18" cy="20" r="1.4" fill="#fff"/><circle cx="14" cy="20" r="0.6" fill="#000"/><circle cx="18" cy="20" r="0.6" fill="#000"/><path d="M13,25 Q16,27.5 19,25" stroke="#000" stroke-width="1.1" fill="none" stroke-linecap="round"/><rect x="10" y="50" width="12" height="3.5" rx="1" fill="#0f172a" stroke="#b07cff" stroke-width="0.5"/></svg></div>
-    <div class="inflatable-wrapper neon-cyan dancer-7"><svg class="inflatable-svg" viewBox="0 0 32 60"><defs><linearGradient id="v7" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7defff"/><stop offset="100%" stop-color="#0099bb"/></linearGradient></defs><path class="arm arm-l" d="M12,20 C4,12 0,24 3,33" stroke="url(#v7)" stroke-width="3.4" stroke-linecap="round" fill="none"/><path class="arm arm-r" d="M20,20 C28,12 32,24 29,33" stroke="url(#v7)" stroke-width="3.4" stroke-linecap="round" fill="none"/><rect x="11" y="14" width="10" height="38" rx="5" fill="url(#v7)"/><circle cx="14" cy="20" r="1.4" fill="#fff"/><circle cx="18" cy="20" r="1.4" fill="#fff"/><circle cx="14" cy="20" r="0.6" fill="#000"/><circle cx="18" cy="20" r="0.6" fill="#000"/><ellipse cx="16" cy="25" rx="1.4" ry="1.8" fill="#000"/><rect x="10" y="50" width="12" height="3.5" rx="1" fill="#0f172a" stroke="#00d9ff" stroke-width="0.5"/></svg></div>
-    <div class="inflatable-wrapper neon-pink dancer-8"><svg class="inflatable-svg" viewBox="0 0 32 60"><defs><linearGradient id="v8" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ff9ad5"/><stop offset="100%" stop-color="#d6007a"/></linearGradient></defs><path class="arm arm-l" d="M12,20 C4,13 1,25 4,32" stroke="url(#v8)" stroke-width="3.4" stroke-linecap="round" fill="none"/><path class="arm arm-r" d="M20,20 C28,13 31,25 28,32" stroke="url(#v8)" stroke-width="3.4" stroke-linecap="round" fill="none"/><rect x="11" y="14" width="10" height="38" rx="5" fill="url(#v8)"/><circle cx="13.5" cy="20" r="1.4" fill="#fff"/><circle cx="18.5" cy="20" r="1.4" fill="#fff"/><circle cx="13.5" cy="20" r="0.6" fill="#000"/><circle cx="18.5" cy="20" r="0.6" fill="#000"/><path d="M12.5,25 Q16,28 19.5,25" stroke="#000" stroke-width="1.1" fill="none" stroke-linecap="round"/><rect x="10" y="50" width="12" height="3.5" rx="1" fill="#0f172a" stroke="#ff4dbe" stroke-width="0.5"/></svg></div>
-    <div class="inflatable-wrapper neon-lime dancer-9"><svg class="inflatable-svg" viewBox="0 0 32 60"><defs><linearGradient id="v9" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#b8ff8a"/><stop offset="100%" stop-color="#4ac520"/></linearGradient></defs><path class="arm arm-l" d="M12,20 C5,11 0,22 3,31" stroke="url(#v9)" stroke-width="3.4" stroke-linecap="round" fill="none"/><path class="arm arm-r" d="M20,20 C27,11 32,22 29,31" stroke="url(#v9)" stroke-width="3.4" stroke-linecap="round" fill="none"/><rect x="11" y="14" width="10" height="38" rx="5" fill="url(#v9)"/><circle cx="14" cy="20" r="1.4" fill="#fff"/><circle cx="18" cy="20" r="1.4" fill="#fff"/><circle cx="14" cy="20" r="0.6" fill="#000"/><circle cx="18" cy="20" r="0.6" fill="#000"/><ellipse cx="16" cy="24.5" rx="1.3" ry="1.5" fill="#000"/><rect x="10" y="50" width="12" height="3.5" rx="1" fill="#0f172a" stroke="#8aff4d" stroke-width="0.5"/></svg></div>
-    <div class="inflatable-wrapper neon-yellow dancer-10"><svg class="inflatable-svg" viewBox="0 0 32 60"><defs><linearGradient id="v10" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fff0a0"/><stop offset="100%" stop-color="#d9a800"/></linearGradient></defs><path class="arm arm-l" d="M12,20 C4,12 0,24 3,33" stroke="url(#v10)" stroke-width="3.4" stroke-linecap="round" fill="none"/><path class="arm arm-r" d="M20,20 C28,12 32,24 29,33" stroke="url(#v10)" stroke-width="3.4" stroke-linecap="round" fill="none"/><rect x="11" y="14" width="10" height="38" rx="5" fill="url(#v10)"/><circle cx="14" cy="20" r="1.4" fill="#fff"/><circle cx="18" cy="20" r="1.4" fill="#fff"/><circle cx="14" cy="20" r="0.6" fill="#000"/><circle cx="18" cy="20" r="0.6" fill="#000"/><path d="M12.5,25 Q16,27.5 19.5,25" stroke="#000" stroke-width="1.1" fill="none" stroke-linecap="round"/><rect x="10" y="50" width="12" height="3.5" rx="1" fill="#0f172a" stroke="#ffe066" stroke-width="0.5"/></svg></div>
-    <div class="pacman-lane"><div class="pacman-mini pink" id="pacRight"><div class="pac-eye"></div></div></div>
+    <div class="inflatable-wrapper neon-violet dancer-6"><svg class="inflatable-svg" viewBox="0 0 32 60"><defs><linearGradient id="z6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#c9a6ff"/><stop offset="100%" stop-color="#7a3fcc"/></linearGradient></defs><path class="arm arm-l" d="M12,20 C4,12 0,23 3,32" stroke="url(#z6)" stroke-width="3.4" stroke-linecap="round" fill="none"/><path class="arm arm-r" d="M20,20 C28,12 32,23 29,32" stroke="url(#z6)" stroke-width="3.4" stroke-linecap="round" fill="none"/><rect x="11" y="14" width="10" height="38" rx="5" fill="url(#z6)"/><circle cx="14" cy="20" r="1.4" fill="#fff"/><circle cx="18" cy="20" r="1.4" fill="#fff"/><circle cx="14" cy="20" r="0.6" fill="#000"/><circle cx="18" cy="20" r="0.6" fill="#000"/><path d="M13,25 Q16,27.5 19,25" stroke="#000" stroke-width="1.1" fill="none" stroke-linecap="round"/><rect x="10" y="50" width="12" height="3.5" rx="1" fill="#0f172a" stroke="#b07cff" stroke-width="0.5"/></svg></div>
+    <div class="inflatable-wrapper neon-cyan dancer-7"><svg class="inflatable-svg" viewBox="0 0 32 60"><defs><linearGradient id="z7" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7defff"/><stop offset="100%" stop-color="#0099bb"/></linearGradient></defs><path class="arm arm-l" d="M12,20 C4,12 0,24 3,33" stroke="url(#z7)" stroke-width="3.4" stroke-linecap="round" fill="none"/><path class="arm arm-r" d="M20,20 C28,12 32,24 29,33" stroke="url(#z7)" stroke-width="3.4" stroke-linecap="round" fill="none"/><rect x="11" y="14" width="10" height="38" rx="5" fill="url(#z7)"/><circle cx="14" cy="20" r="1.4" fill="#fff"/><circle cx="18" cy="20" r="1.4" fill="#fff"/><circle cx="14" cy="20" r="0.6" fill="#000"/><circle cx="18" cy="20" r="0.6" fill="#000"/><ellipse cx="16" cy="25" rx="1.4" ry="1.8" fill="#000"/><rect x="10" y="50" width="12" height="3.5" rx="1" fill="#0f172a" stroke="#00d9ff" stroke-width="0.5"/></svg></div>
+    <div class="inflatable-wrapper neon-pink dancer-8"><svg class="inflatable-svg" viewBox="0 0 32 60"><defs><linearGradient id="z8" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ff9ad5"/><stop offset="100%" stop-color="#d6007a"/></linearGradient></defs><path class="arm arm-l" d="M12,20 C4,13 1,25 4,32" stroke="url(#z8)" stroke-width="3.4" stroke-linecap="round" fill="none"/><path class="arm arm-r" d="M20,20 C28,13 31,25 28,32" stroke="url(#z8)" stroke-width="3.4" stroke-linecap="round" fill="none"/><rect x="11" y="14" width="10" height="38" rx="5" fill="url(#z8)"/><circle cx="13.5" cy="20" r="1.4" fill="#fff"/><circle cx="18.5" cy="20" r="1.4" fill="#fff"/><circle cx="13.5" cy="20" r="0.6" fill="#000"/><circle cx="18.5" cy="20" r="0.6" fill="#000"/><path d="M12.5,25 Q16,28 19.5,25" stroke="#000" stroke-width="1.1" fill="none" stroke-linecap="round"/><rect x="10" y="50" width="12" height="3.5" rx="1" fill="#0f172a" stroke="#ff4dbe" stroke-width="0.5"/></svg></div>
+    <div class="inflatable-wrapper neon-lime dancer-9"><svg class="inflatable-svg" viewBox="0 0 32 60"><defs><linearGradient id="z9" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#b8ff8a"/><stop offset="100%" stop-color="#4ac520"/></linearGradient></defs><path class="arm arm-l" d="M12,20 C5,11 0,22 3,31" stroke="url(#z9)" stroke-width="3.4" stroke-linecap="round" fill="none"/><path class="arm arm-r" d="M20,20 C27,11 32,22 29,31" stroke="url(#z9)" stroke-width="3.4" stroke-linecap="round" fill="none"/><rect x="11" y="14" width="10" height="38" rx="5" fill="url(#z9)"/><circle cx="14" cy="20" r="1.4" fill="#fff"/><circle cx="18" cy="20" r="1.4" fill="#fff"/><circle cx="14" cy="20" r="0.6" fill="#000"/><circle cx="18" cy="20" r="0.6" fill="#000"/><ellipse cx="16" cy="24.5" rx="1.3" ry="1.5" fill="#000"/><rect x="10" y="50" width="12" height="3.5" rx="1" fill="#0f172a" stroke="#8aff4d" stroke-width="0.5"/></svg></div>
+    <div class="inflatable-wrapper neon-yellow dancer-10"><svg class="inflatable-svg" viewBox="0 0 32 60"><defs><linearGradient id="z10" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fff0a0"/><stop offset="100%" stop-color="#d9a800"/></linearGradient></defs><path class="arm arm-l" d="M12,20 C4,12 0,24 3,33" stroke="url(#z10)" stroke-width="3.4" stroke-linecap="round" fill="none"/><path class="arm arm-r" d="M20,20 C28,12 32,24 29,33" stroke="url(#z10)" stroke-width="3.4" stroke-linecap="round" fill="none"/><rect x="11" y="14" width="10" height="38" rx="5" fill="url(#z10)"/><circle cx="14" cy="20" r="1.4" fill="#fff"/><circle cx="18" cy="20" r="1.4" fill="#fff"/><circle cx="14" cy="20" r="0.6" fill="#000"/><circle cx="18" cy="20" r="0.6" fill="#000"/><path d="M12.5,25 Q16,27.5 19.5,25" stroke="#000" stroke-width="1.1" fill="none" stroke-linecap="round"/><rect x="10" y="50" width="12" height="3.5" rx="1" fill="#0f172a" stroke="#ffe066" stroke-width="0.5"/></svg></div>
   </div>
 </div>
 
-<!-- VOLUMEN REDISEÑADO ACOPLE NEON -->
 <div class="player-right">
   <div class="vol-wrap" id="volWrap">
     <button class="vol-icon-btn" id="volIconBtn" aria-label="Volumen">
@@ -253,48 +234,6 @@ volIconBtn.addEventListener('click', ()=>{
 volWrap.addEventListener('mouseenter', ()=>volWrap.classList.add('expanded'));
 volWrap.addEventListener('mouseleave', ()=>{ if(audio.volume>0) volWrap.classList.remove('expanded'); });
 
-function initPacmanRespectful(){
-  const stages=[{id:'stageLeft', pacId:'pacLeft'}, {id:'stageRight', pacId:'pacRight'}];
-  stages.forEach(({id,pacId})=>{
-    const stage=document.getElementById(id);
-    const pac=document.getElementById(pacId);
-    if(!stage||!pac) return;
-    let x=0, dir=1, speed=0.9 + Math.random()*0.6;
-    let lastTime=0;
-    function getObstacles(){return Array.from(stage.querySelectorAll('.inflatable-wrapper')).map(el=>{return {left: el.offsetLeft, right: el.offsetLeft + el.offsetWidth};});}
-    function isColliding(newX){
-      const pacLeft=newX;
-      const pacRight=newX + pac.offsetWidth;
-      const obstacles=getObstacles();
-      for(const ob of obstacles){ if(pacRight > ob.left + 2 && pacLeft < ob.right - 2){ return true; } }
-      return false;
-    }
-    function loop(t){
-      if(t - lastTime < 16){ requestAnimationFrame(loop); return; }
-      lastTime=t;
-      if(!isPlaying){ requestAnimationFrame(loop); return; }
-      const maxX = stage.clientWidth - pac.offsetWidth;
-      let nextX = x + dir * speed;
-      if(nextX <= 0){ nextX=0; dir=1; pac.classList.remove('rev'); }
-      else if(nextX >= maxX){ nextX=maxX; dir=-1; pac.classList.add('rev'); }
-      else if(isColliding(nextX)){
-        dir *= -1;
-        if(dir===1) pac.classList.remove('rev'); else pac.classList.add('rev');
-        nextX = x + dir * speed * 2;
-        if(isColliding(nextX)){ requestAnimationFrame(loop); return; }
-      }
-      x=nextX;
-      pac.style.left = x + 'px';
-      requestAnimationFrame(loop);
-    }
-    x = id==='stageLeft' ? 0 : stage.clientWidth - pac.offsetWidth;
-    dir = id==='stageLeft' ? 1 : -1;
-    if(dir===-1) pac.classList.add('rev');
-    pac.style.left = x + 'px';
-    requestAnimationFrame(loop);
-  });
-}
-
 audio.addEventListener('play',()=>{isPlaying=true;playerBar.classList.add('playing');playIcon.classList.add('hidden');pauseIcon.classList.remove('hidden');playerLiveText.textContent="EN VIVO";render();});
 audio.addEventListener('pause',()=>{isPlaying=false;playerBar.classList.remove('playing');pauseIcon.classList.add('hidden');playIcon.classList.remove('hidden');playerLiveText.textContent=currentIndex>=0?"Pausado":"En espera";render();});
 audio.addEventListener('waiting',()=>{playerLiveText.textContent="Cargando…";});audio.addEventListener('playing',()=>{playerLiveText.textContent="EN VIVO";});
@@ -303,7 +242,7 @@ document.getElementById('volumeRange').addEventListener('input',e=>setVolume(par
 document.querySelectorAll('.view-btn').forEach(btn=>{btn.addEventListener('click',()=>{viewMode=btn.dataset.view;localStorage.setItem('crg_view',viewMode);document.querySelectorAll('.view-btn').forEach(b=>{b.classList.toggle('active',b===btn);});render();});});
 document.getElementById('favToggle').addEventListener('click',function(){showFavoritesOnly=!showFavoritesOnly;this.classList.toggle('on',showFavoritesOnly);render();});
 document.addEventListener('keydown',e=>{if(e.code==='Space'&&document.activeElement.tagName!=='INPUT'){e.preventDefault();togglePlay();}});
-(function init(){const v=localStorage.getItem('crg_vol');if(v!==null)setVolume(parseFloat(v));else setVolume(1.0);playerLogo.src=svgFallback('CRG',getNeon(0));render(); setTimeout(initPacmanRespectful, 500);})();
+(function init(){const v=localStorage.getItem('crg_vol');if(v!==null)setVolume(parseFloat(v));else setVolume(1.0);playerLogo.src=svgFallback('CRG',getNeon(0));render();})();
 </script>
 </body>
 </html>
