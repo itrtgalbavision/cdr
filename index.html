@@ -715,6 +715,10 @@ const pauseIcon = document.getElementById('pauseIcon');
 const container = document.getElementById('stationsContainer');
 const searchInput = document.getElementById('searchInput');
 const listMeta = document.getElementById('listMeta');
+const playPauseBtn = document.getElementById('playPauseBtn');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const volumeRange = document.getElementById('volumeRange');
 
 audio.removeAttribute('crossorigin');
 audio.crossOrigin = null;
@@ -811,6 +815,12 @@ function render(){
 
 function playStation(index, urlTry = 0){
   if(index < 0 || index >= stations.length) return;
+  
+  if(currentIndex === index && isPlaying && urlTry === 0){
+    audio.pause();
+    return;
+  }
+
   const st = stations[index];
   const url = st.urls[urlTry];
   if(!url){ showToast("Sin conexión con el origen"); playerLiveText.textContent = "Error de señal"; return; }
@@ -833,131 +843,104 @@ function playStation(index, urlTry = 0){
     else { playerLiveText.textContent = "Error de señal"; showToast("Error de conexión con " + st.name); }
   };
 
-  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-  if(isIOS || audio.canPlayType('application/vnd.apple.mpegurl')){
+  if(audio.canPlayType('application/vnd.apple.mpegurl')){
     audio.src = url;
     audio.load();
-    audio.play().catch(()=>{});
-    return;
-  }
-
-  if (window.Hls && Hls.isSupported()) {
-    hlsInstance = new Hls({
-      enableWorker: true,
-      lowLatencyMode: false,
-      maxBufferLength: isMobile ? 30 : 15,
-      maxMaxBufferLength: 60,
-      maxBufferSize: 30 * 1000 * 1000,
-      maxBufferHole: isMobile ? 1.5 : 0.5,
-      liveSyncDurationCount: isMobile ? 5 : 3,
-      liveMaxLatencyDurationCount: 20,
-      manifestLoadingTimeOut: 20000,
-      manifestLoadingMaxRetry: 4,
-      fragLoadingTimeOut: 20000,
-      fragLoadingMaxRetry: 6,
-      fragLoadingRetryDelay: 1000,
-      xhrSetup: xhr => { xhr.withCredentials = false; }
-    });
+    audio.play().catch(tryNextUrl);
+  } else if (window.Hls && Hls.isSupported()) {
+    hlsInstance = new Hls({ enableWorker: true, lowLatencyMode: true });
     hlsInstance.loadSource(url);
     hlsInstance.attachMedia(audio);
-    hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => { audio.play().catch(()=>{}); });
-    hlsInstance.on(Hls.Events.ERROR, (event, data) => {
-      if(!data.fatal) return;
-      if(data.type === Hls.ErrorTypes.NETWORK_ERROR){ hlsInstance.startLoad(); return; }
-      if(data.type === Hls.ErrorTypes.MEDIA_ERROR){ hlsInstance.recoverMediaError(); return; }
-      try{ hlsInstance.destroy(); }catch(e){}
-      hlsInstance = null;
-      tryNextUrl();
+    hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => {
+      audio.play().catch(tryNextUrl);
     });
-    return;
-  }
-
-  audio.src = url;
-  audio.load();
-  audio.play().catch(()=>{});
-
-  if('mediaSession' in navigator){
-    try{
-      navigator.mediaSession.metadata = new MediaMetadata({
-        title: st.name,
-        artist: 'Central de Radios Guatemala',
-        album: st.freq
-      });
-    }catch(e){}
+    hlsInstance.on(Hls.Events.ERROR, (event, data) => {
+      if (data.fatal) {
+        if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
+          hlsInstance.destroy();
+          hlsInstance = null;
+          tryNextUrl();
+        } else {
+          hlsInstance.destroy();
+          hlsInstance = null;
+        }
+      }
+    });
+  } else {
+    audio.src = url;
+    audio.load();
+    audio.play().catch(tryNextUrl);
   }
 }
 
-function togglePlay(){
-  if(currentIndex === -1){ playStation(0); return; }
-  if(audio.paused){ audio.play().catch(()=>{}); } else { audio.pause(); }
-}
-function nextStation(){ if(currentIndex === -1){ playStation(0); return; } playStation((currentIndex + 1) % stations.length); }
-function prevStation(){ if(currentIndex === -1){ playStation(0); return; } playStation((currentIndex - 1 + stations.length) % stations.length); }
-function setVolume(v){ audio.volume = v; document.getElementById('volumeRange').value = v; localStorage.setItem('crg_vol', v); }
+audio.addEventListener('play', () => {
+  isPlaying = true;
+  playerBar.classList.add('playing');
+  playIcon.classList.add('hidden');
+  pauseIcon.classList.remove('hidden');
+  playerLiveText.textContent = "EN VIVO";
+  render();
+});
 
-audio.addEventListener('play', ()=>{ isPlaying = true; playerBar.classList.add('playing'); playIcon.classList.add('hidden'); pauseIcon.classList.remove('hidden'); playerLiveText.textContent = "EN VIVO"; render(); });
-audio.addEventListener('pause', ()=>{ isPlaying = false; playerBar.classList.remove('playing'); pauseIcon.classList.add('hidden'); playIcon.classList.remove('hidden'); playerLiveText.textContent = currentIndex >= 0? "Pausado" : "En espera"; render(); });
-audio.addEventListener('waiting', ()=>{ playerLiveText.textContent = "Cargando…"; });
-audio.addEventListener('playing', ()=>{ playerLiveText.textContent = "EN VIVO"; });
-audio.addEventListener('stalled', ()=>{ if(hlsInstance){ try{ hlsInstance.startLoad(); }catch(e){} }});
-audio.addEventListener('error', ()=>{ playerLiveText.textContent = "Error de señal"; showToast("Error al cargar la señal de audio"); });
+audio.addEventListener('pause', () => {
+  isPlaying = false;
+  playerBar.classList.remove('playing');
+  playIcon.classList.remove('hidden');
+  pauseIcon.classList.add('hidden');
+  if(currentIndex !== -1) playerLiveText.textContent = "Pausado";
+  render();
+});
 
-document.getElementById('playPauseBtn').addEventListener('click', togglePlay);
-document.getElementById('nextBtn').addEventListener('click', nextStation);
-document.getElementById('prevBtn').addEventListener('click', prevStation);
-document.getElementById('volumeRange').addEventListener('input', e => setVolume(parseFloat(e.target.value)));
+playPauseBtn.addEventListener('click', () => {
+  if (currentIndex === -1) {
+    playStation(0);
+  } else if (isPlaying) {
+    audio.pause();
+  } else {
+    audio.play().catch(() => playStation(currentIndex));
+  }
+});
+
+prevBtn.addEventListener('click', () => {
+  let prev = currentIndex - 1;
+  if(prev < 0) prev = stations.length - 1;
+  playStation(prev);
+});
+
+nextBtn.addEventListener('click', () => {
+  let next = currentIndex + 1;
+  if(next >= stations.length) next = 0;
+  playStation(next);
+});
+
+volumeRange.addEventListener('input', (e) => {
+  audio.volume = e.target.value;
+});
+
+document.getElementById('viewControls').addEventListener('click', (e) => {
+  const btn = e.target.closest('.view-btn');
+  if(!btn) return;
+  document.querySelectorAll('.view-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-selected', 'false');
+  });
+  btn.classList.add('active');
+  btn.setAttribute('aria-selected', 'true');
+  viewMode = btn.dataset.view;
+  localStorage.setItem('crg_view', viewMode);
+  render();
+});
+
+document.getElementById('favToggle').addEventListener('click', (e) => {
+  showFavoritesOnly = !showFavoritesOnly;
+  e.target.classList.toggle('on', showFavoritesOnly);
+  e.target.setAttribute('aria-pressed', showFavoritesOnly);
+  render();
+});
+
 searchInput.addEventListener('input', render);
 
-document.querySelectorAll('.view-btn').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    viewMode = btn.dataset.view;
-    localStorage.setItem('crg_view', viewMode);
-    document.querySelectorAll('.view-btn').forEach(b=>{
-      b.classList.toggle('active', b === btn);
-      b.setAttribute('aria-selected', b === btn? 'true' : 'false');
-    });
-    render();
-  });
-});
-
-document.getElementById('favToggle').addEventListener('click', function(){
-  showFavoritesOnly = !showFavoritesOnly;
-  this.classList.toggle('on', showFavoritesOnly);
-  this.setAttribute('aria-pressed', showFavoritesOnly? 'true' : 'false');
-  render();
-});
-
-document.addEventListener('keydown', e=>{
-  if(e.code === 'Space' && document.activeElement.tagName !== 'INPUT'){ e.preventDefault(); togglePlay(); }
-});
-
-window.addEventListener('online', () => {
-  if(currentIndex >= 0 && audio.paused){ playStation(currentIndex); }
-});
-
-if('mediaSession' in navigator){
-  try{
-    navigator.mediaSession.setActionHandler('play', ()=> audio.play());
-    navigator.mediaSession.setActionHandler('pause', ()=> audio.pause());
-    navigator.mediaSession.setActionHandler('previoustrack', prevStation);
-    navigator.mediaSession.setActionHandler('nexttrack', nextStation);
-  }catch(e){}
-}
-
-(function init(){
-  const savedVol = localStorage.getItem('crg_vol');
-  if(savedVol !== null) setVolume(parseFloat(savedVol));
-  else setVolume(1.0);
-  document.querySelectorAll('.view-btn').forEach(b=>{
-    const on = b.dataset.view === viewMode;
-    b.classList.toggle('active', on);
-    b.setAttribute('aria-selected', on? 'true' : 'false');
-  });
-  playerLogo.src = svgFallback('CRG');
-  render();
-})();
+render();
 </script>
 </body>
 </html>
