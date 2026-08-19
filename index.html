@@ -299,7 +299,7 @@ input { font-family: inherit; }
   border-radius: var(--radius-xl);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 1px rgba(255,255,255,0.2);
   z-index: 100;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .player-bar::before {
@@ -345,7 +345,7 @@ input { font-family: inherit; }
 .p-live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--text-muted); }
 .player-bar.playing .p-live-dot { background: var(--accent-red); box-shadow: 0 0 6px var(--accent-red); animation: pulseDot 1.4s infinite; }
 
-/* NUEVAS ONDAS MUSICALES MEJORADAS */
+/* ONDAS MUSICALES */
 .visualizer {
   display: flex;
   align-items: flex-end;
@@ -384,8 +384,8 @@ input { font-family: inherit; }
   100% { height: 16px; opacity: 1; }
 }
 
-/* CONTROLES CENTRADOS */
-.player-center { display: flex; align-items: center; gap: 10px; justify-content: center; }
+/* CONTROLES CENTRADOS Y PERSONAJES INFLABLES BAILANDO */
+.player-center { display: flex; align-items: center; gap: 10px; justify-content: center; position: relative; }
 
 .ctrl-btn {
   width: 36px; height: 36px;
@@ -395,6 +395,7 @@ input { font-family: inherit; }
   border: 1px solid var(--border);
   color: var(--text-primary);
   transition: all 0.2s;
+  z-index: 2;
 }
 .ctrl-btn:hover { background: var(--bg-surface-hover); border-color: var(--border-strong); transform: scale(1.05); }
 
@@ -407,6 +408,77 @@ input { font-family: inherit; }
 }
 .ctrl-btn.play:hover { transform: scale(1.06); background: #fff; }
 .player-bar.playing .ctrl-btn.play { background: var(--accent-cyan); box-shadow: 0 0 20px var(--accent-cyan-glow); }
+
+/* PERSONAJES INFLABLES DESDE EL BOTÓN NEXT */
+.dancers-stage {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  margin-left: 6px;
+  height: 48px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.inflatable-wrapper {
+  width: 26px;
+  height: 46px;
+  position: relative;
+  transform-origin: bottom center;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
+}
+
+.inflatable-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Estado de reposo / Pausa */
+.inflatable-wrapper {
+  transform: scaleY(0.85) rotate(0deg);
+  opacity: 0.6;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+/* Animaciones de baile reactivas cuando el reproductor esta 'playing' */
+.player-bar.playing .dancer-1 {
+  opacity: 1;
+  animation: dancerWiggle1 0.7s infinite alternate ease-in-out;
+}
+
+.player-bar.playing .dancer-2 {
+  opacity: 1;
+  animation: dancerWiggle2 0.6s infinite alternate ease-in-out 0.15s;
+}
+
+.player-bar.playing .arm-left-1 { animation: armDance 0.4s infinite alternate ease-in-out; transform-origin: 12px 18px; }
+.player-bar.playing .arm-right-1 { animation: armDanceReverse 0.5s infinite alternate ease-in-out; transform-origin: 20px 18px; }
+
+.player-bar.playing .arm-left-2 { animation: armDanceReverse 0.45s infinite alternate ease-in-out 0.1s; transform-origin: 12px 18px; }
+.player-bar.playing .arm-right-2 { animation: armDance 0.38s infinite alternate ease-in-out 0.05s; transform-origin: 20px 18px; }
+
+@keyframes dancerWiggle1 {
+  0% { transform: scaleY(0.9) skewX(-8deg) rotate(-5deg); }
+  50% { transform: scaleY(1.1) skewX(0deg) rotate(2deg); }
+  100% { transform: scaleY(0.95) skewX(8deg) rotate(6deg); }
+}
+
+@keyframes dancerWiggle2 {
+  0% { transform: scaleY(1.05) skewX(7deg) rotate(4deg); }
+  50% { transform: scaleY(0.88) skewX(-3deg) rotate(-3deg); }
+  100% { transform: scaleY(1.1) skewX(-7deg) rotate(-5deg); }
+}
+
+@keyframes armDance {
+  0% { transform: rotate(-20deg) scaleY(0.9); }
+  100% { transform: rotate(45deg) scaleY(1.1); }
+}
+
+@keyframes armDanceReverse {
+  0% { transform: rotate(30deg) scaleY(1.1); }
+  100% { transform: rotate(-35deg) scaleY(0.85); }
+}
 
 .player-right { display: flex; align-items: center; gap: 12px; justify-content: flex-end; }
 .vol-wrap { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); }
@@ -458,6 +530,7 @@ input[type=range]::-webkit-slider-thumb {
   .player-right { display: none; }
   .wrap { padding-bottom: 150px; }
   .player-bar { left: 8px; right: 8px; bottom: 8px; }
+  .dancers-stage { display: none; }
 }
 </style>
 </head>
@@ -490,7 +563,7 @@ input[type=range]::-webkit-slider-thumb {
   <main id="stationsContainer" aria-live="polite"></main>
 </div>
 
-<!-- REPRODUCTOR BARRA CON SOLA PRO -->
+<!-- REPRODUCTOR BARRA CONSOLA PRO -->
 <div class="player-bar" id="playerBar" role="region" aria-label="Reproductor">
   <div class="player-inner">
     <div class="player-left">
@@ -521,6 +594,63 @@ input[type=range]::-webkit-slider-thumb {
       <button class="ctrl-btn" id="nextBtn" aria-label="Siguiente">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
       </button>
+
+      <!-- PERSONAJES INFLABLES DESDE EL BOTÓN NEXT -->
+      <div class="dancers-stage" aria-hidden="true">
+        <!-- Inflable Cyan -->
+        <div class="inflatable-wrapper dancer-1">
+          <svg class="inflatable-svg" viewBox="0 0 32 60">
+            <defs>
+              <linearGradient id="gradCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00ffff" />
+                <stop offset="100%" stop-color="#0088cc" />
+              </linearGradient>
+            </defs>
+            <!-- Brazo Izquierdo -->
+            <path class="arm-left-1" d="M12,20 C5,15 2,25 4,32" stroke="url(#gradCyan)" stroke-width="3.5" stroke-linecap="round" fill="none" />
+            <!-- Brazo Derecho -->
+            <path class="arm-right-1" d="M20,20 C27,15 30,25 28,32" stroke="url(#gradCyan)" stroke-width="3.5" stroke-linecap="round" fill="none" />
+            <!-- Cuerpo Tubo Inflable -->
+            <rect x="11" y="14" width="10" height="38" rx="5" fill="url(#gradCyan)" />
+            <!-- Cara / Ojos -->
+            <circle cx="14" cy="20" r="1.8" fill="#fff" />
+            <circle cx="18" cy="20" r="1.8" fill="#fff" />
+            <circle cx="14" cy="20" r="0.8" fill="#000" />
+            <circle cx="18" cy="20" r="0.8" fill="#000" />
+            <!-- Boca Asombrada -->
+            <ellipse cx="16" cy="25" rx="2" ry="3" fill="#000" />
+            <!-- Base Puntero ventilador -->
+            <rect x="10" y="50" width="12" height="4" rx="1" fill="#1e293b" />
+          </svg>
+        </div>
+
+        <!-- Inflable Rojo / Neon -->
+        <div class="inflatable-wrapper dancer-2">
+          <svg class="inflatable-svg" viewBox="0 0 32 60">
+            <defs>
+              <linearGradient id="gradRed" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ff3366" />
+                <stop offset="100%" stop-color="#990033" />
+              </linearGradient>
+            </defs>
+            <!-- Brazo Izquierdo -->
+            <path class="arm-left-2" d="M12,20 C5,12 2,22 5,30" stroke="url(#gradRed)" stroke-width="3.5" stroke-linecap="round" fill="none" />
+            <!-- Brazo Derecho -->
+            <path class="arm-right-2" d="M20,20 C27,12 30,22 27,30" stroke="url(#gradRed)" stroke-width="3.5" stroke-linecap="round" fill="none" />
+            <!-- Cuerpo Tubo Inflable -->
+            <rect x="11" y="14" width="10" height="38" rx="5" fill="url(#gradRed)" />
+            <!-- Cara / Ojos -->
+            <circle cx="14" cy="20" r="1.8" fill="#fff" />
+            <circle cx="18" cy="20" r="1.8" fill="#fff" />
+            <circle cx="14" cy="20" r="0.8" fill="#000" />
+            <circle cx="18" cy="20" r="0.8" fill="#000" />
+            <!-- Boca Sonriente -->
+            <path d="M13,24 Q16,28 19,24" stroke="#000" stroke-width="1.5" fill="none" stroke-linecap="round" />
+            <!-- Base Puntero ventilador -->
+            <rect x="10" y="50" width="12" height="4" rx="1" fill="#1e293b" />
+          </svg>
+        </div>
+      </div>
     </div>
 
     <div class="player-right">
