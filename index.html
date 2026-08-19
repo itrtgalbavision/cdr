@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Central de Radios Guatemala — Directo Console Pro</title>
+<title>Central de Radios Guatemala — Directo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -22,7 +22,6 @@
   --accent-cyan-glow: rgba(0, 217, 255, 0.25);
   --accent-red: #ff3355;
   --accent-gold: #ffb700;
-  --accent-green: #10b981;
 
   --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
@@ -53,7 +52,7 @@ body {
 button { font-family: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
 input { font-family: inherit; }
 
-.wrap { max-width: 1200px; margin: 0 auto; padding: 40px 20px 240px; }
+.wrap { max-width: 1200px; margin: 0 auto; padding: 40px 20px 170px; }
 
 /* HEADER */
 .site-header { text-align: center; margin-bottom: 36px; }
@@ -287,22 +286,20 @@ input { font-family: inherit; }
 .compact-pill.active { border-color: var(--accent-cyan); color: var(--accent-cyan); }
 .compact-pill img { width: 18px; height: 18px; object-fit: contain; }
 
-/* REPRODUCTOR BARRA CONSOLA PRO CON FIGURAS DINÁMICAS Y MÉTRICAS */
+/* REPRODUCTOR BARRA CONSOLA PRO */
 .player-bar {
   position: fixed;
   left: 12px; right: 12px; bottom: 12px;
   max-width: 1176px;
   margin: 0 auto;
-  background: rgba(10, 15, 23, 0.94);
+  background: rgba(10, 15, 23, 0.92);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-xl);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 1px rgba(255,255,255,0.2);
   z-index: 100;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  overflow: visible;
 }
 
 .player-bar::before {
@@ -318,9 +315,8 @@ input { font-family: inherit; }
   background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
 }
 
-/* PANEL SUPERIOR: INFORMACIÓN Y DANCERS */
-.player-top-panel {
-  padding: 12px 20px 8px;
+.player-inner {
+  padding: 12px 20px;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
@@ -349,7 +345,7 @@ input { font-family: inherit; }
 .p-live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--text-muted); }
 .player-bar.playing .p-live-dot { background: var(--accent-red); box-shadow: 0 0 6px var(--accent-red); animation: pulseDot 1.4s infinite; }
 
-/* ONDAS MUSICALES EN CABECERA */
+/* ONDAS MUSICALES */
 .visualizer {
   display: flex;
   align-items: flex-end;
@@ -430,13 +426,22 @@ input { font-family: inherit; }
   position: relative;
   transform-origin: bottom center;
   filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
+}
+
+.inflatable-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Estado de reposo / Pausa */
+.inflatable-wrapper {
   transform: scaleY(0.85) rotate(0deg);
   opacity: 0.6;
   transition: transform 0.5s ease, opacity 0.5s ease;
 }
 
-.inflatable-svg { width: 100%; height: 100%; overflow: visible; }
-
+/* Animaciones de baile reactivas cuando el reproductor esta 'playing' */
 .player-bar.playing .dancer-1 {
   opacity: 1;
   animation: dancerWiggle1 0.7s infinite alternate ease-in-out;
@@ -489,125 +494,9 @@ input[type=range]::-webkit-slider-thumb {
 }
 .player-bar.playing input[type=range]::-webkit-slider-thumb { background: var(--accent-cyan); }
 
-/* FIGURAS GRÁFICAS ADICIONALES Y MÉTRICAS (LLENADO DE ESPACIOS) */
-.player-graphics-panel {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1.5fr;
-  gap: 12px;
-  padding: 6px 20px 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  background: rgba(0, 0, 0, 0.25);
-}
-
-.gfx-box {
-  background: rgba(14, 20, 29, 0.6);
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  padding: 8px 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 68px;
-}
-
-.gfx-title {
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* FIGURA 1: ONDA RECTANGULAR DE AUDIO */
-.waveform-bars {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 3px;
-  height: 38px;
-  width: 100%;
-}
-
-.wave-rect-bar {
-  flex: 1;
-  background: var(--accent-cyan);
-  border-radius: 2px;
-  height: 8%;
-  transition: height 0.08s ease;
-  opacity: 0.85;
-}
-
-/* FIGURA 2: VU METER DE ESPECTRO (dBFS) */
-.vu-meter-cols {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 4px;
-  height: 38px;
-  width: 100%;
-}
-
-.vu-col {
-  flex: 1;
-  display: flex;
-  flex-direction: column-reverse;
-  gap: 2px;
-  height: 100%;
-}
-
-.vu-seg {
-  flex: 1;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 1px;
-  transition: background 0.08s ease;
-}
-
-.vu-col.level-1 .seg-1 { background: var(--accent-green); }
-.vu-col.level-2 .seg-1, .vu-col.level-2 .seg-2 { background: var(--accent-green); }
-.vu-col.level-3 .seg-1, .vu-col.level-3 .seg-2, .vu-col.level-3 .seg-3 { background: var(--accent-green); }
-.vu-col.level-4 .seg-1, .vu-col.level-4 .seg-2, .vu-col.level-4 .seg-3, .vu-col.level-4 .seg-4 { background: var(--accent-green); }
-.vu-col.level-5 .seg-1, .vu-col.level-5 .seg-2, .vu-col.level-5 .seg-3, .vu-col.level-5 .seg-4 { background: var(--accent-green); }
-.vu-col.level-5 .seg-5 { background: var(--accent-gold); }
-.vu-col.level-6 .seg-1, .vu-col.level-6 .seg-2, .vu-col.level-6 .seg-3, .vu-col.level-6 .seg-4 { background: var(--accent-green); }
-.vu-col.level-6 .seg-5 { background: var(--accent-gold); }
-.vu-col.level-6 .seg-6 { background: var(--accent-red); }
-
-/* FIGURA 3: PANEL DE MÉTRICAS BROADCAST */
-.metrics-box-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-  height: 38px;
-  align-items: center;
-}
-
-.metric-item {
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: var(--radius-sm);
-  padding: 4px 6px;
-  text-align: center;
-  border: 1px solid rgba(255,255,255,0.02);
-}
-
-.metric-val {
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--accent-cyan);
-}
-
-.metric-lbl {
-  font-size: 8px;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  font-weight: 700;
-}
-
 .toast {
   position: fixed;
-  bottom: 165px; left: 50%;
+  bottom: 85px; left: 50%;
   transform: translateX(-50%) translateY(10px);
   background: #0f172a;
   border: 1px solid var(--border-strong);
@@ -634,22 +523,12 @@ input[type=range]::-webkit-slider-thumb {
 .hidden { display: none !important; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
 
-@media (max-width: 850px) {
-  .player-graphics-panel {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-  .gfx-box { height: 50px; }
-  .waveform-bars, .vu-meter-cols { height: 26px; }
-  .metrics-box-grid { height: 26px; }
-  .wrap { padding-bottom: 310px; }
-}
-
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .controls-bar { flex-direction: column; align-items: stretch; }
   .view-controls { justify-content: space-between; }
-  .player-top-panel { grid-template-columns: 1fr auto; }
+  .player-inner { grid-template-columns: 1fr auto; }
   .player-right { display: none; }
+  .wrap { padding-bottom: 150px; }
   .player-bar { left: 8px; right: 8px; bottom: 8px; }
   .dancers-stage { display: none; }
 }
@@ -684,11 +563,9 @@ input[type=range]::-webkit-slider-thumb {
   <main id="stationsContainer" aria-live="polite"></main>
 </div>
 
-<!-- REPRODUCTOR BARRA CONSOLA PRO COMPLETO -->
+<!-- REPRODUCTOR BARRA CONSOLA PRO -->
 <div class="player-bar" id="playerBar" role="region" aria-label="Reproductor">
-  
-  <!-- PANEL SUPERIOR CONSOLA -->
-  <div class="player-top-panel">
+  <div class="player-inner">
     <div class="player-left">
       <div class="player-logo" id="playerLogoWrap">
         <img id="playerLogo" alt="Logo emisora" />
@@ -729,19 +606,25 @@ input[type=range]::-webkit-slider-thumb {
                 <stop offset="100%" stop-color="#0088cc" />
               </linearGradient>
             </defs>
+            <!-- Brazo Izquierdo -->
             <path class="arm-left-1" d="M12,20 C5,15 2,25 4,32" stroke="url(#gradCyan)" stroke-width="3.5" stroke-linecap="round" fill="none" />
+            <!-- Brazo Derecho -->
             <path class="arm-right-1" d="M20,20 C27,15 30,25 28,32" stroke="url(#gradCyan)" stroke-width="3.5" stroke-linecap="round" fill="none" />
+            <!-- Cuerpo Tubo Inflable -->
             <rect x="11" y="14" width="10" height="38" rx="5" fill="url(#gradCyan)" />
+            <!-- Cara / Ojos -->
             <circle cx="14" cy="20" r="1.8" fill="#fff" />
             <circle cx="18" cy="20" r="1.8" fill="#fff" />
             <circle cx="14" cy="20" r="0.8" fill="#000" />
             <circle cx="18" cy="20" r="0.8" fill="#000" />
+            <!-- Boca Asombrada -->
             <ellipse cx="16" cy="25" rx="2" ry="3" fill="#000" />
+            <!-- Base Puntero ventilador -->
             <rect x="10" y="50" width="12" height="4" rx="1" fill="#1e293b" />
           </svg>
         </div>
 
-        <!-- Inflable Rojo -->
+        <!-- Inflable Rojo / Neon -->
         <div class="inflatable-wrapper dancer-2">
           <svg class="inflatable-svg" viewBox="0 0 32 60">
             <defs>
@@ -750,14 +633,20 @@ input[type=range]::-webkit-slider-thumb {
                 <stop offset="100%" stop-color="#990033" />
               </linearGradient>
             </defs>
+            <!-- Brazo Izquierdo -->
             <path class="arm-left-2" d="M12,20 C5,12 2,22 5,30" stroke="url(#gradRed)" stroke-width="3.5" stroke-linecap="round" fill="none" />
+            <!-- Brazo Derecho -->
             <path class="arm-right-2" d="M20,20 C27,12 30,22 27,30" stroke="url(#gradRed)" stroke-width="3.5" stroke-linecap="round" fill="none" />
+            <!-- Cuerpo Tubo Inflable -->
             <rect x="11" y="14" width="10" height="38" rx="5" fill="url(#gradRed)" />
+            <!-- Cara / Ojos -->
             <circle cx="14" cy="20" r="1.8" fill="#fff" />
             <circle cx="18" cy="20" r="1.8" fill="#fff" />
             <circle cx="14" cy="20" r="0.8" fill="#000" />
             <circle cx="18" cy="20" r="0.8" fill="#000" />
+            <!-- Boca Sonriente -->
             <path d="M13,24 Q16,28 19,24" stroke="#000" stroke-width="1.5" fill="none" stroke-linecap="round" />
+            <!-- Base Puntero ventilador -->
             <rect x="10" y="50" width="12" height="4" rx="1" fill="#1e293b" />
           </svg>
         </div>
@@ -772,61 +661,12 @@ input[type=range]::-webkit-slider-thumb {
       </div>
     </div>
   </div>
-
-  <!-- PANEL INFERIOR: FIGURAS VISUALES Y MÉTRICAS TECNICAS (LLENADO TOTAL) -->
-  <div class="player-graphics-panel">
-    <!-- FIGURA 1: ONDA RECTANGULAR DINÁMICA -->
-    <div class="gfx-box">
-      <div class="gfx-title">
-        <span>Onda de Audio Live</span>
-        <span id="formatText">AAC / HLS</span>
-      </div>
-      <div class="waveform-bars" id="waveformContainer">
-        <!-- Generado por JS -->
-      </div>
-    </div>
-
-    <!-- FIGURA 2: VU METER DE NIVEL (dBFS) -->
-    <div class="gfx-box">
-      <div class="gfx-title">
-        <span>VU Meter</span>
-        <span>dBFS</span>
-      </div>
-      <div class="vu-meter-cols" id="vuMeterContainer">
-        <!-- Generado por JS -->
-      </div>
-    </div>
-
-    <!-- FIGURA 3: PANEL DE MÉTRICAS HEALTH CHECK -->
-    <div class="gfx-box">
-      <div class="gfx-title">
-        <span>Estado de Transmisión</span>
-        <span>Live Metrics</span>
-      </div>
-      <div class="metrics-box-grid">
-        <div class="metric-item">
-          <div class="metric-val" id="metricBitrate">-- kbps</div>
-          <div class="metric-lbl">Bitrate</div>
-        </div>
-        <div class="metric-item">
-          <div class="metric-val" id="metricBuffer" style="color:var(--accent-green)">0.0 s</div>
-          <div class="metric-lbl">Buffer</div>
-        </div>
-        <div class="metric-item">
-          <div class="metric-val" id="metricEngine">HLS.js</div>
-          <div class="metric-lbl">Motor</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <audio id="audioEl" preload="metadata" playsinline></audio>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-// CONFIGURACIÓN DE URLS Y CADENAS
 const CDN_NUEVO = "https://d2b5h5wyivfnfl.cloudfront.net";
 const CDN_VIEJO = "https://d2qsan2ut81n2k.cloudfront.net";
 const SONORA_CUSTOM = "https://d1iowt63cq06qa.cloudfront.net/medialist_14854753276708185244_hls.m3u8";
@@ -865,116 +705,19 @@ let showFavoritesOnly = false;
 let favorites = JSON.parse(localStorage.getItem('crg_favs') || '[]');
 let hlsInstance = null;
 
-// DOM ELEMENTS
 const audio = document.getElementById('audioEl');
 const playerBar = document.getElementById('playerBar');
 const playerStationName = document.getElementById('playerStationName');
 const playerLogo = document.getElementById('playerLogo');
 const playerLiveText = document.getElementById('playerLiveText');
-const playPauseBtn = document.getElementById('playPauseBtn');
 const playIcon = document.getElementById('playIcon');
 const pauseIcon = document.getElementById('pauseIcon');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
-const volumeRange = document.getElementById('volumeRange');
 const container = document.getElementById('stationsContainer');
 const searchInput = document.getElementById('searchInput');
 const listMeta = document.getElementById('listMeta');
-const favToggle = document.getElementById('favToggle');
-const viewControls = document.getElementById('viewControls');
-
-const waveformContainer = document.getElementById('waveformContainer');
-const vuMeterContainer = document.getElementById('vuMeterContainer');
-const metricBitrate = document.getElementById('metricBitrate');
-const metricBuffer = document.getElementById('metricBuffer');
-const metricEngine = document.getElementById('metricEngine');
 
 audio.removeAttribute('crossorigin');
 audio.crossOrigin = null;
-
-// GENERAR ESTRUCTURAS GRÁFICAS PARA EL REPRODUCTOR
-const WAVE_BARS = 18;
-const VU_COLS = 8;
-const VU_SEGS = 6;
-
-for (let i = 0; i < WAVE_BARS; i++) {
-  const bar = document.createElement('div');
-  bar.className = 'wave-rect-bar';
-  bar.id = `wave-rect-${i}`;
-  waveformContainer.appendChild(bar);
-}
-
-for (let i = 0; i < VU_COLS; i++) {
-  const col = document.createElement('div');
-  col.className = 'vu-col';
-  col.id = `vu-col-${i}`;
-  for (let j = 0; j < VU_SEGS; j++) {
-    const seg = document.createElement('div');
-    seg.className = `vu-seg seg-${j + 1}`;
-    col.appendChild(seg);
-  }
-  vuMeterContainer.appendChild(col);
-}
-
-// INTEGRACIÓN WEB AUDIO API PARA LAS FIGURAS
-let audioCtx = null;
-let analyser = null;
-let dataArray = null;
-let isAudioContextReady = false;
-
-function initAudioEngine() {
-  if (isAudioContextReady) return;
-  try {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    analyser = audioCtx.createAnalyser();
-    const source = audioCtx.createMediaElementSource(audio);
-    source.connect(analyser);
-    analyser.connect(audioCtx.destination);
-    analyser.fftSize = 64;
-    dataArray = new Uint8Array(analyser.frequencyBinCount);
-    isAudioContextReady = true;
-  } catch(e) {
-    console.log("Web Audio API no iniciada directamente por CORS en CDN externo o políticas del navegador");
-  }
-}
-
-function renderVisuals() {
-  if (isPlaying && analyser) {
-    analyser.getByteFrequencyData(dataArray);
-
-    // Render Figura 1: Onda Rectangular
-    for (let i = 0; i < WAVE_BARS; i++) {
-      const el = document.getElementById(`wave-rect-${i}`);
-      const val = dataArray[i] || 0;
-      const pct = Math.max(8, Math.min(100, (val / 255) * 100));
-      if(el) el.style.height = `${pct}%`;
-    }
-
-    // Render Figura 2: VU Meter
-    for (let i = 0; i < VU_COLS; i++) {
-      const col = document.getElementById(`vu-col-${i}`);
-      const val = dataArray[i * 2] || 0;
-      const lvl = Math.ceil((val / 255) * VU_SEGS);
-      if(col) {
-        col.className = 'vu-col';
-        if (lvl > 0) col.classList.add(`level-${lvl}`);
-      }
-    }
-
-    // Render Figura 3: Buffer Metric
-    if (audio.buffered.length > 0) {
-      const bufEnd = audio.buffered.end(audio.buffered.length - 1);
-      const curr = audio.currentTime;
-      const bufLen = Math.max(0, bufEnd - curr).toFixed(1);
-      metricBuffer.textContent = `${bufLen} s`;
-    }
-  } else {
-    document.querySelectorAll('.wave-rect-bar').forEach(b => b.style.height = '8%');
-    document.querySelectorAll('.vu-col').forEach(c => c.className = 'vu-col');
-    metricBuffer.textContent = '0.0 s';
-  }
-  requestAnimationFrame(renderVisuals);
-}
 
 function svgFallback(name){
   return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(
@@ -1080,9 +823,6 @@ function playStation(index, urlTry = 0){
   playerLiveText.textContent = "Conectando…";
   render();
 
-  initAudioEngine();
-  if (audioCtx && audioCtx.state === 'suspended') { audioCtx.resume(); }
-
   if (hlsInstance) { try{ hlsInstance.destroy(); }catch(e){} hlsInstance = null; }
   audio.pause();
   audio.removeAttribute('crossorigin');
@@ -1090,134 +830,134 @@ function playStation(index, urlTry = 0){
 
   const tryNextUrl = () => {
     if(urlTry + 1 < st.urls.length){ playStation(index, urlTry + 1); }
-    else { playerLiveText.textContent = "Error de señal"; showToast("Error de conexión con " + st.name); updatePlaybackState(false); }
+    else { playerLiveText.textContent = "Error de señal"; showToast("Error de conexión con " + st.name); }
   };
 
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
   const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   if(isIOS || audio.canPlayType('application/vnd.apple.mpegurl')){
-    metricEngine.textContent = 'Native iOS';
     audio.src = url;
     audio.load();
-    audio.play().then(() => {
-      updatePlaybackState(true);
-    }).catch(()=>{ tryNextUrl(); });
+    audio.play().catch(()=>{});
     return;
   }
 
   if (window.Hls && Hls.isSupported()) {
-    metricEngine.textContent = 'HLS.js Pro';
-    hlsInstance = new Hls({ enableWorker: true, lowLatencyMode: true });
+    hlsInstance = new Hls({
+      enableWorker: true,
+      lowLatencyMode: false,
+      maxBufferLength: isMobile ? 30 : 15,
+      maxMaxBufferLength: 60,
+      maxBufferSize: 30 * 1000 * 1000,
+      maxBufferHole: isMobile ? 1.5 : 0.5,
+      liveSyncDurationCount: isMobile ? 5 : 3,
+      liveMaxLatencyDurationCount: 20,
+      manifestLoadingTimeOut: 20000,
+      manifestLoadingMaxRetry: 4,
+      fragLoadingTimeOut: 20000,
+      fragLoadingMaxRetry: 6,
+      fragLoadingRetryDelay: 1000,
+      xhrSetup: xhr => { xhr.withCredentials = false; }
+    });
     hlsInstance.loadSource(url);
     hlsInstance.attachMedia(audio);
-
-    hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => {
-      audio.play().then(() => {
-        updatePlaybackState(true);
-      }).catch(()=>{ updatePlaybackState(false); });
+    hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => { audio.play().catch(()=>{}); });
+    hlsInstance.on(Hls.Events.ERROR, (event, data) => {
+      if(!data.fatal) return;
+      if(data.type === Hls.ErrorTypes.NETWORK_ERROR){ hlsInstance.startLoad(); return; }
+      if(data.type === Hls.ErrorTypes.MEDIA_ERROR){ hlsInstance.recoverMediaError(); return; }
+      try{ hlsInstance.destroy(); }catch(e){}
+      hlsInstance = null;
+      tryNextUrl();
     });
-
-    hlsInstance.on(Hls.Events.LEVEL_LOADED, (evt, data) => {
-      if(data.stats && data.stats.loaded){
-        const bitrate = Math.round(data.stats.loaded * 8 / (data.stats.ending - data.stats.starting) / 1000);
-        if(bitrate > 0) metricBitrate.textContent = `${bitrate} kbps`;
-      }
-    });
-
-    hlsInstance.on(Hls.Events.ERROR, (evt, data) => {
-      if(data.fatal){
-        switch(data.type){
-          case Hls.ErrorTypes.NETWORK_ERROR:
-            hlsInstance.startLoad();
-            break;
-          case Hls.ErrorTypes.MEDIA_ERROR:
-            hlsInstance.recoverMediaError();
-            break;
-          default:
-            tryNextUrl();
-            break;
-        }
-      }
-    });
-  } else {
-    audio.src = url;
-    audio.play().then(()=> updatePlaybackState(true)).catch(()=> tryNextUrl());
-  }
-}
-
-function updatePlaybackState(playing){
-  isPlaying = playing;
-  if(playing){
-    playerBar.classList.add('playing');
-    playIcon.classList.add('hidden');
-    pauseIcon.classList.remove('hidden');
-    playerLiveText.textContent = "EN DIRECTO";
-  } else {
-    playerBar.classList.remove('playing');
-    playIcon.classList.remove('hidden');
-    pauseIcon.classList.add('hidden');
-    playerLiveText.textContent = "PAUSADO";
-  }
-  render();
-}
-
-// EVENT LISTENERS DE CONTROLES
-playPauseBtn.addEventListener('click', ()=>{
-  if(currentIndex === -1){
-    playStation(0);
     return;
   }
-  if(isPlaying){
-    audio.pause();
-    updatePlaybackState(false);
-  } else {
-    initAudioEngine();
-    if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-    audio.play().then(()=> updatePlaybackState(true)).catch(()=>{});
+
+  audio.src = url;
+  audio.load();
+  audio.play().catch(()=>{});
+
+  if('mediaSession' in navigator){
+    try{
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: st.name,
+        artist: 'Central de Radios Guatemala',
+        album: st.freq
+      });
+    }catch(e){}
   }
-});
+}
 
-prevBtn.addEventListener('click', ()=>{
-  if(currentIndex <= 0) playStation(stations.length - 1);
-  else playStation(currentIndex - 1);
-});
+function togglePlay(){
+  if(currentIndex === -1){ playStation(0); return; }
+  if(audio.paused){ audio.play().catch(()=>{}); } else { audio.pause(); }
+}
+function nextStation(){ if(currentIndex === -1){ playStation(0); return; } playStation((currentIndex + 1) % stations.length); }
+function prevStation(){ if(currentIndex === -1){ playStation(0); return; } playStation((currentIndex - 1 + stations.length) % stations.length); }
+function setVolume(v){ audio.volume = v; document.getElementById('volumeRange').value = v; localStorage.setItem('crg_vol', v); }
 
-nextBtn.addEventListener('click', ()=>{
-  if(currentIndex >= stations.length - 1) playStation(0);
-  else playStation(currentIndex + 1);
-});
+audio.addEventListener('play', ()=>{ isPlaying = true; playerBar.classList.add('playing'); playIcon.classList.add('hidden'); pauseIcon.classList.remove('hidden'); playerLiveText.textContent = "EN VIVO"; render(); });
+audio.addEventListener('pause', ()=>{ isPlaying = false; playerBar.classList.remove('playing'); pauseIcon.classList.add('hidden'); playIcon.classList.remove('hidden'); playerLiveText.textContent = currentIndex >= 0? "Pausado" : "En espera"; render(); });
+audio.addEventListener('waiting', ()=>{ playerLiveText.textContent = "Cargando…"; });
+audio.addEventListener('playing', ()=>{ playerLiveText.textContent = "EN VIVO"; });
+audio.addEventListener('stalled', ()=>{ if(hlsInstance){ try{ hlsInstance.startLoad(); }catch(e){} }});
+audio.addEventListener('error', ()=>{ playerLiveText.textContent = "Error de señal"; showToast("Error al cargar la señal de audio"); });
 
-volumeRange.addEventListener('input', (e)=>{
-  audio.volume = e.target.value;
-});
-
+document.getElementById('playPauseBtn').addEventListener('click', togglePlay);
+document.getElementById('nextBtn').addEventListener('click', nextStation);
+document.getElementById('prevBtn').addEventListener('click', prevStation);
+document.getElementById('volumeRange').addEventListener('input', e => setVolume(parseFloat(e.target.value)));
 searchInput.addEventListener('input', render);
 
-viewControls.addEventListener('click', (e)=>{
-  const btn = e.target.closest('.view-btn');
-  if(!btn) return;
-  document.querySelectorAll('.view-btn').forEach(b => {
-    b.classList.remove('active');
-    b.setAttribute('aria-selected', 'false');
+document.querySelectorAll('.view-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    viewMode = btn.dataset.view;
+    localStorage.setItem('crg_view', viewMode);
+    document.querySelectorAll('.view-btn').forEach(b=>{
+      b.classList.toggle('active', b === btn);
+      b.setAttribute('aria-selected', b === btn? 'true' : 'false');
+    });
+    render();
   });
-  btn.classList.add('active');
-  btn.setAttribute('aria-selected', 'true');
-  viewMode = btn.dataset.view;
-  localStorage.setItem('crg_view', viewMode);
-  render();
 });
 
-favToggle.addEventListener('click', ()=>{
+document.getElementById('favToggle').addEventListener('click', function(){
   showFavoritesOnly = !showFavoritesOnly;
-  favToggle.classList.toggle('on', showFavoritesOnly);
-  favToggle.setAttribute('aria-pressed', showFavoritesOnly);
+  this.classList.toggle('on', showFavoritesOnly);
+  this.setAttribute('aria-pressed', showFavoritesOnly? 'true' : 'false');
   render();
 });
 
-// INICIALIZACIÓN
-render();
-renderVisuals();
-</script>
+document.addEventListener('keydown', e=>{
+  if(e.code === 'Space' && document.activeElement.tagName !== 'INPUT'){ e.preventDefault(); togglePlay(); }
+});
 
+window.addEventListener('online', () => {
+  if(currentIndex >= 0 && audio.paused){ playStation(currentIndex); }
+});
+
+if('mediaSession' in navigator){
+  try{
+    navigator.mediaSession.setActionHandler('play', ()=> audio.play());
+    navigator.mediaSession.setActionHandler('pause', ()=> audio.pause());
+    navigator.mediaSession.setActionHandler('previoustrack', prevStation);
+    navigator.mediaSession.setActionHandler('nexttrack', nextStation);
+  }catch(e){}
+}
+
+(function init(){
+  const savedVol = localStorage.getItem('crg_vol');
+  if(savedVol !== null) setVolume(parseFloat(savedVol));
+  else setVolume(1.0);
+  document.querySelectorAll('.view-btn').forEach(b=>{
+    const on = b.dataset.view === viewMode;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-selected', on? 'true' : 'false');
+  });
+  playerLogo.src = svgFallback('CRG');
+  render();
+})();
+</script>
 </body>
 </html>
